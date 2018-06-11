@@ -1,0 +1,171 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Purchase.OrderAcceptance.IndexViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css") rel="stylesheet" type="text/css" />
+}
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Purchase")">采购管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>采购验收管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>验收单查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","OrderAcceptance",new {page = Model.Items.Page,pageSize = Model.Items.PageSize})" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">所属项目</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(x => x.Query.ProjectIds, Model.ProjectList, new { multiple = "", @class = "selectpicker" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">订单编号</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Query.OrderNo" value="@Model.Query.OrderNo" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">提交时间</label>
+                                    <div class="col-md-9">
+                                        <div class="input-group date-picker input-daterange" data-date="2016-05-05" data-date-format="yyyy-mm-dd">
+                                            @Html.InputText(m => m.Query.StartTime)
+                                            <span class="input-group-addon"> 到 </span>
+                                            @Html.InputText(m => m.Query.EndTime)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">状态</label>
+                                    <div class="col-md-9">
+                                        @Html.EnumTextDropDownListFor(m => m.Query.Status, typeof(AcceptanceStatus), true)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-offset-5">
+                                        <button type="submit" class="btn green">查询</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"> </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered" style="height: auto;">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">订单列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table">
+                    <table class="table table-hover table-scrollable">
+                        <thead>
+                            <tr>
+                                <th> 项目 </th>
+                                <th> 订单编号 </th>
+                                <th> 订单类型 </th>
+                                <th> 供应商 </th>
+                                <th> 验收状态 </th>
+                                <th> 采购人 </th>
+                                <th> 操作 </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td> @item.PurchaseOrder.Project.Name </td>
+                                    <td> <a target="_blank" href="@Url.Action("Detail", "Order", new {id = item.PurchaseOrder.Id})">@item.PurchaseOrder.OrderNo</a> </td>
+                                    <td> @item.PurchaseOrder.OrderType </td>
+                                    <td> @(item.PurchaseSupplier == null ? "其他供应商" : item.PurchaseSupplier.Name)</td>
+                                    <td> @item.Status </td>
+                                    <td> @item.PurchaseOrder.User.RealName </td>
+                                    <td>
+                                      <a target="_blank" href="@Url.Action("Detail", "OrderAcceptance", new {id = item.Id})" class="btn default btn-xs yellow-stripe">查看</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.Partial("_Pagination", Model.Items)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script>
+        $(document).ready(function() {
+            $('.selectpicker').selectpicker({
+                style: 'btn-xs',
+                iconBase: 'fa',
+                tickIcon: 'fa-check',
+                noneSelectedText: "--未选择--"
+            });
+
+            $("select[name='Query.ProjectIds']").val(@Html.Raw(Json.Encode(Model.Query.ProjectIds)));
+            $('.selectpicker').selectpicker('refresh');
+        });
+    </script>
+}

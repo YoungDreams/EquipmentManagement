@@ -1,0 +1,226 @@
+﻿@using PensionInsurance.Entities
+@using Foundation.Core
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@using PensionInsurance.Web.Views.HealthManagement
+@model PensionInsurance.Web.Views.HealthManagement.Graphic.GraphicViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/jstree/dist/themes/default/style.min.css") rel="stylesheet" type="text/css" />
+
+    <link href=@Url.Content("~/assets/global/plugins/layui/css/layui.css") rel="stylesheet" type="text/css" />
+
+    <style>
+        .tranformroute {
+            transform: rotate(90deg);
+            -ms-transform: rotate(90deg); /* IE 9 */
+            -moz-transform: rotate(90deg); /* Firefox */
+            -webkit-transform: rotate(90deg); /* Safari 和 Chrome */
+            -o-transform: rotate(90deg); /* Opera */
+        }
+    </style>
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index", "HealthManagement")">健康体检首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            @if (Model.hmviewModel.CheckStatus == "-1")
+            {
+                <li>
+                    <a href="@Url.Action("MoreCustomerHealthIndex", "HealthManagement")">退住客户健康体检管理</a>
+                    <i class="fa fa-circle"></i>
+                </li>
+            }
+            <li>
+                <span>健康检测图文报告</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<div class="row margin-top-10">
+    <div style="float:left; width:180px;">
+        @Html.Partial("~/Views/HealthManagement/_LeftMenuInfo.cshtml", Model.hmviewModel)
+    </div>
+    <div style="float:left;width:calc(100% - 210px);">
+        <div class="form-body">
+            @Html.Partial("~/Views/HealthManagement/_CustomerBasicInfo.cshtml", Model.hmviewModel)
+        </div>
+
+        <div class="row margin-top-10">
+            <div class="col-md-12">
+                <div class="tabbable-custom">
+                    <ul class="nav nav-tabs">
+                        <li class="">
+                            <a data-showloading="true" href="@Url.Action("HealthMonitoringIndex", "HealthManagement", new {customerAccountId = Model.hmviewModel.CustomerInfo.CustomerAccountId,healthStatus=Model.hmviewModel.HealthReportStatus})"> 健康检测指标 </a>
+                        </li>
+                        <li class="active">
+                            <a data-showloading="true" href="@Url.Action("Index","GraphicReport",new {customerAccountId = Model.hmviewModel.CustomerInfo.CustomerAccountId,healthStatus=Model.hmviewModel.HealthReportStatus})"> 图文报告 </a>
+                        </li>
+                        <li class="">
+                            <a data-showloading="true" href="@Url.Action("HealthManageReport", "HealthManagement", new {customerAccountId = Model.hmviewModel.CustomerInfo.CustomerAccountId,healthStatus=Model.hmviewModel.HealthReportStatus})"> 健康报告 </a>
+                        </li>
+                    </ul>
+                    <div class="tab-content">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="portlet light bordered" style="border:0px!important">
+                                    <div class="portlet-body">
+                                        <form action="@Url.Action("Index","GraphicReport",new { customerAccountId=Model.CustomerAccountId,healthStatus=Model.hmviewModel.HealthReportStatus })" method="post" class="form-horizontal">
+                                            <div class="form-group">
+                                                <div class="col-md-4 form-inline">
+                                                    <label class="control-label">心电图报告</label>
+                                                    <select onchange="this.form.submit()" name="EcgId" class="form-control input-xs" style="width:150px;">
+                                                        @if (Model.Ecgs.Count <= 0)
+                                                        {
+                                                            <option>最近一次</option>
+                                                        }
+                                                        @for (int i = 0; i < Model.Ecgs.Count; i++)
+                                                        {
+                                                            if (i == 0)
+                                                            {
+                                                                <option value="@Model.Ecgs[i].Id"
+                                                                        @(Model.Ecgs[i].Id == Model.EId ? "selected" : "")>
+                                                                    最近一次
+                                                                </option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@Model.Ecgs[i].Id"
+                                                                        @(Model.Ecgs[i].Id == Model.EId ? "selected" : "")>
+                                                                    @Model.Ecgs[i].CheckDate.ToString("yyyy-MM-dd")
+                                                                </option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <label class="col-md-4 control-label">检测时间:<strong id="LBL_ECG_CHECKDATE">@Model.ECheckDate</strong></label>
+                                                <label class="col-md-4 control-label">报告时间:<strong id="LBL_ECG_CREATEDATE">@Model.ECreateDate</strong></label>
+                                            </div>
+                                            <div class="form-group" style="padding:10px 50px 10px 50px;text-align: center; ">
+                                                @if (Model.EImageData != null)
+                                                {
+                                                    <img id="IMG_ECG_DATE" style="width:700px;height:700px;" src="data:image/gif;base64,@Model.EImageData" />
+                                                }
+
+                                                else
+                                                {
+                                                    <img id="IMG_ECG_DATE" style="width:300px;height:250px;margin-top:20px;" src="~/assets/global/img/zanwu2.png" />
+                                                }
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="col-md-4 form-inline">
+                                                    <label class="control-label">骨密度报告</label>
+                                                    <select onchange="this.form.submit()" name="GmdId" class="form-control input-xs" style="width:150px;">
+                                                        @if (Model.BoneDensitys.Count <= 0)
+                                                        {
+                                                            <option>最近一次</option>
+                                                        }
+                                                        @for (int i = 0; i < Model.BoneDensitys.Count; i++)
+                                                        {
+                                                            if (i == 0)
+                                                            {
+                                                                <option value="@Model.BoneDensitys[i].Id"
+                                                                        @(Model.BoneDensitys[i].Id == Model.BId ? "selected" : "")>
+                                                                    最近一次
+                                                                </option>
+                                                            }
+                                                            else
+                                                            {
+                                                                <option value="@Model.BoneDensitys[i].Id"
+                                                                        @(Model.BoneDensitys[i].Id == Model.BId ? "selected" : "")>
+                                                                    @Model.BoneDensitys[i].CheckDate.ToString("yyyy-MM-dd")
+                                                                </option>
+                                                            }
+                                                        }
+                                                    </select>
+                                                </div>
+
+                                                <label class="col-md-4 control-label">检测时间:<strong id="LBL_GMD_CHECKDATE">@Model.BdCheckDate</strong></label>
+                                                <label class="col-md-4 control-label">报告时间:<strong id="LBL_GMD_CREATEDATE">@Model.BdCreateDate</strong></label>
+                                            </div>
+                                            <div class="form-group" style="padding:10px 50px 10px 50px;text-align: center; ">
+                                                @if (Model.BdImageData != null)
+                                                {
+                                                    <img id="Gmd_imgae_data" style="width:700px;height:700px;" src="data:image/gif;base64,@Model.BdImageData" />
+                                                }
+
+                                                else
+                                                {
+                                                    <img id="Gmd_imgae_data" style="width:300px;height:250px;margin-top:20px;" src="~/assets/global/img/zanwu2.png" />
+                                                }
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+                    <div class="form-actions margin-top-10">
+                        <div class="text-right">
+                            @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.健康管理, Permission.编辑健康报告) && Model.hmviewModel.HealthReportStatus == 2)
+                            {
+                                if (Model.Status == ContractStatus.生效)
+                                {
+                                    <button type="button" class="btn green" onclick="EditHealthReport(@Model.hmviewModel.HealthReportStatus);"><i class="fa fa-edit"></i>提交健康报告</button>
+                                }
+                            }
+                            @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.健康管理, Permission.编辑健康报告) && Model.hmviewModel.HealthReportStatus == 1)
+                            {
+                                if (Model.Status == ContractStatus.生效)
+                                {
+                                    <button type="button" class="btn green" onclick="EditHealthReport(@Model.hmviewModel.HealthReportStatus);"><i class="fa fa-edit"></i>查看健康报告</button>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/layui/layui.all.js") type="text/javascript"></script>
+
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        function EditHealthReport(healthStatus) {
+            var accountId =@Html.Raw(Model.hmviewModel.CustomerInfo.CustomerAccountId);
+            //if (healthStatus == 2) {
+                location.href = "../HealthManagement/HealthManageReport?customerAccountId=" + accountId + "&healthStatus=" + healthStatus;
+            //}
+            //else {
+            //    layer.confirm('健康报告已编辑,是否要去修改?', {
+            //        btn: ['去修改', '取消']//按钮
+            //    }, function (index) {
+            //        layer.close(index);
+            //        location.href = "../HealthManagement/HealthManageReport?customerAccountId=" + accountId + "&healthStatus=" + healthStatus + "&editStatus=1";
+            //    });
+            //}
+        }
+    </script>
+}

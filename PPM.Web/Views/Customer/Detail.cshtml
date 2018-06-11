@@ -1,0 +1,439 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Views.Customer
+@model PensionInsurance.Web.Views.Customer.DetailViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/pages/css/profile.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+@section Breadcrumb{
+
+}
+
+<div id="customer-detail">
+    @if (Model.CustomerType == CustomerType.退住)
+    {
+        @Html.Partial("_Customer.CheckOut.BasicInfo", Model)
+    }
+    else if (Model.CustomerType == CustomerType.入住 || Model.CustomerType == CustomerType.请假)
+    {
+        @Html.Partial("_Customer.CheckIn.BasicInfo", Model)
+    }
+    else if (Model.CustomerType == CustomerType.未知)
+    {
+        <div class="note note-warning">
+            <h4 class="block">提示! 当前客户合同数据有异常，请联系管理员！</h4>
+        </div>
+        return;
+    }
+    <div class="row">
+        <div class="tabbable-custom">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a data-toggle="tab" href="#tab_Customer" aria-expanded="true"> 基本信息 </a>
+                </li>
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户亲属, Permission.查看))
+                {
+                    <li class="">
+                        <a data-toggle="tab" href="#tab_CustomerFamily" aria-expanded="false"> 亲属信息 </a>
+                    </li>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户请假, Permission.查看))
+                {
+                    <li class="">
+                        <a data-toggle="tab" href="#tab_CustomerLeave" aria-expanded="false"> 请假信息 </a>
+                    </li>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户点单, Permission.查看))
+                {
+                    <li class="">
+                        <a data-toggle="tab" href="#tab_CustomerServiceRecord" aria-expanded="false"> 增值服务 </a>
+                    </li>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户合同管理, Permission.查看))
+                {
+                    <li class="">
+                        <a data-toggle="tab" href="#tab_CustomerContract" aria-expanded="false"> 合同 & 附加协议 </a>
+                    </li>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.客户信息查看客户账单))
+                {
+                    <li class="">
+                        <a data-toggle="tab" href="#tab_CustomerBill" aria-expanded="false"> 账单信息 </a>
+                    </li>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.客户信息查看客户账户))
+                {
+                    <li class="">
+                        <a data-toggle="tab" href="#tab_CustomerPayment" aria-expanded="false"> 账户信息 </a>
+                    </li>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.查看))
+                {
+                    <li class="">
+                        <a data-toggle="tab" href="#tab_CustomerLiving" aria-expanded="false"> 入住记录 </a>
+                    </li>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.查看))
+                {
+                    <li class="">
+                        <a data-toggle="tab" href="#tab_CustomerExpense" aria-expanded="false"> 费率记录 </a>
+                    </li>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户医嘱, Permission.查看))
+                {
+                    <li class="">
+                        <a data-toggle="tab" href="#tab_MedicalAdvice" aria-expanded="false"> 医嘱信息 </a>
+                    </li>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户用药单, Permission.查看))
+                {
+                    <li class="">
+                        <a data-toggle="tab" href="#tab_CustomerPrescription" aria-expanded="false"> 药单信息 </a>
+                    </li>
+                }
+            </ul>
+            <div class="tab-content">
+                <div id="tab_Customer" class="tab-pane active">
+                    <!--基本信息-->
+                    @Html.Partial("_Customer", Model)
+                </div>
+                <div id="tab_CustomerFamily" class="tab-pane">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户亲属, Permission.查看))
+                    {
+                        <!--亲属信息-->
+                        @Html.Partial("_CustomerFamily", Model)
+                    }
+                </div>
+                <div id="tab_CustomerLeave" class="tab-pane">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户请假, Permission.查看))
+                    {
+                    <!--请假管理-->
+                        @Html.Partial("_CustomerLeave", Model)
+                    }
+                </div>
+                <div id="tab_CustomerServiceRecord" class="tab-pane">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户点单, Permission.查看))
+                    {
+                    <!--点单管理-->
+                        @Html.Partial("_CustomerServiceRecord", Model)
+                    }
+                </div>
+                <div id="tab_CustomerContract" class="tab-pane">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户合同管理, Permission.查看))
+                    {
+                        @Html.Partial("_CustomerContract", Model)
+                    }
+                </div>
+                <div id="tab_CustomerBill" class="tab-pane">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.客户信息查看客户账单))
+                    {
+                        @Html.Partial("_CustomerBill", Model)
+                    }
+                </div>
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.客户信息查看客户账户))
+                {
+                    <div id="tab_CustomerPayment" class="tab-pane">
+                        @Html.Partial("_CustomerPayment", Model)
+                    </div>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.查看))
+                {
+                    <div id="tab_CustomerLiving" class="tab-pane">
+                        @Html.Partial("_CustomerLiving", Model)
+                    </div>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.查看))
+                {
+                    <div id="tab_CustomerExpense" class="tab-pane">
+                        @Html.Partial("_CustomerExpense", Model)
+                    </div>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户医嘱, Permission.查看))
+                {
+                    <div id="tab_MedicalAdvice" class="tab-pane">
+                        @Html.Partial("_CustomerMedicalAdvice", Model)
+                    </div>
+                }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户用药单, Permission.查看))
+                {
+                    <div id="tab_CustomerPrescription" class="tab-pane">
+                        @Html.Partial("_CustomerPrescriptions", Model)
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div id="customer-contract-side-bar" class="side-bar" style="display: none;">
+        <a href="#section-contract"><i class="fa fa-folder-o"></i></a>
+        <a href="#section-contract-cost-change"><i class="fa fa-rmb"></i></a>
+        <a href="#section-contract-service-pack-change"><i class="fa fa-handshake-o"></i></a>
+        <a href="#section-contract-room-change"><i class="fa fa-bed"></i></a>
+    </div>
+
+    <div id="customer-account-side-bar" class="side-bar" style="display: none;">
+        <a href="#section-customer-account"><i class="fa fa-rmb"></i></a>
+        <a href="#section-customer-point"><i class="fa fa-product-hunt"></i></a>
+    </div>
+
+</div>
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var customerPay = {
+            validate: function (form) {
+                var success = true;
+                var messages = [];
+
+                var customerName = form.find("input[name=CustomerName]").val();
+                var paymentDate = form.find("input[name=PaymentDate]").val();
+                var paymentType = form.find("input[name=PaymentType]").val();
+                var totalPayableCost = parseFloat(form.find("input[name=TotalPayableCost]").val());
+                var totalPrePayableCost = parseFloat(form.find("input[name=TotalPrePayableCost]").val());
+                var totalRemainingCost = parseFloat(form.find("input[name=TotalRemainingCost]").val());
+                var customerMoney = parseFloat(form.find("input[name=Money]").val());
+
+                if (paymentDate === "") {
+                    success = false;
+                    messages.push("请选择付款时间");
+                }
+
+                if (paymentType === "") {
+                    success = false;
+                    messages.push("请选择付款方式");
+                }
+
+                var totalCost = 0;
+
+                if (!isNaN(totalPayableCost)) {
+                    totalCost += parseFloat(totalPayableCost);
+                }
+
+                if (!isNaN(totalPrePayableCost)) {
+                    totalCost += parseFloat(totalPrePayableCost);
+                }
+
+                if (totalCost <= 0 && (isNaN(totalRemainingCost) || totalRemainingCost <= 0)) {
+                    success = false;
+                    messages.push("不使用余额时，合计付款金额必须大于0");
+                }
+
+                var billTotalRemainingCost = 0;
+
+                var tableBills = form.find("#table-bills");
+                var bills = tableBills.find("tbody tr");
+                if (bills.length > 0) {
+                    $(bills).each(function (idx) {
+                        var arrears = parseFloat($("#td-arrears-" + idx + "").text());
+                        var total = parseFloat($("#td-total-" + idx + "").text());
+                        var payableCost = $("input[name='PaymentBills[" + idx + "].PayableCost']").val();
+                        var remainingCost = $("input[name='PaymentBills[" + idx + "].RemainingCost']").val();
+
+                        if ((payableCost !== "" && isNaN(parseFloat(payableCost)))) {
+                            success = false;
+                            messages.push("缴纳金额输入不正确");
+                        }
+
+                        if ((remainingCost !== "" && isNaN(parseFloat(remainingCost)))) {
+                            success = false;
+                            messages.push("使用余额输入不正确");
+                        }
+
+                        if (!isNaN(arrears) && !isNaN(total)) {
+                            if (total > arrears) {
+                                success = false;
+                                messages.push("缴纳金额+使用余额不能大于未缴金额");
+                            } else if (total !== arrears && totalPrePayableCost > 0) {
+                                success = false;
+                                messages.push("必须付清未缴金额，才能预交费用");
+                            }
+                        } else if (isNaN(total) && totalPrePayableCost > 0) {
+                            success = false;
+                            messages.push("必须付清未缴金额，才能预交费用");
+                        }
+
+                        if (!isNaN(parseFloat(remainingCost))) {
+                            billTotalRemainingCost += parseFloat(remainingCost);
+                        }
+                    });
+                }
+
+                if (billTotalRemainingCost > customerMoney) {
+                    success = false;
+                    messages.push("使用余额不能大于客户账户余额");
+                }
+
+                if (success) {
+                    messages.push("客户姓名：" + customerName + "<br/>付款方式：" + paymentType + "<br/>合计付款金额：" + totalCost.toFixed(2) + "<br/>");
+                }
+
+                return {
+                    success: success,
+                    messages: messages
+                };
+            }
+        }
+
+        var customPayButtons = {
+            confirm: {
+                text: '确认',
+                btnClass: 'btn-warning',
+                action: function () {
+                    var js = this;
+                    var $form = $("#customer-pay-form");
+                    var errors = $form.find(".errors");
+                    errors.find("p").remove();
+                    errors.hide();
+
+                    var validateResult = customerPay.validate($form);
+                    if (!validateResult.success) {
+                        $(validateResult.messages).each(function (idx, message) {
+                            errors.append("<p>" + message + "</p>");
+                        });
+                        errors.show();
+                        return false;
+                    }
+
+                    var customerAccountId = $form.find("input[name=CustomerAccountId]").val();
+                    var paymentType = $form.find("input[name=PaymentType]").val();
+
+                    var totalPayableCost = parseFloat($form.find("input[name=TotalPayableCost]").val());
+                    var totalPrePayableCost = parseFloat($form.find("input[name=TotalPrePayableCost]").val());
+                    var totalRemainingCost = parseFloat($form.find("input[name=TotalRemainingCost]").val());
+
+                    var paymentDate = $form.find("input[name=PaymentDate]").val();
+                    var money = $form.find("input[name=Money]").val();
+
+                    var command = {
+                        TotalPayableCost: isNaN(totalPayableCost) ? 0 : totalPayableCost,
+                        PaymentType: paymentType,
+                        CustomerAccountId: customerAccountId,
+                        PaymentDate: paymentDate,
+                        Money: money,
+                        TotalPrePayableCost: isNaN(totalPrePayableCost) ? 0 : totalPrePayableCost,
+                        TotalRemainingCost: isNaN(totalRemainingCost) ? 0 : totalRemainingCost,
+                        PaymentBills: [],
+                        PaymentCustomerOrderFoods: []
+                    };
+
+                    var tableBills = $form.find("#table-bills");
+                    var bills = tableBills.find("tbody tr");
+                    if (bills.length > 0) {
+                        $(bills).each(function (idx, bill) {
+                            var customerBillId = $(bill).find("input[name='PaymentBills[" + idx + "].CustomerBillId']").val();
+                            var payableCost = $(bill).find("input[name='PaymentBills[" + idx + "].PayableCost']").val();
+                            var remainingCost = $(bill).find("input[name='PaymentBills[" + idx + "].RemainingCost']").val();
+
+                            command.PaymentBills.push({ CustomerBillId: customerBillId === "null" ? "" : customerBillId, PayableCost: payableCost, RemainingCost: remainingCost });
+
+                        });
+                    }
+
+                    var tableCashPaidOrderFoods = $("#table-cash-paid-order-foods");
+                    var foods = tableCashPaidOrderFoods.find("tbody tr");
+                    if (foods.length > 0) {
+                        $(foods).each(function (idx, food) {
+                            var foodId = $(food).find("input[name='PaymentCustomerOrderFoods[" + idx + "].Id']").val();
+                            var payableCost = $(food).find("input[name='PaymentCustomerOrderFoods[" + idx + "].PayableCost']").val();
+                            var remainingCost = $(food).find("input[name='PaymentCustomerOrderFoods[" + idx + "].RemainingCost']").val();
+
+                            command.PaymentCustomerOrderFoods.push({ Id: foodId === "null" ? "" : foodId, PayableCost: payableCost, RemainingCost: remainingCost });
+
+                        });
+                    }
+
+                    App.confirm(function () {
+                        $form.postCommand('@Url.Action("CustomerPay", "CustomerAccount")', command, {
+                            onSuccess: function (data) {
+                                if (paymentType === '@PaymentType.刷卡' && (command.TotalPayableCost > 0 || command.TotalPrePayableCost > 0)) {
+                                    window.open('@Url.Action("Detail", "POS")' + "/" + data.result.CustomerPaymentId);
+                                }
+                                js.close();
+                                return true;
+                            }
+                        });
+                    }, function () {
+
+                    }, validateResult.messages);
+
+                    return false;
+                }
+            },
+            cancel: {
+                text: '取消',
+                btnClass: 'btn-success'
+            }
+        };
+
+        $(document).ready(function () {
+            $(document)
+                .on("click", ".edit-customer", function () {
+                    App.dialog('#customer-info-edit-form', '@Url.Action("EditCustomer", "Customer", new {customerId = Model.CustomerInfo.CustomerId})', 'col-md-8 col-md-offset-2');
+                })
+                .on("click", ".customer-pay", function () {
+                    var $this = $(this);
+                    var paymentType = $this.attr("data-payment-type");
+                    App.dialog('#customer-pay-form', '@Url.Action("VerifyCustomerPayment", "CustomerAccount", new {customerAccountId = Model.CustomerAccountId})' + '&paymentType=' + paymentType,
+                        'col-md-10 col-md-offset-1', customPayButtons);
+                })
+                .on("click", ".edit-customer-avatar", function () {
+                    App.dialogMultipart('#customer-Avatar-edit-form', '@Url.Action("EditAvatar", "Customer", new {customerId = Model.CustomerInfo.CustomerId})');
+                })
+                .on("click", ".tabbable-custom .nav.nav-tabs a", function () {
+                    $("#customer-account-side-bar").hide();
+                    $("#customer-contract-side-bar").hide();
+                })
+                .on("click", ".tabbable-custom a[href='#tab_CustomerContract']", function () {
+                    $("#customer-contract-side-bar").fadeIn();
+                })
+                .on("click", ".tabbable-custom a[href='#tab_CustomerPayment']", function () {
+                    $("#customer-account-side-bar").fadeIn();
+                })
+                .on("click", "#customer-contract-side-bar a,#customer-account-side-bar a", function (e) {
+                    e.preventDefault();
+                    var $this = $(this);
+
+                    $('html, body').animate({
+                        scrollTop: $($this.attr("href")).offset().top - 300
+                    }, 500);
+                });
+        });
+
+        if (jQuery) {
+            $('.date-picker').datepicker({
+                rtl: App.isRTL(),
+                orientation: "left",
+                autoclose: true
+            });
+
+            $('.timepicker').timepicker({
+                minuteStep: 5,
+                showMeridian: false
+            });
+
+            $('#ResumptionTime').datetimepicker({
+                autoclose: true,
+                todayBtn: true,
+                language: "zh-CN"
+            });
+        }
+
+    </script>
+}

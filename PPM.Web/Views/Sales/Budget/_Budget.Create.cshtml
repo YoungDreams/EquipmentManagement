@@ -1,0 +1,57 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Sales.Budget.CreateViewModel
+
+<form id="Budget-create-form" data-ajax="true" action="@Url.Action("Create", "SalesBudget")" method="POST" class="form-horizontal">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">新增年度销售预算信息</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">项目</label>
+                            <div class="col-md-9">
+                                @Html.InputDropDown(x => Model.ProjectId, Model.ProjectList, true)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">年度</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control form-control-inline" id="Year" name="Year" data-date-format="yyyy">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#Year').datetimepicker({
+            format: 'yyyy',
+            weekStart: 1,
+            autoclose: true,
+            startView: 4,
+            minView: 4,
+            forceParse: false,
+            language: 'zh-CN'
+        });
+    });
+</script>

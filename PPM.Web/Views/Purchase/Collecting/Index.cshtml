@@ -1,0 +1,80 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Purchase.Collecting.IndexViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Purchase")">采购管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>领取</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <span>项目: </span>
+                    <select id="project" name="project">
+                        <option value="">--未选择--</option>
+                        @foreach (var item in Model.Projects)
+                        {
+                           <option value="@item.Value">@item.Text</option>
+                        }
+                    </select>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="row">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.出库, Permission.查看))
+                    {
+                        <div class="col-sm-3">
+                            <a class="btn default btn-sm orange-stripe margin-bottom-5 collecting">出库</a>
+                        </div>
+                    }
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.盘点, Permission.查看))
+                    {
+                        <div class="col-sm-3">
+                            <a class="btn default btn-sm orange-stripe margin-bottom-5 checking">盘点</a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.collecting').click(function () {
+                var projectId = $('#project').val();
+                if (!projectId) {
+                    return;
+                }
+                var url = '@Url.Action("CollectingProductStock", "Collecting")' + '?projectid=' + projectId;
+                window.location.href = url;
+            });
+            $('.checking').click(function () {
+                var projectId = $('#project').val();
+                if (!projectId) {
+                    return;
+                }
+                var url = '@Url.Action("CheckingProjectItem", "Checking")' + '?projectid=' + projectId;
+                window.location.href = url;
+            });
+        });
+    </script>
+    }

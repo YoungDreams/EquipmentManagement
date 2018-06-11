@@ -1,0 +1,122 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Finance.CustomerAccountTransfer.EditViewModel
+<div class="portlet-title title-style">
+    <div class="caption">
+        <i class="icon-bubble font-green-sharp"></i>
+        <span class="caption-subject font-green-sharp sbold">审批信息</span>
+    </div>
+</div>
+<form id="contractServicePackChange-approval-form" data-ajax="true" action="" method="POST" class="form-horizontal">
+    <div class="portlet-body form">
+        <div class="form-body">
+            @foreach (var item in Model.TrackingResult.WorkflowHistoryTrackingResults)
+            {
+                <div class="row margin-top-10">
+                    <div class="col-md-3 btn">
+                        <div class="form-group">
+                            @item.GetTitle()：@item.User.RealName
+                            <br />
+                            @item.CreatedOn.DateTimeString()
+                        </div>
+                    </div>
+                    <div class="col-md-9">
+                        <div class="row">
+                            <div class="col-md-9 text-left">
+                                <div class="radio-list">
+                                    <label class="radio-inline">
+                                        <span class=""><input type="radio" disabled="disabled" @(item.Result == WorkflowResult.同意 ? "checked='checked'" : "") value="@WorkflowResult.同意"></span>@WorkflowResult.同意
+                                    </label>
+                                    <label class="radio-inline">
+                                        <span class=""><input type="radio" disabled="disabled" @(item.Result == WorkflowResult.不同意 ? "checked='checked'" : "") value="@WorkflowResult.不同意"></span>@WorkflowResult.不同意
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-12">
+                                <textarea class="form-control" style="min-height: 60px;" disabled="disabled">@((item.Result == WorkflowResult.同意 || item.Result == WorkflowResult.不同意) ? item.Result.ToString() : string.Empty) @item.Description</textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @foreach (var workflowStep in Model.CurrentWorkFlowStep.Workflow.WorkflowSteps)
+            {
+                if (workflowStep.Step < Model.CurrentWorkFlowStep.Step)
+                {
+                    continue;
+                }
+
+                if (workflowStep.Id == Model.CurrentWorkFlowStep.Id && WebAppContext.Current.User == Model.CurrentWorkFlowStep.User && Model.CurrentWorkFlowStep.WorkflowStepCategory != WorkflowStepCategory.扫描件上传)
+                {
+                    <div class="row margin-top-10">
+                        <div class="col-md-3 btn">
+                            <div class="form-group">
+                                @Model.CurrentWorkFlowStep.GetTitle()：@Model.CurrentWorkFlowStep.User.RealName
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-9 text-left">
+                                    <div class="radio-list">
+                                        <label class="radio-inline">
+                                            <span class=""><input type="radio" name="Result" value="@WorkflowResult.同意"></span>@WorkflowResult.同意
+                                        </label>
+                                        <label class="radio-inline">
+                                            <span class=""><input type="radio" name="Result" value="@WorkflowResult.不同意"></span>@WorkflowResult.不同意
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 5px;">
+                                <div class="col-md-12">
+                                    <textarea class="form-control" id="Description" style="min-height: 60px;" name="Description"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="row margin-top-10">
+                        <div class="col-md-3 btn">
+                            <div class="form-group">
+                                @if (workflowStep == Model.CurrentWorkFlowStep)
+                                {
+                                    <span class="workflow-current">@workflowStep.GetTitle()：@workflowStep.User.RealName</span>
+                                }
+                                else
+                                {
+                                    <span>@workflowStep.GetTitle()：@workflowStep.User.RealName</span>
+                                }
+                            </div>
+                        </div>
+                        <div class="col-md-9">
+                            <div class="row">
+                                <div class="col-md-9 text-left">
+                                    <div class="radio-list">
+                                        <label class="radio-inline">
+                                            <span class=""><input type="radio" disabled="disabled" value="@WorkflowResult.同意"></span>@WorkflowResult.同意
+                                        </label>
+                                        <label class="radio-inline">
+                                            <span class=""><input type="radio" disabled="disabled" value="@WorkflowResult.不同意"></span>@WorkflowResult.不同意
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="margin-top: 5px;">
+                                <div class="col-md-12">
+                                    <textarea class="form-control" style="min-height: 60px;" disabled="disabled"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+    <div class="errors alert alert-danger fade in" style="display: none;"></div>
+</form>

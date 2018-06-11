@@ -1,0 +1,195 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Query
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common;
+@model PensionInsurance.Web.Views.Budget.IndexViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-editable/css/bootstrap-editable.css") rel="stylesheet" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-table/css/bootstrap-table.css") rel="stylesheet" />
+}
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index", "Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>预算管理</span>
+            </li>
+        </ul>
+    </div>
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>预算管理 - 查询条件
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form id="report-search-form" action="@Url.Action("Index", "Budget")" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">项目</label>
+                                    <div class="col-md-9">
+                                        @Html.InputDropDown(x => Model.Query.ProjectId, Model.ProjectList, true)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">年度</label>
+                                    <div class="col-md-9">
+                                        @Html.InputText(x => x.Query.StartYear, new { @class = "form-control form-control-inline" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="text-center"><button type="submit" class="btn green btn-sm padding-lf-15 " data-showloading="true">查询</button></div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">预算列表</span>
+                </div>
+                <div class="actions">
+                    @if (WebAppContext.Current.User.HasPermission(ModuleType.采购预算管理, Permission.新增))
+                    {
+                        <a href="javascript:;" class="btn green createBudge">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            新增年度预算
+                        </a>
+                    }
+                    @if (WebAppContext.Current.User.HasPermission(ModuleType.采购预算管理, Permission.导出))
+                    {
+                        <a href="javascript:;" class="btn green export-report">
+                            <i class="fa fa-rotate-right" aria-hidden="true"></i>
+                            导出
+                        </a>
+                    }
+                    @if (WebAppContext.Current.User.HasPermission(ModuleType.采购预算管理, Permission.导入))
+                    {
+                        <a href="javascript:;" class="btn green budget-import">
+                            <i class="fa fa-rotate-left" aria-hidden="true"></i>
+                            导入
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="portlet-body">
+                @if (Model.Query.StartYear.HasValue && Model.Query.ProjectId.HasValue && Model.MonthData != null)
+                {
+                    <table id="budgettable" class="table-report table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>项目(@Model.ProjectName)</th>
+                                @foreach (var month in Model.Months)
+                                {
+                                    <th>@($"{month.Year}年{month.Month}月")</th>
+                                }
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>客户有效入住天数</td>
+                                @foreach (var item in Model.MonthData)
+                                {
+                                    <td>@item.Value.ResidentDays</td>
+                                }
+                            </tr>
+
+                            @foreach (var category in Model.ProductCategories)
+                            {
+                                <tr>
+                                    <td>@category.Name</td>
+                                    @foreach (var item in Model.MonthData.Values)
+                                    {
+                                        <td>@Model.GetBudgetCost(item, category)</td>
+                                    }
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-editable/js/bootstrap-editable.min.js")></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-table/js/bootstrap-table.js")></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-table/js/bootstrap-table-zh-CN.js")></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(document).on("click", ".export-report", function () {
+                var form = $("#report-search-form");
+                var st = $("#Query_StartYear").val();
+                var projectId = form.find("select[name='Query.ProjectId']").val();
+                var command = {
+                    StartYear: st,
+                    ProjectId: projectId
+                };
+                App.confirm(function () {
+                    form.postCommand('@Url.Action("ExportBudget", "Budget")', command, {
+                        onSuccess: function (result) {
+                            window.location = "../" + result.redirect;
+                        }
+                    });
+                });
+            });
+
+            $('#Query_StartYear').datetimepicker({
+                format: 'yyyy',
+                weekStart: 1,
+                autoclose: true,
+                startView: 4,
+                minView: 4,
+                forceParse: false,
+                language: 'zh-CN'
+            });
+
+            $(document)
+                .on("click", ".createBudge", function () {
+                    App.dialog('#Budget-create-form', '@Url.Action("Create", "Budget")');
+                })
+                .on("click", ".budget-import", function () {
+                    App.dialogMultipart('#Budget-import-form', '@Url.Action("Import", "Budget")');
+                });
+        });
+    </script>
+}

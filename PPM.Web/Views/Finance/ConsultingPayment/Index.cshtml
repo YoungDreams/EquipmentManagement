@@ -1,0 +1,380 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common;
+@using PensionInsurance.Web.Views.Finance.ConsultingPayment
+@model PensionInsurance.Web.Views.Finance.ConsultingPayment.IndexViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <span>现结餐饮流水管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>现结餐饮流水查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","CustomerOrderFoodSerial")" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">客户名称</label>
+                                    <div class="col-md-9">
+                                        @Html.InputText(m => m.Query.Name)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">项目</label>
+                                    <div class="col-md-9">
+                                        @Html.InputDropDown(x => Model.Query.ProjectId, Model.Projects, true)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">状态</label>
+                                    <div class="col-md-9">
+                                        <select class="form-control" name="Query.Status">
+                                            <option>--请选择--</option>
+                                            <option value="false">未确认</option>
+                                            <option value="true">已确认</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="text-center">
+                            <button type="submit" class="btn green btn-sm padding-lf-15 ">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">现结餐饮流水列表</span>
+                </div>
+                <div class="actions">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.现结餐费流水管理, Permission.确认))
+                    {
+                        <a data-toggle="modal" href="#MassConfirm" class="btn green btn-sm batch-button disabled">
+                            <i class="fa fa-check"></i> 批量确认
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" class="group-checkable" value="" />
+                                </th>
+                                <th>序号</th>
+                                <th>项目</th>
+                                <th>客户名称</th>
+                                <th>点餐类型</th>
+                                <th>付款日期</th>
+                                <th>到账日期</th>
+                                <th>付款方式</th>
+                                <th>付款金额</th>
+                                <th>收款人</th>
+                                <th>确认人</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CashPaidOrderFoodSerials)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="checkboxes" value="@item.Id" />
+                                    </td>
+                                    <td>@Model.CashPaidOrderFoodSerials.RowNumberOf(item)</td>
+                                    <td>@item.ProjectName</td>
+                                    <td>@item.User.Username</td>
+                                    <td>@item.ServicePackCatalog.Name</td>
+                                    <td>@item.PayDate.ToString("yyyy-MM-dd")</td>
+                                    <td>
+                                        @{
+                                            var confirmDate = item.ConfirmedDate.HasValue ? item.ConfirmedDate.Value.ToString("yyyy-MM-dd") : "";
+                                        }
+                                        @confirmDate
+                                    </td>
+                                    <td>@item.PaymentType.ToString()</td>
+                                    <td>@item.PayMoney.FormatString()</td>
+                                    <td>@item.User.Username</td>
+                                    <td>@item.Confirmor</td>
+                                    <td>
+                                        @{
+                                            var status = item.Status ? "已确认" : "待确认";
+                                        }
+                                        @status
+                                    </td>
+                                    <td>
+                                        @if (!item.Status)
+                                        {
+                                            if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.现结餐费流水管理, Permission.确认))
+                                            {
+                                                <a href="javascript:;" onclick="confirmPayment(@item.Id)" class="btn default btn-xs green-stripe">确认</a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                                            }
+                        </tbody>
+                    </table>
+                    @Html.Partial("_Pagination", Model.CashPaidOrderFoodSerials)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal small fade" id="confirmPayment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 500px;">
+        <form data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>确认缴费信息
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <div class="row" style="margin-top: 5px;">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="text-right col-md-3">客户姓名</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="CustomerName" readonly>
+                                                <input type="hidden" name="CashPaidOrderFoodSerialId" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="text-right col-md-3">收支方式</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="PaymentType" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="text-right col-md-3">收支金额</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control" name="PayMoney" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="margin-top: 5px;">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="text-right col-md-3">实际到账日期</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control form-control-inline date-picker" name="ConfirmDate" data-date-format="yyyy-mm-dd">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            <button class="btn green btn-sm padding-lf-15">确认</button>
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">取消</button>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal small fade" id="MassConfirm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 450px;">
+        <form id="confim-payment-form" data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>客户现金流水批量确认
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <div class="row margin-top-20">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">实际到账日期</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="input-sm date-picker form-control" name="ConfimDateTime" data-date-format="yyyy-mm-dd">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            <a href="javascript:;" id="confim-payment" class="btn green btn-sm padding-lf-15">批量确认</a>
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                        </div>
+                                    </p>
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        var page = {
+            getSelectedIds: function () {
+                var ids = [];
+                var checkboxes = $(".checkboxes");
+                $.each(checkboxes, function (i, item) {
+                    var chk = $(item);
+                    if (chk.is(":checked")) {
+                        var id = chk.val();
+
+                        ids.push(id);
+                    }
+                });
+
+                return ids;
+            },
+
+            updateButtons: function () {
+                var checked = $(".checkboxes:checked").length > 0;
+                var buttons = $(".batch-button");
+                buttons.prop("disabled", !checked);
+                if (checked) {
+                    buttons.removeClass("disabled");
+                } else {
+                    buttons.addClass("disabled");
+                }
+            }
+        }
+
+        $(document).ready(function () {
+            $(document).on("click",
+                ".customer-pay",
+                function () {
+                    var $this = $(this);
+                    var paymentType = $this.attr("data-payment-type");
+                    var cashPayFoodId = $this.attr("data-id");
+                    App.dialog('#customer-order-food-pay-form',
+                        '@Url.Action("GetPay", "CustomerOrderFood")' +
+                        '?id=' +
+                        cashPayFoodId +
+                        '&paymentType=' +
+                        paymentType,
+                        'col-md-8 col-md-offset-2');
+                });
+
+            $(document).on("change", ".group-checkable", function () {
+                var checkAll = $(this);
+                var checked = checkAll.is(":checked");
+                checkAll.closest(".table").find(".checkboxes").prop("checked", checked).uniform("refresh");
+                page.updateButtons();
+            });
+
+            $(document).on("change", ".checkboxes", function () {
+                page.updateButtons();
+            });
+            $(document).on("click", "#confim-payment", function () {
+                var form = $("#confim-payment-form");
+
+                var confimDateTime = form.find("input[name='ConfimDateTime']");
+                var paymentIds = page.getSelectedIds();
+                var command = {
+                    ConfirmDate: confimDateTime.val(),
+                    CashPaidOrderFoodSerialIds: paymentIds
+                };
+                $("#MassConfirm").modal("hide");
+                form.postCommand('@Url.Action("ConfirmPayments", "CustomerOrderFoodSerial")', command, {
+                    onSuccess: function () {
+                        return true;
+                    },
+                    onFail: function (result) {
+                        $.bootstrapGrowl(result.errors, {
+                            type: "warning",
+                            offset: {
+                                from: "top",
+                                amount: 150
+                            },
+                            align: "center"
+                        });
+                    }
+                });
+            });
+
+        });
+
+        //确认缴费信息弹出窗
+        function confirmPayment(customerPaymentId) {
+            var confirmPaymentInfo = $('#confirmPayment');
+            $.get("@Url.Action("ConfirmPayment", "CustomerOrderFoodSerial")" + "/" + customerPaymentId, function (result) {
+                confirmPaymentInfo.modal('show');
+                confirmPaymentInfo.find("form").attr("action", "@Url.Action("ConfirmPayment", "CustomerOrderFoodSerial", new {returnUrl = Request.Url})");
+                setFormValues(result);
+            });
+        }
+
+    </script>
+}

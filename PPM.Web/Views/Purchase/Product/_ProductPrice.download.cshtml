@@ -1,0 +1,181 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Purchase.Product.DownLoadViewModel
+@section Styles{
+    <style>
+        #productlist td {
+            line-height: 45px;
+        }
+
+        .select2-selection__rendered {
+            height: 28px !important;
+        }
+    </style>
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css") rel="stylesheet" type="text/css" />
+}
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Product")">产品管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>价格导入</span>
+            </li>
+        </ul>
+    </div>
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet" style="margin-top: 10px;">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>下载价格模版
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form id="export-productPrice-from" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">分类名称</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" disabled id="productCategoryText" value="@Model.CategoryText" placeholder="选择分类">
+                                        <input id="productCategoryId" type="hidden" name="productCategoryId" />
+                                        <span id="getCategories" class="input-group-addon" style="padding: 3px 12px;">
+                                            <i class="fa fa-bars font-red"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">供应商</label>
+                                    <div class="col-md-9">
+                                        @Html.InputDropDown(x => Model.ProductSupplierId, Model.Suppliers, true)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">区域</label>
+                                    <div class="col-md-9">
+                                        @Html.InputDropDown(x => Model.AreaId, Model.Cities, true)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-offset-5">
+                                        <a href="javascript:;" class="btn green export-productPrice">下载模版</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"> </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal small fade" id="productCategories" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:600px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift"></i>商品分类
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <!-- BEGIN FORM-->
+                        <div id="tree_1" class="tree-demo">
+                            @Html.Raw(Model.ProductCategoryTreeView.GetSubTreeNodes(Model.ProductCategoryTreeView.Trees))
+                        </div>
+                        <div id="category-noselect-error" class="alert alert-danger hidden">
+                            <strong>未选择商品分类!</strong>
+                        </div>
+                        <div class="row">
+                            <br />
+                            <p>
+                                <div class="text-center">
+                                    <button id="select-product-category" class="btn green btn-sm padding-lf-15">确定</button>
+                                    <button id="cancel-select-product-category" type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">取消</button>
+                                </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+
+            $('#getCategories').on('click',
+                function () {
+                    var productCategories = $('#productCategories');
+                    productCategories.modal('show');
+                });
+
+            $('#select-product-category').on('click',
+                function () {
+                    var checkedCategory = $('.jstree-clicked');
+                    var categoryId = checkedCategory.attr('data-id');
+                    var categoryText = checkedCategory.attr('data-text');
+                    var error = $('#category-noselect-error');
+                    if (categoryId || categoryText) {
+                        error.addClass('hidden');
+                        $('#productCategoryId').val(categoryId);
+                        $('#productCategoryText').val(categoryText);
+
+                        $('#cancel-select-product-category').click();
+                    } else {
+                        error.removeClass('hidden');
+                    }
+                });
+
+            $(document).on("click", ".export-productPrice", function () {
+                var form = $("#export-productPrice-from");
+                var productCategoryId = $("#productCategoryId").val(); 
+                var productSupplierId = form.find("select[name='ProductSupplierId']").val();
+                var areaId = form.find("select[name='AreaId']").val();
+                var command = {
+                    ProductCategoryId: productCategoryId,
+                    ProductSupplierId: productSupplierId,
+                    AreaId: areaId
+                };
+                App.confirm(function () {
+                    form.postCommand('@Url.Action("DownLoad", "Product")', command, {
+                        onSuccess: function (result) {
+                            window.location = "../" + result.redirect;
+                        }
+                    });
+                });
+            });
+
+        });
+    </script>
+
+}

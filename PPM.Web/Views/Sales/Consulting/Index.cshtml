@@ -1,0 +1,591 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common;
+@model PensionInsurance.Web.Views.Sales.Consulting.IndexViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="#">销售管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>咨询接待管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>咨询人查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","Consulting")" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">关键字</label>
+                                    <div class="col-md-8" title="可按客户电话，客户邮箱，咨询人电话，咨询人邮箱 模糊查询">
+                                        @Html.InputText(m => m.Query.Keywords)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">录入时间</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group date-picker input-daterange" data-date="2016年05月05日" data-date-format="yyyy-mm-dd">
+                                            @Html.InputText(m => m.Query.StartLastModifiedOn)
+                                            <span class="input-group-addon"> 到 </span>
+                                            @Html.InputText(m => m.Query.EndLastModifiedOn)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">项目</label>
+                                    <div class="col-md-8">
+                                        @Html.DropDownListFor(m => m.Query.ProjectId, Model.ProjectList, true)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">客户级别</label>
+                                    <div class="col-md-8">
+                                        @Html.EnumTextDropDownListFor(m => m.Query.ConsultingLevels, typeof(ConsultingLevel),new { multiple = "", @class = "selectpicker" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">跟踪时间</label>
+                                    <div class="col-md-8">
+                                        <div class="input-group date-picker input-daterange" data-date="2016年05月05日" data-date-format="yyyy-mm-dd">
+                                            @Html.InputText(m => m.Query.StartTrackingTime)
+                                            <span class="input-group-addon"> 到 </span>
+                                            @Html.InputText(m => m.Query.EndTrackingTime)
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">跟踪方式</label>
+                                    <div class="col-md-8">
+                                        @Html.EnumTextDropDownListFor(m => m.Query.ConsultingTrackingTypes, typeof(ConsultingTrackingType), new { multiple = "", @class = "selectpicker" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">客户姓名</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.Query.ConsultingName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">咨询人姓名</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.Query.VisitorName)
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">销售</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.Query.SalesUserName)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="text-center">
+                            @Html.Hidden("page", Model.Items.Page)
+                            @Html.Hidden("pageSize", Model.Items.PageSize)
+                            <button type="submit" class="btn green btn-sm padding-lf-15 " data-showloading="true">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">咨询人列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if (PensionInsurance.Shared.WebAppContext.Current.User.HasCreateConsultingPermission())
+                            {
+                                <a href="@Url.Action("Create", "Consulting")" class="btn green">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                    新增
+                                </a>
+                            }
+                            @if (PensionInsurance.Shared.WebAppContext.Current.User.HasTransmitConsultingPermission())
+                            {
+                                <a id="transmit" data-toggle="modal" href="#transmitModal" class="btn green disabled batch-button">
+                                    <i class="fa fa-random" aria-hidden="true"></i>
+                                    客户转交
+                                </a>
+                            }
+                            @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.咨询接待管理, Permission.客户收藏))
+                            {
+                                <a data-toggle="modal" href="#favoriteModal" class="btn green disabled batch-button">
+                                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                                    客户收藏
+                                </a>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+                <div class="table table-scrollable">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" class="group-checkable" />
+                                </th>
+                                <th> 序号 </th>
+                                <th>客户编号</th>
+                                <th> 客户姓名 </th>
+                                <th> 客户联系电话 </th>
+                                <th> 咨询人名称 </th>
+                                <th> 咨询人联系电话 </th>
+                                <th> 客户级别 </th>
+                                <th> 销售人员 </th>
+                                <th> 操作 </th>
+                                <th >wow版 </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr class="@((item.FavoriteFolderId.HasValue && item.FavoriteFolderUserId.HasValue && item.FavoriteFolderUserId == PensionInsurance.Shared.WebAppContext.Current.User.Id) ? "danger" : "")">
+                                    <td>
+                                        <input type="checkbox" class="checkboxes" value="@item.ConsultingId" />
+                                    </td>
+                                    <td> @item.RowNumber </td>
+                                    <td> @item.ConsultingNo </td>
+                                    <td> @item.ConsultingName </td>
+                                    <td> @item.ConsultingPhone </td>
+                                    <td> @item.VisitorName </td>
+                                    <td> @item.VisitorPhone </td>
+                                    <td> @item.ConsultingLevel </td>
+                                    <td> @item.RealName </td>
+                                    <td>
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.咨询接待管理, Permission.查看))
+                                        {
+                                            <a href="@Model.PopulateDetailUrl(item.ConsultingId,item.RowNumber + 1,Model.Query)" class="btn default btn-xs green-stripe">查看</a>
+                                        }
+
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.Id == item.UserId)
+                                        {
+                                            <a href="@Model.PopulateEditUrl(item.ConsultingId,item.RowNumber + 1,Model.Query)" class="btn default btn-xs yellow-stripe">编辑</a>
+                                        }
+
+                                        @*@if (PensionInsurance.Shared.WebAppContext.Current.User.Id == item.UserId && PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户跟踪管理, Permission.新增))
+                                        {
+                                            <a href="javascript:;" data-id="@item.ConsultingId" class="btn default btn-xs purple-stripe add-consulting-tracking">新增沟通记录</a>
+                                        }*@
+
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.咨询接待管理, Permission.客户入住) && PensionInsurance.Shared.WebAppContext.Current.User.Id == item.UserId)
+                                        {
+                                            if (!item.ContractId.HasValue)
+                                            {
+                                                <a href="@Url.Action("CheckIn", "Consulting", new {id = item.ConsultingId})" class="btn default btn-xs blue-stripe">
+                                                    入住
+                                                </a>
+                                            }
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.咨询接待管理, Permission.客户入住) && PensionInsurance.Shared.WebAppContext.Current.User.Id == item.UserId)
+                                        {
+                                            if (!item.ContractId.HasValue && !item.IsWow)
+                                            {
+                                                <button data-id="@item.ConsultingId" class="btn default btn-xs green-stripe in-wow">
+                                                    加入
+                                                </button>
+                                            }
+                                            else if (item.IsWow)
+                                            {
+                                                <button data-id="@item.ConsultingId" class="btn default btn-xs red-stripe out-wow">
+                                                    移出
+                                                </button>
+                                            }
+                                            else { }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                </div>
+                @Html.Partial("_Pagination", Model.Items)
+            </div>
+        </div>
+    </div>
+</div>
+<div id="transmitModal" class="modal fade" tabindex="-1" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">客户转交</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">转交给</label>
+                            <div class="col-md-10">
+                                <select id="salePersonId" name="SalesPersonId">
+                                    @foreach (var item in Model.Sales)
+                                    {
+                                    <option value="@item.Id">@item.RealName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-md-2 control-label">转交原因</label>
+                            <div class="col-md-10">
+                                <input class="form-control" id="reason" type="text">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="errors alert alert-dange fade in" style="display: none;"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn default">取消</button>
+                <button id="submit-transmit" type="submit" class="btn green">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="favoriteModal" class="modal fade" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true"></button>
+                <h4 class="modal-title">收藏客户</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-horizontal">
+                    <div class="form-body">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">收藏至</label>
+                            <div class="col-md-8">
+                                <div class="input-group">
+                                    <div class="input-group">
+                                        <input name="FavoriteFolderName" type="text" class="form-control">
+                                        <div class="input-group-btn">
+                                            <button type="button" class="btn btn-xs yellow dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
+                                                选择
+                                                <i class="fa fa-angle-down"></i>
+                                            </button>
+                                            <ul class="dropdown-menu pull-right">
+                                                @foreach (var folder in Model.FavoriteFolderSelectList)
+                                                {
+                                                <li>
+                                                    <a href="javascript:;" class="select-favorite-folder"> @folder.Text </a>
+                                                </li>
+                                                }
+                                            </ul>
+                                        </div>
+                                        <!-- /btn-group -->
+                                    </div>
+                                    <!-- /btn-group -->
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="alert alert-danger display-hide">
+                        <button class="close" data-close="alert"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-dismiss="modal" class="btn default">取消</button>
+                <button id="favoriteClients" type="submit" class="btn green">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal small fade" id="trackInfoModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+        <form data-ajax="true" action="#" method="POST" class="form-horizontal" data-refresh="#items">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>跟踪信息
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">跟踪方式</label>
+                                            <div class="col-md-9">
+                                                @Html.DropDownList("TrackingType", SettingType.跟踪方式)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">所属项目</label>
+                                            <div class="col-md-9">
+                                                <select name="Pid" class="form-control input-xs">
+                                                    @foreach (var project in Model.ProjectList)
+                                                    {
+                                                    <option value="@project.Value">@project.Text</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">开始日期</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control form-control-inline date-picker" name="StartTime" data-date-format="yyyy-mm-dd">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">完成日期</label>
+                                            <div class="col-md-9">
+                                                <input type="text" class="form-control form-control-inline date-picker" name="EndTime" data-date-format="yyyy-mm-dd">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-3">跟踪记录</label>
+                                            <div class="col-md-9">
+                                                <textarea class="form-control" name="Description" style="resize: none;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            @Html.Hidden("ConsultingId")
+                                            <button class="btn green btn-sm padding-lf-15">保存</button>
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                        </div>
+                                    </p>
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+@section Scripts{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <!-- BEGIN THEME GLOBAL SCRIPTS -->
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <!-- END THEME GLOBAL SCRIPTS -->
+    <script type="text/javascript">
+        var funcs = {
+            getConsultingIds: function () {
+                var ids = [];
+                var checkboxes = $(".checkboxes");
+                $.each(checkboxes, function (i, item) {
+                    var chk = $(item);
+                    if (chk.is(":checked")) {
+                        var id = chk.val();
+
+                        ids.push(id);
+                    }
+                });
+
+                return ids;
+            },
+            updateButtons: function () {
+                var checked = $(".checkboxes:checked").length > 0;
+                var buttons = $(".batch-button");
+                buttons.prop("disabled", !checked);
+                if (checked) {
+                    buttons.removeClass("disabled");
+                } else {
+                    buttons.addClass("disabled");
+                }
+            }
+        };
+
+
+        $(document).ready(function () {
+
+            $(".group-checkable").change(function () {
+                var checkAll = $(this);
+                var checked = checkAll.is(":checked");
+                checkAll.closest(".table").find(".checkboxes").prop("checked", checked).uniform("refresh");
+                funcs.updateButtons();
+            });
+
+            $(".checkboxes").change(function () {
+                funcs.updateButtons();
+            });
+
+            $(".select-favorite-folder").click(function () {
+                var text = $(this).text();
+                $("input[name='FavoriteFolderName']").val(text);
+            });
+
+            $("#submit-transmit").click(function () {
+                var ids = funcs.getConsultingIds();
+
+                var url = '@Url.Action("TransmitConsultings", "Consulting")';
+                var command = {
+                    SalesPersonId: $("#salePersonId").val(),
+                    FromId: "@PensionInsurance.Shared.WebAppContext.Current.User.Id",
+                    Reason: $("#reason").val(),
+                    ConsultingIds: ids
+                };
+                postCommand(url, command, $("#transmitModal"));
+                return false;
+            });
+
+            $("#favoriteClients").click(function () {
+                var ids = funcs.getConsultingIds();
+                var url = '@Url.Action("FavoriteConsultings", "Consulting")';
+                var command = {
+                    FavoriteFolderName: $("input[name='FavoriteFolderName']").val(),
+                    ConsultingIds: ids
+                };
+                postCommand(url, command);
+                return false;
+            });
+
+            $(".in-wow").on('click', function () {
+                var confirmed = confirm("确认要加入wow版吗？");
+                if (confirmed) {
+                    var id = $(this).attr('data-id');
+                    updatewow(id, true);
+                }
+            });
+            $(".out-wow").on('click', function () {
+                var confirmed = confirm("确认要从wow版中移出吗？");
+                if (confirmed) {
+                    var id = $(this).attr('data-id');
+                    updatewow(id, false);
+                }
+            });
+
+            var updatewow = function (id, isWow) {
+                var url = "@Url.Action("UpdateWow", "Consulting")";
+                var command = {
+                    id: id,
+                    isWow: isWow
+                };
+                postCommand(url, command);
+                return false;
+            }
+
+            $(document).on("click", ".add-consulting-tracking", function () {
+                var trackInfo = $('#trackInfoModal');
+                var consultingId = $(this).attr("data-id");
+                $("#ConsultingId").val(consultingId);
+                trackInfo.modal('show');
+                trackInfo.find("form").attr("action", "@Url.Action("CreateConsultingTracking", "Consulting", new { returnUrl = Request.Url })");
+                clearFormValues("trackInfoModal");
+            });
+
+            $('.selectpicker').selectpicker({
+                style: 'btn-xs',
+                iconBase: 'fa',
+                tickIcon: 'fa-check',
+                noneSelectedText: "--未选择--"
+            });
+            $("select[name='Query.ConsultingLevels']").val(@Html.Raw(Json.Encode(Model.Query.ConsultingLevels)));
+            $("select[name='Query.ConsultingTrackingTypes']").val(@Html.Raw(Json.Encode(Model.Query.ConsultingTrackingTypes)));
+            $('.selectpicker').selectpicker('refresh');
+        });
+    </script>
+}

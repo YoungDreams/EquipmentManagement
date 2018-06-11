@@ -1,0 +1,373 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Contract.ProjectViewModel
+<div class="portlet-title title-style">
+    <div class="caption">
+        <i class="icon-bubble font-green-sharp"></i>
+        <span class="caption-subject font-green-sharp sbold">甲方信息（养老服务机构）</span>
+    </div>
+</div>
+<div class="portlet-body form">
+    <!-- BEGIN FORM-->
+    <div class="form-body">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-4">项目全称</label>
+                    <div class="col-md-8">
+                        @if (Model.PreviousContractId.HasValue || Model.SignedType == SignedType.新签 || Model.SignedType == SignedType.续签)
+                        {
+                            <select id="ProjectId" class="form-control input-small changeLd" disabled>
+                                <option value="">--未选择--</option>
+                                @foreach (var project in Model.Projects)
+                                {
+                                    <option value="@project.Id" @((Model.Project != null && project.Id == Model.Project.Id) ? "selected=selected" : "")>@project.ProjectFullName</option>
+                                }
+                            </select>
+                            @Html.Hidden("ProjectId", Model.Project?.Id)
+                        }
+                        else
+                        {
+                            <select id="ProjectId" name="ProjectId" class="form-control input-small changeLd">
+                                <option value="">--未选择--</option>
+                                @foreach (var project in Model.Projects)
+                                {
+                                    <option value="@project.Id" @((Model.Project != null && project.Id == Model.Project.Id) ? "selected=selected" : "")>@project.ProjectFullName</option>
+                                }
+                            </select>
+                        }
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-4">甲方</label>
+                    <div class="col-md-8">
+                        <label name="CompanyName"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-4">法定代表人</label>
+                    <div class="col-md-8">
+                        <label name="CompanyCorporation"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-4">联系电话</label>
+                    <div class="col-md-8">
+                        <label name="CompanyTel"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-4">银行户名</label>
+                    <div class="col-md-8">
+                        <label name="CompanyAccountName"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-4">开户行</label>
+                    <div class="col-md-8">
+                        <label name="CompanyAccountBank"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-4">银行账号</label>
+                    <div class="col-md-8">
+                        <label name="CompanyAccount"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-4">电子邮箱</label>
+                    <div class="col-md-8">
+                        <label name="CompanyEmail"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <label class="control-label col-md-4">邮政编码</label>
+                    <div class="col-md-8">
+                        <label name="CompanyPostCode"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="form-group">
+                    <label class="control-label col-md-2">地址</label>
+                    <div class="col-md-10">
+                        <label name="CompanyAddress"></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var serviceLevel = $("#ServicePackageLevel");
+        var nursingType = $("#NursingType");
+        var signedType = $("#SignedType");
+        var projectSelector = $("select[id=ProjectId]");
+        if (projectSelector.val() !== "") {
+            setProjectInfo(projectSelector);
+        }
+        projectSelector.on("change", function () {
+            setContractValues($(this));
+        });
+
+        signedType.change(function () {
+            var $this = $(this);
+            if ($this.val() === '续签') {
+                $("#RelocationCost").val(0);
+            } else if ($this.val() === '新签') {
+                setContractValues($("select[id=ProjectId]"));
+            }
+        });
+        nursingType.change(function () {
+            var $this = $(this);
+            var nursinglevel = 0;
+            var liveLevel = 0;//服务包级别
+            if ($this.val() == '@ConcernType.失智照护1级.ToString()') {
+                nursinglevel = 1;
+                liveLevel = 1;
+            }
+            if ($this.val() == '@ConcernType.失智照护2级.ToString()') {
+                nursinglevel = 2;
+                liveLevel = 2;
+            }
+            if ($this.val() == '@ConcernType.失智照护3级.ToString()') {
+                nursinglevel = 3;
+                liveLevel = 3;
+            }
+            if ($this.val() == '@ConcernType.失智照护4级.ToString()') {
+                nursinglevel = 4;
+                liveLevel = 4;
+            }
+            if ($this.val() == '@ConcernType.生活照料1级.ToString()') {
+                liveLevel = 1;
+            }
+            if ($this.val() == '@ConcernType.生活照料2级.ToString()') {
+                liveLevel = 2;
+            }
+            if ($this.val() == '@ConcernType.生活照料3级.ToString()') {
+                liveLevel = 3;
+            }
+            if ($this.val() == '@ConcernType.生活照料4级.ToString()') {
+                liveLevel = 4;
+            }
+
+            if ($this.val() == '@ConcernType.独立型.ToString()') {
+                nursinglevel = 0;
+                liveLevel = 0;
+            }
+            serviceLevel.val(liveLevel);
+
+            getCost(serviceLevel);
+            if (nursinglevel != 0 && projectSelector.val() != "") {
+                $.get("@Url.Action("GetServicePackage", "Contract")" + "?projectId=" + projectSelector.val() + "&level=" + nursinglevel + "&contractId=null",
+                    function (result) {
+                        $("#ServicePackCostDate").val(result.ServicePackCostDate);
+                        $("#LongTermNursingCost").val(result.MCLongPrice);
+                        $("#ShortTermNursingCost").val(result.MCShortPrice);
+                        changeLiquidatedDamages();
+                    });
+            } else {
+                $("#LongTermNursingCost").val(0);
+                $("#ShortTermNursingCost").val(0);
+            }
+
+        });
+
+
+        function setProjectInfo(projectSelector) {
+
+            if (projectSelector.val()) {
+                $.get("/Project/Detail/" + projectSelector.val(), function (data) {
+                    $("label[name=CompanyName]").text(data.CompanyName == null ? "" : data.CompanyName);
+                    $("label[name=CompanyCorporation]").text(data.CompanyCorporation == null ? "" : data.CompanyCorporation);
+                    $("label[name=CompanyTel]").text(data.CompanyTel == null ? "" : data.CompanyTel);
+                    $("label[name=CompanyAccountName]").text(data.CompanyAccountName == null ? "" : data.CompanyAccountName);
+                    $("label[name=CompanyAccountBank]").text(data.CompanyAccountBank == null ? "" : data.CompanyAccountBank);
+                    $("label[name=CompanyAccount]").text(data.CompanyAccount == null ? "" : data.CompanyAccount);
+                    $("label[name=CompanyAddress]").text(data.CompanyAddress == null ? "" : data.CompanyAddress);
+                    $("label[name=CompanyEmail]").text(data.Email == null ? "" : data.Email);
+                    $("label[name=CompanyPostCode]").text(data.PostCode == null ? "" : data.PostCode);
+                    $("input[name='ProjectInfo.PensionAddress']").val(data.PensionAddress == null ? "" : data.PensionAddress);
+
+                    // $("input[name=ShortTermMealsCost]").val(data.ShortTermMealsCost);
+                    // $("input[name=ShortTermServiceCost]").val(data.ShortTermServiceCost);
+                    //$("input[name=LongTermMealsCost]").val(data.LongTermMealsCost);
+                    //$("input[name=LongTermServiceCost]").val(data.LongTermServiceCost);
+                    setServiceCost(projectSelector);
+                    setMealsCost(projectSelector);
+
+
+                    $("input[name=RefundCost]").val(data.RefundCost);
+                    if ($("#SignedType").val() == '续签') {
+                        $("input[name=RelocationCost]").val(0);
+                    }
+                    else {
+                        $("input[name=RelocationCost]").val(data.RelocationCost);
+                    }
+                    if ($("#CustomerAccountId").val() == 0) {
+                        $("input[name=RecommendPoint]").val(0);
+                        $("input[name=BonusPoint]").val(0);
+                    } else {
+                        $("input[name=RecommendPoint]").val(data.RecommendPoint);
+                        $("input[name=BonusPoint]").val(data.BonusPoint);
+                    }
+                });
+
+
+
+
+            }
+        }
+        //设置餐费和基础服务费
+        function setServiceCost(projectSelector) {
+            if (projectSelector.val()) {
+                $.get("@Url.Action("GetServiceCost", "Project")" + "?projectId=" + projectSelector.val() + "&contractId=null", function (result) {
+                    $("#LongTermServiceCost").val(result.LongTermServiceCost);
+                    $("#ShortTermServiceCost").val(result.ShortTermServiceCost);
+                    $("#ServiceCostDate").val(result.ServiceCostDate);
+                });
+            }
+        }
+
+        function setMealsCost(projectSelector) {
+            if (projectSelector.val()) {
+                $.get("@Url.Action("GetMealsCost", "Project")" + "?projectId=" + projectSelector.val() + "&contractId=null", function (result) {
+                    $("#LongTermMealsCost").val(result.LongTermMealsCost);
+                    $("#ShortTermMealsCost").val(result.ShortTermMealsCost);
+                    $("#MealsCostDate").val(result.MealsCostDate);
+                });
+            }
+        }
+
+
+        function setContractValues(projectSelector) {
+            $("#ShortTermMealsCost").val(0);
+            $("#ShortTermServiceCost").val(0);
+            $("#LongTermMealsCost").val(0);
+            $("#LongTermServiceCost").val(0);
+            $("#RefundCost").val(0);
+            $("#RelocationCost").val(0);
+            $("#DepositType").val("");
+            $("#DepositCost").val(0);
+
+            $("#ServiceCostDate").val();
+            $("#MealsCostDate").val();
+
+            setProjectInfo(projectSelector);
+
+            serviceLevel.val("");
+            nursingType.val("");
+            $("#ShortTermServiceMonthlyCost").val(0);
+            $("#LongTermServiceMonthlyCost").val(0);
+            $("#LongTermNursingCost").val(0);
+            $("#ShortTermNursingCost").val(0);
+            $("#ServicePackCostDate").val();
+
+            if ($("#DepositType").attr("data-default-value")) {
+                $("#DepositType").val($("#DepositType").attr("data-default-value"))
+                    .attr("data-default-value", "");
+                $("#DepositType").trigger("change");
+            }
+
+            if (serviceLevel.attr("data-default-value")) {
+                serviceLevel.val(serviceLevel.attr("data-default-value"))
+                    .attr("data-default-value", "");
+                serviceLevel.trigger("change");
+            }
+            if (nursingType.attr("data-default-value")) {
+                nursingType.val(nursingType.attr("data-default-value"))
+                    .attr("data-default-value", "");
+                nursingType.trigger("change");
+            }
+
+            var rawProjectId = $("#RawProjectId").val();
+            if (rawProjectId == $(projectSelector).val()) {
+                var rawEndTime = $("#StartTime").attr("data-raw-end-time");
+
+                if (Date.parse($("#StartTime").val()) < Date.parse(rawEndTime)) {
+                    $("#StartTime").val("");
+                }
+                if (Date.parse($("#EndTime").val()) < Date.parse(rawEndTime)) {
+                    $("#EndTime").val("");
+                }
+
+                $("#StartTime").datepicker('setStartDate', $("#StartTime").attr("data-raw-end-time"));
+                $("#EndTime").datepicker('setStartDate', $("#EndTime").attr("data-raw-end-time"));
+            } else {
+                $("#StartTime").datepicker('setStartDate', "");
+                $("#EndTime").datepicker('setStartDate', "");
+            }
+        }
+        //修改违约金
+        $(".changeLd").change(function () {
+            changeLiquidatedDamages();
+        });
+    });
+
+    //计算违约金
+    function changeLiquidatedDamages() {
+        var longTermRoomCost = $("#LongTermRoomCost").val();
+        var longTermMealsCost = $("#LongTermMealsCost").val();
+        var longTermServiceCost = $("#LongTermServiceCost").val();
+        var longTermServiceMonthlyCost = $("#LongTermServiceMonthlyCost").val();
+        var longTermNursingCost = $("#LongTermNursingCost").val();
+        var longTermAttachCost = $("#LongTermAttachCost").val();
+        var projectSelectorval = $("select[id=ProjectId]").val();
+
+        if (longTermRoomCost == "") {
+            longTermRoomCost = 0;
+        }
+        var sumCost = parseFloat(longTermRoomCost) + parseFloat(longTermMealsCost) + parseFloat(longTermServiceCost) + parseFloat(longTermServiceMonthlyCost) + parseFloat(longTermNursingCost) + parseFloat(longTermAttachCost);
+
+        if (projectSelectorval != 0 && sumCost != 0) {
+            $.get("@Url.Action("GetLiquidatedDamages", "Contract")" + "?cost=" + sumCost + "&projectId=" + projectSelectorval, function (result) {
+                if (result.success) {
+                    $("#LiquidatedDamages").val(result.LiquidatedDamages);
+                } else {
+                    $("#LiquidatedDamages").val(0);
+                }
+            });
+        }
+    }
+
+    function getCost(serviceLevel) {
+        var project = $("select[id=ProjectId]");
+        if (serviceLevel.val() != "" && project.val() != "") {
+            $.get("@Url.Action("GetServicePackage", "Contract")" + "?projectId=" + project.val() + "&level=" + serviceLevel.val() + "&contractId=null",
+                function (result) {
+                    $("#ShortTermServiceMonthlyCost").val(result.ShortPrice);
+                    $("#LongTermServiceMonthlyCost").val(result.LongPrice);
+                    $("#ServicePackCostDate").val(result.ServicePackCostDate);
+                    changeLiquidatedDamages();
+                });
+        } else {
+            $("#ShortTermServiceMonthlyCost").val(0);
+            $("#LongTermServiceMonthlyCost").val(0);
+        }
+    }
+
+</script>

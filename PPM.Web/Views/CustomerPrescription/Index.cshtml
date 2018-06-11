@@ -1,0 +1,124 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common;
+@model PensionInsurance.Web.Views.CustomerPrescription.IndexViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <span>客户用药单管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>客户用药单查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","CustomerPrescription")" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">客户名称</label>
+                                    <div class="col-md-9">
+                                        @Html.InputText(m => m.Query.Name)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">项目</label>
+                                    <div class="col-md-9">
+                                        @Html.InputDropDown(x => Model.Query.ProjectId, Model.Projects, true)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">状态</label>
+                                    <div class="col-md-9">
+                                        @Html.InputDropDownEnum(m => m.Query.Status, typeof(PrescriptionStatus), true)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="text-center">
+                            <button type="submit" class="btn green btn-sm padding-lf-15 ">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">客户用药单列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>项目名称</th>
+                                <th>客户名称</th>
+                                <th>药单名称</th>
+                                <th>单次剂量</th>
+                                <th>给药途径</th>
+                                <th>服用日期</th>
+                                <th>服用时间</th>
+                                <th>发药签字人</th>
+                                <th>摆药签字人</th>
+                                <th>药单状态</th>
+                               
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CustomerPrescriptions)
+                            {
+                                <tr>
+                                    <td>@Model.CustomerPrescriptions.RowNumberOf(item)</td>
+                                    <td>@item.CustomerMedicalAdvice.CustomerAccount.Project.Name</td>
+                                    <td>@item.CustomerMedicalAdvice.CustomerAccount.Customer.Name</td>
+                                    <td>@item.CustomerMedicalAdvice.MedicalAdviceContent</td>
+                                    <td>@item.CustomerMedicalAdvice.Dose</td>
+                                    <td>@item.CustomerMedicalAdvice.RouteOfAdministration</td>
+                                    <td>@item.UsingDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@item.UsingTime</td>
+                                    <td>@{
+                                            var dispensingUser = item.DispensingUser == null ? "" : item.DispensingUser.RealName;
+                                        }@dispensingUser</td>
+                                    <td>@{
+                                            var drugDispensingUser = item.DrugDispensingUser == null ? "" : item.DrugDispensingUser.RealName;
+                                        }@drugDispensingUser</td>
+                                    <td>@item.Status</td>
+                                    
+                                </tr>
+                                    }
+                        </tbody>
+                    </table>
+                    @Html.Partial("_Pagination", Model.CustomerPrescriptions)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

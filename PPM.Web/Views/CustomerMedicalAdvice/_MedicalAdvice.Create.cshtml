@@ -1,0 +1,153 @@
+﻿@using Foundation.Core
+@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.CustomerMedicalAdvice.CreateViewModel
+
+<form id="MedicalAdvice-create-form" data-ajax="true" action="@Url.Action("Create", "CustomerMedicalAdvice")" method="POST" class="form-horizontal">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">@($"新增客户{Model.MedicalAdviceType}信息")</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+                @Html.HiddenFor(m => m.CustomerAccountId)
+                @Html.HiddenFor(m => m.MedicalAdviceType)
+                @*<div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">长辈姓名</label>
+                            <div class="col-md-8">
+                                @Model.Customer.Name
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">长辈性别</label>
+                            <div class="col-md-8">
+                                @Model.Customer.Sex
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">长辈年龄</label>
+                            <div class="col-md-8">
+                                @Model.Customer.Birthday.ToAge()
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">房间</label>
+                            <div class="col-md-8">
+                                @Model.Customer.Birthday.ToAge()
+                            </div>
+                        </div>
+                    </div>
+                </div>*@
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">开始日期</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control form-control-inline" id="StartTime" name="StartTime" data-date-format="yyyy-mm-dd hh:ii">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">是否药品</label>
+                            <div class="col-md-8">
+                                @Html.DropDownListFor(m => m.IsDrugs, true)
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">医嘱内容</label>
+                            <div class="col-md-10">
+                                @Html.InputText(m => m.MedicalAdviceContent)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="yaopinInfo">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">单次剂量</label>
+                            <div class="col-md-8">
+                                @Html.InputText(x => x.Dose)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">每日频次</label>
+                            <div class="col-md-8">
+                                @Html.InputText(x => x.Frequency)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">给药途径</label>
+                            <div class="col-md-8">
+                                @Html.EnumTextDropDownListFor(x => x.RouteOfAdministration, typeof (RouteOfAdministration), true)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">用药时间</label>
+                            <div class="col-md-8">
+                                <input type="text" class="form-control" placeholder="多个时间以','隔开" id="MedicationTime" name="MedicationTime">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+
+        $("#IsDrugs").on("change", function (e) {
+           
+            if ($(this).val() =='True') {
+                $("#yaopinInfo").show();
+            }
+            if ($(this).val() == 'False') {
+                $("#yaopinInfo").hide();
+            }
+        });
+        
+
+        $('#StartTime').datetimepicker({
+            autoclose: true,
+            todayBtn: true,
+            language: "zh-CN"
+        });
+        //st
+        $('#st').timepicker({
+            autoclose: true,
+            todayBtn: true,
+            language: "zh-CN",
+            minuteStep: 5,
+            showSeconds: false,
+            showMeridian: false
+        });
+    });
+</script>

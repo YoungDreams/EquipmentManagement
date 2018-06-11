@@ -1,0 +1,89 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+
+@model PensionInsurance.Web.Views.Customer.DetailViewModel
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet-body">
+            <div class="table-scrollable">
+                <table id="customer-family-items" class="table table-hover" data-src="@Url.Action("Detail", "Customer", new {customerId = Model.CustomerInfo.CustomerId, customerAccountId = Model.CustomerAccountId})">
+                    <thead>
+                    <tr>
+                        <th>头像</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>关系</th>
+                        <th>证件号</th>
+                        <th>手机号码</th>
+                        <th>固定电话</th>
+                        <th>工作单位</th>
+                        <th>电子邮箱</th>
+                        <th>地址</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.CustomerFamilyList != null)
+                        {
+                            foreach (var item in Model.CustomerFamilyList)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (string.IsNullOrWhiteSpace(item.AvatarThumbnail))
+                                        {
+                                            <img src="@Url.Content("~/assets/layouts/layout/img/confirm.png")" class="avatar" alt="">
+                                        }
+                                        else
+                                        {
+                                            <img src="@Url.Content(item.AvatarThumbnail)" class="avatar" alt="">
+                                        }
+                                    </td>
+                                    <td>@item.Name</td>
+                                    <td>@item.Sex</td>
+                                    <td>@item.Ship</td>
+                                    <td>@item.IDCardNo</td>
+                                    <td>@item.MobilePhone</td>
+                                    <td>@item.Tel</td>
+                                    <td>@item.WorkUnit</td>
+                                    <td>@item.Mailbox</td>
+                                    <td>@item.Address</td>
+                                    <td>
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户亲属, Permission.编辑))
+                                        {
+                                            <a data-src="@Url.Action("EditAvatar", "CustomerFamily", new {familyId = item.Id})" href="javascript:;" class="btn default btn-xs blue-stripe edit-customer-family-avatar">上传头像</a>
+                                            <a data-src="@Url.Action("Edit", "CustomerFamily", new {id = item.Id})" href="javascript:;" class="btn default btn-xs yellow-stripe edit-customer-family">编辑</a>
+                                        }
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户亲属, Permission.删除))
+                                        {
+                                            <a href="javascript:;" data-command="@Model.DeleteCustomerFamilyCommand(item.Id).ToJavascript()" class="btn default btn-xs red-stripe" data-refresh="#customer-family-items">
+                                                删除
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document)
+                // 亲属信息
+                .on("click", ".add-customer-family", function () {
+                    App.dialog('#customer-family-create-form', '@Url.Action("Create", "CustomerFamily", new { customerId = Model.CustomerInfo.CustomerId})', "col-md-8 col-md-offset-2");
+                })
+                .on("click", ".edit-customer-family", function () {
+                    var src = $(this).attr("data-src");
+                    App.dialog('#customer-family-edit-form', src, "col-md-8 col-md-offset-2");
+                })
+                .on("click", ".edit-customer-family-avatar", function () {
+                    var src = $(this).attr("data-src");
+                    App.dialogMultipart('#customerFamily-Avatar-edit-form', src);
+                });
+    });
+</script>

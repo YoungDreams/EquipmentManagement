@@ -1,0 +1,80 @@
+﻿@using PensionInsurance.Web.Common;
+@model PensionInsurance.Web.Views.SystemSetting.Room.CreateRoomListViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index", "Home")">系统设置管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Project")">项目管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>房间管理</span>
+            </li>
+        </ul>
+    </div>
+}
+
+<div class="row" style="margin-top: 10px;">
+    <form data-ajax="true" action="@Url.Action("CreateListConfirm", "Room")" method="POST" class="form-horizontal">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">房间信息列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>楼栋名称</th>
+                            <th>单元名称</th>
+                            <th>楼层名称</th>
+                            <th>房间说明</th>
+                            <th>房型</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @{int index = 0; }
+                        @foreach (var item in Model.CreateRoomViewModels)
+                        {
+                            <tr>
+                                <td>@Model.CreateRoomViewModels.RowNumberOf(item)</td>
+                                <td>@Html.LabelForModel(item.BuildingName)</td>
+                                <td>@Html.LabelForModel(item.UnitName)</td>
+                                <td>@Html.LabelForModel(item.FloorName)</td>
+                                <td>@Html.LabelForModel(item.Remark)</td>
+                                <td>@Html.DropDownList("Rooms["+index+"].RoomTypeId", Model.RoomTypes, "--未选择--", new {@class = "input-small"})</td>
+                                <td><input type="hidden" name="Rooms[@index].Building" value ="@item.Building.ToString()"/></td>
+                                <td><input type="hidden" name="Rooms[@index].Unit" value="@item.Unit.ToString()" /></td>
+                                <td><input type="hidden" name="Rooms[@index].Floor" value="@item.Floor.ToString()" /></td>
+                                <td><input type="hidden" name="Rooms[@index].Remark" value="@item.Remark" /></td>
+                                <td><input type="hidden" name="Rooms[@index].ProjectId" value="@Request.QueryString["ProjectId"]" /></td>
+                            </tr>
+                            index += 1;
+                        }
+                        </tbody>
+                    </table>
+                    <input type="hidden" name="Remark" value="@Request.QueryString["remark"]" />
+                    <input type="hidden" name="ProjectId" value="@Request.QueryString["ProjectId"]" />
+                </div>
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+            </div>
+            <div class="form-actions">
+                <div class="text-center">
+                    <button type="submit" class="btn green btn-sm padding-lf-15 ">保存</button>
+                    <button type="button" class="btn yellow btn-sm padding-lf-15 " onclick="javascript: history.back(-1);">返回上一页</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>

@@ -1,0 +1,70 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@model PensionInsurance.Web.Views.ContractCostChange.CreateUploadProtocolPartialViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+
+
+<div class="portlet box green">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="fa fa-gift"></i>@Model.Title
+        </div>
+    </div>
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        <div class="form-body">
+            <div class="row">
+                <div class="col-md-12">
+                    <form  action="@Url.Action("UploadAdditional", "ContractCostChange")" method="POST" enctype="multipart/form-data">
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            @Html.HiddenFor(m => m.RalatedId)
+                            @Html.HiddenFor(m => m.Type)
+                            @Html.HiddenFor(m => m.CustomerAccountId)
+                            <div class="form-body">
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-4">
+                                        <div class="form-group">
+                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                <div class="input-group input-large">
+                                                    <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                        <span class="fileinput-filename"> </span>
+                                                    </div>
+                                                    <span class="input-group-addon btn default btn-file">
+                                                        <span class="fileinput-new">选择文件</span>
+                                                        <span class="fileinput-exists">替换</span>
+                                                        <input type="file" name="file">
+                                                    </span>
+                                                    <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <div class="text-center">
+                                <button class="btn green btn-sm padding-lf-15">上传</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

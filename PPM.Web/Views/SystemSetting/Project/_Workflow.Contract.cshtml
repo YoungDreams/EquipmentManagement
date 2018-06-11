@@ -1,0 +1,408 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.SystemSetting.Project.EditWorkflowContractViewModel
+<form id="workflow-contract-edit-form" data-ajax="true" action="@Url.Action("EditWorkflowContract", "Project")" method="POST" class="form-horizontal" data-refresh="#project-items">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                @if (Model.WorkflowCategory == WorkflowCategory.客户退住通知单)
+                {
+                    <span class="caption-subject font-green-sharp sbold">编辑@(Model.WorkflowCategory)填写流程</span>
+                }
+                else if (Model.WorkflowCategory == WorkflowCategory.食材紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.食材紧急采购验收 || Model.WorkflowCategory == WorkflowCategory.紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.计划采购审批 || Model.WorkflowCategory == WorkflowCategory.紧急采购验收 || Model.WorkflowCategory == WorkflowCategory.计划采购验收
+                    || Model.WorkflowCategory == WorkflowCategory.食材采购审批 || Model.WorkflowCategory == WorkflowCategory.餐饮部计划采购审批 || Model.WorkflowCategory == WorkflowCategory.餐饮部计划采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类计划采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购审批)
+                {
+                    <span class="caption-subject font-green-sharp sbold">编辑@(Model.WorkflowCategory)流程</span>
+                }
+                else
+                {
+                    <span class="caption-subject font-green-sharp sbold">编辑@(Model.WorkflowCategory)审批流程</span>
+                }
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="form-body">
+                @Html.HiddenFor(m => m.WorkflowCategory)
+                @Html.HiddenFor(m => m.ProjectId)
+                @Html.Hidden("SelectedUsers")
+
+
+                @if (Model.WorkflowCategory == WorkflowCategory.客户退住通知单)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">生活健康经理</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.LivingHealthManagerUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">公寓总经理</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.ApartmentGeneralManagerUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.WorkflowCategory == WorkflowCategory.固定资产采购验收)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">资产管理员</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.AssetManagerUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">公寓总经理</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.ApartmentApprovalUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.WorkflowCategory == WorkflowCategory.营销类计划采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购验收 || Model.WorkflowCategory == WorkflowCategory.餐饮部计划采购验收 || Model.WorkflowCategory == WorkflowCategory.食材紧急采购验收 || Model.WorkflowCategory == WorkflowCategory.紧急采购验收 || Model.WorkflowCategory == WorkflowCategory.计划采购验收)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">管家入库</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.HousekeeperUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.WorkflowCategory == WorkflowCategory.食材采购验收)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">项目餐饮负责人</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.ProjectCaterersUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.WorkflowCategory == WorkflowCategory.营销类计划采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.食材紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.食材紧急采购验收 || Model.WorkflowCategory == WorkflowCategory.紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.计划采购审批 || Model.WorkflowCategory == WorkflowCategory.紧急采购验收 || Model.WorkflowCategory == WorkflowCategory.计划采购验收
+     || Model.WorkflowCategory == WorkflowCategory.食材采购审批 || Model.WorkflowCategory == WorkflowCategory.餐饮部计划采购验收 || Model.WorkflowCategory == WorkflowCategory.餐饮部计划采购审批 || Model.WorkflowCategory == WorkflowCategory.食材采购验收)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">公寓总经理</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.ApartmentApprovalUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.WorkflowCategory == WorkflowCategory.营销类计划采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购验收)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">营销业务审批</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.MarketingDirectorApprovalUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.WorkflowCategory == WorkflowCategory.营销类计划采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购验收)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">公寓总经理</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.ApartmentApprovalUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.WorkflowCategory == WorkflowCategory.营销类计划采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购审批)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">销售总监审批</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.SalesApprovalUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">市场总监审批</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.MarketDirectorApprovalUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.WorkflowCategory == WorkflowCategory.营销类计划采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.食材紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.计划采购审批 || Model.WorkflowCategory == WorkflowCategory.食材采购确认
+|| Model.WorkflowCategory == WorkflowCategory.餐饮部计划采购审批)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">采购负责人</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.PurchaseUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    if (Model.WorkflowCategory == WorkflowCategory.紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购审批)
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">财务总监</label>
+                                    <div class="col-md-5">
+                                        @Html.InputDropDown(m => m.FinanceUserId, Model.Users, true)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+                @if (Model.WorkflowCategory != WorkflowCategory.固定资产采购验收 && Model.WorkflowCategory != WorkflowCategory.盘点审批 && Model.WorkflowCategory != WorkflowCategory.餐饮部计划采购验收 && Model.WorkflowCategory != WorkflowCategory.餐饮部计划采购审批 && Model.WorkflowCategory != WorkflowCategory.食材紧急采购审批 && Model.WorkflowCategory != WorkflowCategory.食材紧急采购验收 && Model.WorkflowCategory != WorkflowCategory.紧急采购审批 && Model.WorkflowCategory != WorkflowCategory.计划采购审批 && Model.WorkflowCategory != WorkflowCategory.紧急采购验收 && Model.WorkflowCategory != WorkflowCategory.计划采购验收 && Model.WorkflowCategory != WorkflowCategory.食材采购确认 && Model.WorkflowCategory != WorkflowCategory.食材采购验收)
+                {
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @if (Model.WorkflowCategory == WorkflowCategory.客户退住通知单)
+                                {
+                                    <label class="control-label col-md-5">中心通知人</label>
+                                }
+                                else if (Model.WorkflowCategory == WorkflowCategory.营销类计划采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.食材采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类计划采购验收)
+                                {
+                                    <label class="control-label col-md-5">传阅人</label>
+                                }
+                                else
+                                {
+                                    <label class="control-label col-md-5">添加审批人</label>
+                                }
+
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.Users, Model.Users, true)
+
+                                </div>
+                                <div class="col-md-2">
+                                    <span class="add-workflow"><i class="fa fa-plus"></i></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                @if (Model.WorkflowCategory == WorkflowCategory.营销类计划采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购审批 || Model.WorkflowCategory == WorkflowCategory.营销类计划采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类特殊采购验收 || Model.WorkflowCategory == WorkflowCategory.营销类紧急采购验收 || Model.WorkflowCategory == WorkflowCategory.客户退住通知单 || Model.WorkflowCategory == WorkflowCategory.食材采购审批)
+                                {
+                                    if (Model.WorkflowCategory == WorkflowCategory.客户退住通知单)
+                                    {
+                                        <label class="control-label col-md-5">已添加通知人</label>
+                                    }
+                                    else
+                                    {
+                                        <label class="control-label col-md-5">已添加传阅人</label>
+                                    }
+                                    <div class="col-md-7">
+                                        <ul class="dd-list">
+                                            @foreach (var item in Model.UserSelectListItems)
+                                            {
+                                                <li class="dd-item" data-id="@item.Value">@item.Text<i class="js-remove fa fa-remove"></i></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <label class="control-label col-md-5">已添加审批人</label>
+                                    <div class="col-md-7">
+                                        <ul class="dd-list">
+                                            @foreach (var workflow in Model.WorkflowDetail)
+                                            {
+                                                <li class="dd-item" data-id="@workflow.UserId">@workflow.RealName<i class="js-remove fa fa-remove"></i></li>
+                                            }
+                                        </ul>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.WorkflowCategory != WorkflowCategory.固定资产采购验收 && Model.WorkflowCategory != WorkflowCategory.盘点审批 && Model.WorkflowCategory != WorkflowCategory.营销类计划采购验收 && Model.WorkflowCategory != WorkflowCategory.营销类特殊采购验收 && Model.WorkflowCategory != WorkflowCategory.营销类紧急采购验收 && Model.WorkflowCategory != WorkflowCategory.营销类计划采购审批 && Model.WorkflowCategory != WorkflowCategory.营销类特殊采购审批 && Model.WorkflowCategory != WorkflowCategory.营销类紧急采购审批 && Model.WorkflowCategory != WorkflowCategory.餐饮部计划采购验收 && Model.WorkflowCategory != WorkflowCategory.餐饮部计划采购审批 && Model.WorkflowCategory != WorkflowCategory.食材紧急采购审批 && Model.WorkflowCategory != WorkflowCategory.食材紧急采购验收 && Model.WorkflowCategory != WorkflowCategory.食材采购确认 && Model.WorkflowCategory != WorkflowCategory.食材采购验收 && Model.WorkflowCategory != WorkflowCategory.客户退住通知单 && Model.WorkflowCategory != WorkflowCategory.客户退住退款 && Model.WorkflowCategory != WorkflowCategory.账单减免不累计额度 && Model.WorkflowCategory != WorkflowCategory.账单减免累计限额内 && Model.WorkflowCategory != WorkflowCategory.账单减免累计限额外
+&& Model.WorkflowCategory != WorkflowCategory.紧急采购审批 && Model.WorkflowCategory != WorkflowCategory.食材采购审批 && Model.WorkflowCategory != WorkflowCategory.计划采购审批 && Model.WorkflowCategory != WorkflowCategory.紧急采购验收 && Model.WorkflowCategory != WorkflowCategory.计划采购验收)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">打印人</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.PrintUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    if (Model.WorkflowCategory != WorkflowCategory.转账)
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-5">生效人</label>
+                                    <div class="col-md-5">
+                                        @Html.InputDropDown(m => m.EffectUserId, Model.Users, true)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+
+                @if (Model.WorkflowCategory != WorkflowCategory.固定资产采购验收 && Model.WorkflowCategory != WorkflowCategory.盘点审批 && Model.WorkflowCategory != WorkflowCategory.营销类计划采购验收 && Model.WorkflowCategory != WorkflowCategory.营销类特殊采购验收 && Model.WorkflowCategory != WorkflowCategory.营销类紧急采购验收 && Model.WorkflowCategory != WorkflowCategory.营销类计划采购审批 && Model.WorkflowCategory != WorkflowCategory.营销类特殊采购审批 && Model.WorkflowCategory != WorkflowCategory.营销类紧急采购审批 && Model.WorkflowCategory != WorkflowCategory.餐饮部计划采购验收 && Model.WorkflowCategory != WorkflowCategory.餐饮部计划采购审批 && Model.WorkflowCategory != WorkflowCategory.食材紧急采购审批 && Model.WorkflowCategory != WorkflowCategory.食材紧急采购验收 && Model.WorkflowCategory != WorkflowCategory.食材采购确认 && Model.WorkflowCategory != WorkflowCategory.食材采购验收 && Model.WorkflowCategory != WorkflowCategory.客户退住通知单 && Model.WorkflowCategory != WorkflowCategory.账单减免不累计额度 && Model.WorkflowCategory != WorkflowCategory.账单减免累计限额内 && Model.WorkflowCategory != WorkflowCategory.账单减免累计限额外
+&& Model.WorkflowCategory != WorkflowCategory.紧急采购审批 && Model.WorkflowCategory != WorkflowCategory.食材采购审批 && Model.WorkflowCategory != WorkflowCategory.计划采购审批 && Model.WorkflowCategory != WorkflowCategory.紧急采购验收 && Model.WorkflowCategory != WorkflowCategory.计划采购验收)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">上传人</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.UploadUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">确认人</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.ConfirmUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                }
+                @if (Model.WorkflowCategory == WorkflowCategory.客户退住退款)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">退款人</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.RefundUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.WorkflowCategory == WorkflowCategory.盘点审批)
+                {
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">公寓总经理</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.ApartmentApprovalUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">主管会计确认</label>
+                                <div class="col-md-5">
+                                    @Html.InputDropDown(m => m.DirectorAccountingConfirmUserId, Model.Users, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+            @*<div class="note note-warning">
+                    <h5 class="block">提示! 编辑当前的审批流程中的审批人后，会将所有审批流程中的任务撤回到新建状态</h5>
+                </div>*@
+        </div>
+    </div>
+    <div class="errors alert alert-danger fade in" style="display: none;"></div>
+</form>
+<script type="text/javascript" src="@Url.Content("~/assets/global/plugins/sortable/Sortable.js")"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var ddList = $(".dd-list");
+        if (ddList && ddList[0]) {
+            var editableList = Sortable.create(ddList[0], {
+                filter: '.js-remove',
+                handle: ".dd-item",
+                onFilter: function (evt) {
+                    var el = editableList.closest(evt.item);
+                    el && el.parentNode.removeChild(el);
+
+                    $("#SelectedUsers").val(editableList.toArray());
+                },
+                onEnd: function () {
+                    $("#SelectedUsers").val(editableList.toArray());
+                }
+            });
+            $("#SelectedUsers").val(editableList.toArray());
+
+            $(document).on("click", ".add-workflow i", function () {
+                var errors = $(".errors");
+                errors.find("p").remove();
+                var userId = $('#Users option:selected').val();
+                var userName = $('#Users option:selected').text();
+
+                if (userId === '') {
+                    errors.append("<p>请选择审批人</p>");
+                    errors.show();
+                    return;
+                } else {
+                    errors.hide();
+                }
+
+                var el = $('<li class="dd-item" data-id="' + userId + '">' + userName + '<i class="js-remove fa fa-remove"></i></li>')[0];
+                editableList.el.appendChild(el);
+
+                $("#SelectedUsers").val(editableList.toArray());
+            });
+        }
+    });
+
+</script>

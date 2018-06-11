@@ -1,0 +1,308 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Customer.CustomerPayViewModel
+
+@if (!Model.IsSucceed)
+{
+    <div class="errors alert alert-danger fade in">
+        <span>@Model.Message</span>
+    </div>
+    return;
+}
+
+<form id="customer-pay-form" data-ajax="true" action="#" method="POST" class="form-horizontal">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">付款</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">客户姓名</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="CustomerName" value="@Model.CustomerName" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">付款日期</label>
+                            <div class="col-md-10">
+                                <input type="text" name="PaymentDate" class="form-control form-control-inline date-picker" data-date-format="yyyy-mm-dd" value="@DateTime.Now.ToString("yyyy-MM-dd")">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">付款方式</label>
+                            <div class="col-md-10">
+                                <span>@Model.PaymentType.ToString()</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">账户余额</label>
+                            <div class="col-md-10">
+                                <input type="text" class="form-control" name="Money" value="@Model.Money" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">账单付款金额</label>
+                            <div class="col-md-10">
+                                <input type="text" name="TotalPayableCost" class="form-control" value="@Model.TotalPayableCost" readonly>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">预交金额</label>
+                            <div class="col-md-10">
+                                <input type="text" name="TotalPrePayableCost" class="form-control" value="@Model.TotalPrePayableCost">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (Model.Bills.Count > 0)
+                {
+                    <div class="row">
+                        <table class="table table-hover" id="table-bills" style="margin: 20px; width: 95%">
+                            <thead>
+                            <tr>
+                                <th>合同编号</th>
+                                <th>账单类型</th>
+                                <th>账单名称</th>
+                                <th>账单金额</th>
+                                <th>未缴金额</th>
+                                <th>缴纳金额</th>
+                                <th>使用余额</th>
+                                <th>合计</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @{
+                                var idx = 0;
+                                foreach (var bill in Model.Bills)
+                                {
+                                    if (bill.Arrears == 0)
+                                    {
+                                        continue;
+                                    }
+                                    <tr>
+                                        <td>@bill.ContractNo</td>
+                                        <td>@bill.BillType</td>
+                                        <td>@bill.BillName</td>
+                                        <td>@bill.ActualPaymentCost</td>
+                                        <td id='td-arrears-@idx'>@bill.Arrears</td>
+                                        <td id='td-payable-cost-@idx'>
+                                            <input type='hidden' name='PaymentBills[@idx].CustomerBillId' value="@bill.CustomerBillId">
+                                            <input type='text' name='PaymentBills[@idx].PayableCost'>
+                                        </td>
+                                        <td>
+                                            <input type='text' name='PaymentBills[@idx].RemainingCost'>
+                                        </td>
+                                        <td id='td-total-@idx'></td>
+                                    </tr>
+                                    idx++;
+                                }
+
+                            }
+
+                            </tbody>
+                        </table>
+                        
+                    </div>
+                                    }
+                                
+                @if (Model.CustomerOrderFoods != null && Model.CustomerOrderFoods.Any())
+                {
+                    var idx = 0;
+                    <div class="row">
+                        <table id="table-cash-paid-order-foods" class="table table-hover" style="margin: 20px; width: 95%">
+                            <thead>
+                            <tr>
+                                <th>餐饮类型</th>
+                                <th>账单金额</th>
+                                <th>已缴金额</th>
+                                <th>未缴金额</th>
+                                <th>缴纳金额</th>
+                                <th>使用余额</th>
+                                <th>合计</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            @foreach (var item in Model.CustomerOrderFoods)
+                            {
+                                <tr>
+                                    <td>@item.ServiceItemName</td>
+                                    <td>@item.Total.FormatString()</td>
+                                    <td>@item.ActualPayment.FormatString()</td>
+                                    <td>@{
+                                            var unPaidMoney = item.Total - item.ActualPayment;
+                                        }
+                                    @unPaidMoney.FormatString()</td>
+                                    <td id='td-payable-cost-@idx'>
+                                        <input type='hidden' name='PaymentCustomerOrderFoods[@idx].Id' value="@item.ServiceRecordId">
+                                        <input type='text' name='PaymentCustomerOrderFoods[@idx].PayableCost'>
+                                    </td>
+                                    <td>
+                                        <input type='text' name='PaymentCustomerOrderFoods[@idx].RemainingCost'>
+                                    </td>
+                                    <td id='td-total-cash-@idx'></td>
+                                </tr>
+                                idx++;
+                            }
+                            </tbody>
+                        </table>
+                    </div>
+                        }
+
+                        <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                        <input type="hidden" name="CustomerAccountId" value="@Model.CustomerAccountId"/>
+                        <input type="hidden" name="TotalRemainingCost" value="@Model.TotalRemainingCost"/>
+                        <input type="hidden" name="PaymentType" value="@Model.PaymentType.ToString()"/>
+                        <!-- END FORM-->
+                    </div>
+        </div>
+    </div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var tableBills = $("#table-bills");
+
+        $(tableBills.find('tr')).each(function(idx) {
+            $("input[name='PaymentBills[" + idx + "].PayableCost']").on("blur", function () {
+                debugger;
+                var tdTotal = $("#td-total-" + idx + "");
+                var totalPayableCost = 0;
+                var payableItems = $("[name$='.PayableCost']");
+                $(payableItems).each(function (idx, item) {
+                    var payableCost = $(item).val();
+                    if (payableCost !== "" && !isNaN(parseFloat(payableCost))) {
+                        totalPayableCost += parseFloat(payableCost);
+                    }
+                });
+                $("input[name=TotalPayableCost]").val(totalPayableCost.toFixed(2));
+
+                var currentPayableCost = parseFloat($("input[name='PaymentBills[" + idx + "].PayableCost']").val());
+                var currentRemainingCost = parseFloat($("input[name='PaymentBills[" + idx + "].RemainingCost']").val());
+                if (!isNaN(currentPayableCost) && !isNaN(currentRemainingCost)) {
+                    tdTotal.text((currentPayableCost + currentRemainingCost).toFixed(2));
+                } else if (!isNaN(currentPayableCost)) {
+                    tdTotal.text(currentPayableCost.toFixed(2));
+                } else if (!isNaN(currentRemainingCost)) {
+                    tdTotal.text(currentRemainingCost.toFixed(2));
+                } else {
+                    tdTotal.text('');
+                }
+            });
+
+            $("input[name='PaymentBills[" + idx + "].RemainingCost']").on("blur", function () {
+                debugger;
+                var tdTotal = $("#td-total-" + idx + "");
+                var totalRemainingCost = 0;
+                var remainingItems = $("[name$='.RemainingCost']");
+                $(remainingItems).each(function (idx, item) {
+                    var remainingCost = $(item).val();
+                    if (remainingCost !== "" && !isNaN(parseFloat(remainingCost))) {
+                        totalRemainingCost += parseFloat(remainingCost);
+                    }
+                });
+                $("input[name=TotalRemainingCost]").val(totalRemainingCost.toFixed(2));
+
+                var currentPayableCost = parseFloat($("input[name='PaymentBills[" + idx + "].PayableCost']").val());
+                var currentRemainingCost = parseFloat($("input[name='PaymentBills[" + idx + "].RemainingCost']").val());
+                if (!isNaN(currentPayableCost) && !isNaN(currentRemainingCost)) {
+                    tdTotal.text((currentPayableCost + currentRemainingCost).toFixed(2));
+                } else if (!isNaN(currentPayableCost)) {
+                    tdTotal.text(currentPayableCost.toFixed(2));
+                } else if (!isNaN(currentRemainingCost)) {
+                    tdTotal.text(currentRemainingCost.toFixed(2));
+                } else {
+                    tdTotal.text('');
+                }
+            });
+        });
+
+        var tableCashPaidOrderFoods = $("#table-cash-paid-order-foods");
+
+        $(tableCashPaidOrderFoods.find('tr')).each(function (idx) {
+            $("input[name='PaymentCustomerOrderFoods[" + idx + "].PayableCost']").on("blur", function () {
+                debugger;
+                var tdTotal = $("#td-total-cash-" + idx + "");
+                var totalPayableCost = 0;
+                var payableItems = $("[name$='.PayableCost']");
+                $(payableItems).each(function (idx, item) {
+                    var payableCost = $(item).val();
+                    if (payableCost !== "" && !isNaN(parseFloat(payableCost))) {
+                        totalPayableCost += parseFloat(payableCost);
+                    }
+                });
+                $("input[name=TotalPayableCost]").val(totalPayableCost.toFixed(2));
+                var currentPayableCost = parseFloat($("input[name='PaymentCustomerOrderFoods[" + idx + "].PayableCost']").val());
+                var currentRemainingCost = parseFloat($("input[name='PaymentCustomerOrderFoods[" + idx + "].RemainingCost']").val());
+                if (!isNaN(currentPayableCost) && !isNaN(currentRemainingCost)) {
+                    tdTotal.text((currentPayableCost + currentRemainingCost).toFixed(2));
+                } else if (!isNaN(currentPayableCost)) {
+                    tdTotal.text(currentPayableCost.toFixed(2));
+                } else if (!isNaN(currentRemainingCost)) {
+                    tdTotal.text(currentRemainingCost.toFixed(2));
+                } else {
+                    tdTotal.text('');
+                }
+            });
+
+            $("input[name='PaymentCustomerOrderFoods[" + idx + "].RemainingCost']").on("blur", function () {
+                debugger;
+                var tdTotal = $("#td-total-cash-" + idx + "");
+                var totalRemainingCost = 0;
+                var remainingItems = $("[name$='.RemainingCost']");
+                $(remainingItems).each(function (idx, item) {
+                    var remainingCost = $(item).val();
+                    if (remainingCost !== "" && !isNaN(parseFloat(remainingCost))) {
+                        totalRemainingCost += parseFloat(remainingCost);
+                    }
+                });
+                $("input[name=TotalRemainingCost]").val(totalRemainingCost.toFixed(2));
+
+
+                var currentPayableCost = parseFloat($("input[name='PaymentCustomerOrderFoods[" + idx + "].PayableCost']").val());
+                var currentRemainingCost = parseFloat($("input[name='PaymentCustomerOrderFoods[" + idx + "].RemainingCost']").val());
+                if (!isNaN(currentPayableCost) && !isNaN(currentRemainingCost)) {
+                    tdTotal.text((currentPayableCost + currentRemainingCost).toFixed(2));
+                } else if (!isNaN(currentPayableCost)) {
+                    tdTotal.text(currentPayableCost.toFixed(2));
+                } else if (!isNaN(currentRemainingCost)) {
+                    tdTotal.text(currentRemainingCost.toFixed(2));
+                } else {
+                    tdTotal.text('');
+                }
+            });
+        });
+
+        $('input[name="PaymentDate"]').datepicker({
+            autoclose: true,
+            language: "zh-CN"
+        });
+    });
+</script>

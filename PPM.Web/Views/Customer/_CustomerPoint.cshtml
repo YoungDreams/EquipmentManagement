@@ -1,0 +1,49 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Query
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Customer.DetailViewModel
+<div id="section-customer-point" class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet protlet-border">
+            <div class="portlet-title title-style">
+                <i class="fa fa-product-hunt"></i>
+                <span class="caption-subject font-green bold uppercase">积分信息</span>
+            </div>
+            <div class="table-scrollable">
+                <table id="tablePoint" class="table table-hover" data-src="@Request.Url">
+                    <thead>
+                        <tr>
+                            <th class="th-15-percent">收支日期</th>
+                            <th class="th-15-percent">使用方式</th>
+                            <th class="th-10-percent">收入积分</th>
+                            <th class="th-10-percent">支出积分</th>
+                            <th class="th-50-percent">备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.CustomerPointList)
+                        {
+                            <tr>
+                                <td style="white-space: nowrap;">@item.UseDate.DateString()</td>
+                                <td>@item.PointType.ToString()</td>
+                                @if (item.UsePoint > 0)
+                                {
+                                    <td>@item.UsePoint</td>
+                                        <td></td>
+                                }
+                                else
+                                {
+                                    <td></td>
+                                        <td>@item.UsePoint</td>
+                                }
+                                <td>@item.Remark</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,113 @@
+﻿@using PPM.Commands
+@model PPM.MVC.Views.Equipment.Info.ViewInWechatViewModel
+@{
+    Layout = "";
+    var equipmentInfo = Model.EquipmentInfo;
+    var category = equipmentInfo.EquipmentCategory;
+    var categoryColumns = category.Columns;
+    var columnValues = equipmentInfo.EquipmentInfoColumnValues;
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,user-scalable=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>设备详情</title>
+    <!-- head 中 -->
+    <link href=@Url.Content("~/assets/weui/weui.css") rel="stylesheet" type="text/css" />
+    <link rel="stylesheet" href="https://cdn.bootcss.com/jquery-weui/1.2.0/css/jquery-weui.min.css">
+    <style>
+        body, html {
+            height: 100%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .demos-title {
+            text-align: center;
+            font-size: 34px;
+            color: #3cc51f;
+            font-weight: 400;
+            margin: 0 15%;
+        }
+
+        .demos-sub-title {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+        }
+
+        .demos-header {
+            padding: 35px 0;
+        }
+
+        .demos-content-padded {
+            padding: 15px;
+        }
+
+        .demos-second-title {
+            text-align: center;
+            font-size: 24px;
+            color: #3cc51f;
+            font-weight: 400;
+            margin: 0 15%;
+        }
+
+        footer {
+            text-align: center;
+            font-size: 14px;
+            padding: 20px;
+        }
+
+            footer a {
+                color: #999;
+                text-decoration: none;
+            }
+    </style>
+</head>
+<body>
+    <header class='demos-header'>
+        <h4 class="demos-title">设备分类: @category.Name</h4>
+    </header>
+
+    <div class="bd">
+        <div class="weui-cells__title">详情</div>
+        @{
+            var index = 0;
+        }
+        @foreach (var categoryColumn in categoryColumns)
+        {
+            if (categoryColumn.ColumnType != EquipmentCategoryColumnType.文件.ToString())
+            {
+                <div class="weui-cells">
+                    <div class="weui-cell">
+                        <div class="weui-cell__bd">
+                            <p>@categoryColumn.ColumnName</p>
+                        </div>
+                        <div class="weui-cell__ft">@columnValues[index].Value</div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="weui-cells weui-cell_access">
+                    <a class="weui-cell" href="@(columnValues[index].Value.IndexOf("Attachments", StringComparison.Ordinal)!=-1 ? columnValues[index].Value:"javascript:;")">
+                        <div class="weui-cell__bd">
+                            <p>@categoryColumn.ColumnName</p>
+                        </div>
+                        <div class="weui-cell__ft">@(columnValues[index].Value.IndexOf("Attachments", StringComparison.Ordinal) != -1 ? "查看文件" : "未上传")</div>
+                    </a>
+                </div>
+            }
+            index++;
+        }
+    </div>
+    <br />
+    <div class="weui-footer">
+        <p class="weui-footer__text">Copyright © @DateTime.Now.Year</p>
+    </div>
+    <!-- body 最后 -->
+    <script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery-weui/1.2.0/js/jquery-weui.min.js"></script>
+</body>
+</html>

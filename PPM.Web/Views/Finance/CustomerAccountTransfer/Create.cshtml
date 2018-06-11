@@ -1,0 +1,131 @@
+﻿@model PensionInsurance.Web.Views.Finance.CustomerAccountTransfer.CreateViewModel
+@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        <div class="form-body">
+            <form id="transfer-customer-account-form" data-ajax="true" action="@Url.Action("CreateAndSubmit", "CustomerAccountTransfer")" method="POST" class="form-horizontal">      
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="icon-bubble font-green-sharp"></i>
+                            <span class="caption-subject font-green-sharp sbold">客户转账</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <div class="form-body">
+                            <div class="row" style="margin-top: 5px;">
+                                <div class="col-md-6 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">转账客户姓名</label>
+                                        <div class="col-md-8">
+                                            <label>@Model.TransferName</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">客户余额</label>
+                                        <div class="col-md-8">
+                                            <label>@Model.TransferBalance</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">收款人姓名</label>
+                                        <div class="col-md-8">
+                                            <select id="TransferTo" name="TransferTo" class="form-control input-small"></select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">转账金额</label>
+                                        <div class="col-md-8">
+                                            <input name="TransferAmount" value="@Model.TransferBalance" class="form-control input-small" readonly="readonly"/>
+                                            @*@Html.InputText(m => m.TransferAmount, new {@class = "form-control bootstrap-touchspin"})*@
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-md-offset-2">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">转账原因</label>
+                                        <div class="col-md-8">
+                                            <textarea class="form-control" name="Reason" style="resize: none;"></textarea>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @Html.HiddenFor(m => m.TransferFrom)
+                    </div>
+                </div>
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                <div class="form-actions">
+                    <div class="text-center">
+                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户转账, Permission.转账))
+                        {    
+                            <button type="submit" class="btn green btn-sm padding-lf-15 ">提交</button>
+                        }
+                        <a href="@Url.Action("Detail", "Customer", new {customerAccountId = Model.TransferFrom})" class="btn yellow btn-sm padding-lf-15">返回</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/i18n/zh-CN.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#TransferAmount").TouchSpin({
+                min: 0,
+                max: @Model.TransferBalance,
+                decimals: 2,
+                step: 0.01,
+                buttondown_class: 'display-hide',
+                buttonup_class: 'display-hide'
+        });
+
+            $("#TransferTo").select2({
+                ajax: {
+                    url: "@Url.Action("GetCustomerAccounts", "CustomerAccount")",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            keyword: params.term,
+                            projectId:@Model.ProjectId,
+                            customerAccountId:@Model.TransferFrom
+                        };
+                    },
+                    processResults: function (data, params) {
+                        var proceedData = $.map(data, function (result) {
+                            result.id = result.CId;
+                            result.text = result.Name;
+                            return result;
+                        });
+                        return {
+                            results: proceedData
+                        };
+                    },
+                    cache: true
+                },
+                escapeMarkup: function (markup) { return markup; }, // let our custom formatter work
+                minimumInputLength: 1,
+                language:"zh-CN"
+            });
+        });
+    </script>
+}

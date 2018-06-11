@@ -1,0 +1,170 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common;
+@model PensionInsurance.Web.Views.Customer.DetailViewModel
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet-body">
+            <div class="table-scrollable">
+                <table id="customer-service-record-items" class="table table-hover" data-src="@Url.Action("Detail", "Customer", new {customerId = Model.CustomerInfo.CustomerId, customerAccountId = Model.CustomerAccountId})">
+                    <thead>
+                    <tr>
+                        <th>服务时间</th>
+                        <th>服务项名称</th>
+                        <th>服务单价</th>
+                        <th>耗材金额</th>
+                        <th>服务次数</th>
+                        <th>总金额</th>
+                        <th>备注</th>
+                        <th>记录人</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.CustomerServiceRecords)
+                    {
+                        <tr>
+                            <td style="white-space: nowrap;">@item.ServiceDate.DateString()</td>
+                            <td>@item.ServiceItemName</td>
+                            <td>@item.UnitPrice.FormatString()</td>
+                            @if ((item.Total - (item.ServiceAmount*item.UnitPrice)) > 0)
+                            {
+                                <td><a class="show-consumptive-material-Info" data-id="@item.ServiceRecordId" href="javascript:;"> @(item.Total - (item.ServiceAmount*item.UnitPrice)) </a></td>
+                            }
+                            else
+                            {
+                                <td>@(item.Total - (item.ServiceAmount*item.UnitPrice))</td>
+                            }
+                            <td>@item.ServiceAmount</td>
+                            <td>@item.Total.FormatString()</td>
+                            <td>@item.Remark</td>
+                            <td>@item.RealName</td>
+                            <td>
+                                @if (Model.EnableEditCustomerRecord(item))
+                                {
+                                    <a href="@Url.Action("Edit", "CustomerServiceRecord", new {id = item.ServiceRecordId, customerId = Model.CustomerId})" class="btn default btn-xs yellow-stripe">编辑</a>
+                                }
+                                @if (Model.EnableDeleteCustomerRecord(item))
+                                {
+                                    <a href="javascript:;" data-command="@Model.DeleteCustomerServiceRecordCommand(item.ServiceRecordId).ToJavascript()" class="btn default btn-xs red-stripe" data-refresh="#customer-service-record-items">
+                                        删除
+                                    </a>
+                                }
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal small fade" id="consumptiveMaterialInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 700px;">
+        <form data-ajax="true" action="#" method="POST" class="form-horizontal" data-refresh="#tablePayment">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>耗材明细
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <div class="row" style="margin-top: 5px;">
+                                    <div class="col-md-12">
+                                        <div class="portlet light bordered">
+                                            <div class="portlet-body">
+                                                <div class="table">
+                                                    <table class="table table-hover">
+                                                        <thead>
+                                                        <tr>
+                                                            <th width="50%">耗材名称</th>
+                                                            <th width="30%">单价</th>
+                                                            <th width="20%">数量</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody id="bodyInfo">
+                                                        <tr id="row_template">
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                        </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                        </div>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="container">
+    <div class="modal small fade" id="MaterialItems" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog" style="width: 400px; height: auto;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>耗材名称</th>
+                            <th>数量</th>
+                            <th>单价</th>
+                        </tr>
+                        </thead>
+                        <tbody id="mitems"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on("click", ".show-consumptive-material-Info", function () {
+            var infoBody = "";
+            $.get("@Url.Action("GetMaterialServices", "CustomerServiceRecord")/" + $(this).attr("data-id"), function (result) {
+
+                if (result.length > 0)
+                {
+                    $(result).each(function (index, val) {
+                        infoBody += bindItems(val);
+                    });
+                    $("#mitems").html(infoBody);
+                    $("#MaterialItems").modal('show');
+                }
+            });
+        });
+
+        function bindItems(item) {
+            var bodyHtml = "";
+            bodyHtml += "<tr>";
+            bodyHtml += "<td>" + item.Name + "</td>";
+            bodyHtml += "<td>" + item.Amount + "</td>";
+            bodyHtml += "<td>" + item.Price + "元</td>";
+            bodyHtml += " </tr>";
+            return bodyHtml;
+        }
+    });
+
+    
+
+</script>

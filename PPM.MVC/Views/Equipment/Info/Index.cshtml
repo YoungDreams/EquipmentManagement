@@ -1,0 +1,210 @@
+﻿@using System.Web.UI.WebControls
+@using PPM.Commands
+@using PPM.Entities
+@using PPM.Shared
+@using PPM.Web.Common
+@model PPM.MVC.Views.Equipment.Info.IndexViewModel
+<!-- BEGIN PAGE BAR -->
+<!-- END PAGE BAR -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>设备信息查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","EquipmentInfo",new {page = Model.Items.Page,pageSize = Model.Items.PageSize})" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">分类名称</label>
+                                    <div class="input-group col-md-8">
+                                        <input type="text" class="form-control" disabled id="productCategoryText" value="@Model.CategoryText" placeholder="选择分类">
+                                        <input id="productCategoryId" type="hidden" name="Query.CategoryId" value="@Model.Query.CategoryId" />
+                                        <span id="getCategories" class="input-group-addon" style="padding: 3px 12px;">
+                                            <i class="fa fa-bars font-red"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-offset-5">
+                                        <button type="submit" class="btn green">查询</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"> </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="portlet" style="margin-top: 10px; min-height: 500px;">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-social-dribbble font-green"></i>
+            <span class="caption-subject font-green bold uppercase">设备信息</span>
+        </div>
+        <div class="actions">
+            <a href="@Url.Action("Create", "EquipmentInfo")" class="btn green">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                新增
+            </a>
+
+            @*@if (WebAppContext.Current.User.RoleTypeIs(RoleType.超级管理员))
+                {*@
+            <a href="javascript:;" class="btn green equipments-import">
+                <i class="fa fa-rotate-left" aria-hidden="true"></i>
+                导入
+            </a>
+            @*}*@
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="table">
+            <table id="productlist" class="table table-bordered">
+                @if (Model.Items.Any())
+                {
+                    <thead>
+                        <tr>
+                            <th>设备ID</th>
+                            @{
+                                var equipmentCategoryColumns = Model.Items.FirstOrDefault()?.EquipmentCategory?.Columns.Where(x => x.ColumnType != EquipmentCategoryColumnType.文件.ToString());
+                            }
+                            @if (equipmentCategoryColumns != null)
+                            {
+                                foreach (var header in equipmentCategoryColumns)
+                                {
+                                    <th>@header.ColumnName</th>
+                                }
+                            }
+                            <th>二维码</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>@item.Id</td>
+                                @{ var index = 0; }
+                                @foreach (var cell in item.EquipmentInfoColumnValues)
+                                {
+                                    if (item.EquipmentCategory.Columns[index].ColumnType != EquipmentCategoryColumnType.文件.ToString())
+                                    {
+                                        <td>@cell.Value</td>
+                                    }
+                                    index++;
+                                }
+                                <td><img src="@Url.Content(item.QrCodeImage)" style="width: 100px; height: 100px;" alt="设备二维码" /></td>
+                                <td>
+                                    <a href="@Url.Action("Edit", "EquipmentInfo", new {id = item.Id})" class="btn default btn-xs yellow-stripe">编辑</a>
+                                    <a href="javascript:;" data-command="@Model.DeleteCommand(item.Id).ToJavascript()" class="btn default btn-xs red-stripe">
+                                        删除
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                }
+            </table>
+
+            @Html.Partial("_Pagination", Model.Items)
+        </div>
+    </div>
+</div>
+
+
+<div class="modal small fade" id="productCategories" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:600px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift"></i>商品分类
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <!-- BEGIN FORM-->
+                        <div id="tree_1" class="tree-demo">
+                            @Html.Raw(Model.ProductCategoryTreeView.GetSubTreeNodes(Model.ProductCategoryTreeView.Trees))
+                        </div>
+                        <div id="category-noselect-error" class="alert alert-danger hidden">
+                            <strong>未选择商品分类!</strong>
+                        </div>
+                        <div class="row">
+                            <br />
+                            <p>
+                                <div class="text-center">
+                                    <button id="select-product-category" class="btn green btn-sm padding-lf-15">确定</button>
+                                    <button id="cancel-select-product-category" type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">取消</button>
+                                </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts
+{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#getCategories').on('click',
+                function () {
+                    var productCategories = $('#productCategories');
+                    productCategories.modal('show');
+                });
+
+            $('#select-product-category').on('click',
+                function () {
+                    var checkedCategory = $('.jstree-clicked');
+                    var categoryId = checkedCategory.attr('data-id');
+                    var categoryText = checkedCategory.attr('data-text');
+                    var error = $('#category-noselect-error');
+                    if (categoryId || categoryText) {
+                        error.addClass('hidden');
+                        $('#productCategoryId').val(categoryId);
+                        $('#productCategoryText').val(categoryText);
+
+                        $('#cancel-select-product-category').click();
+                    } else {
+                        error.removeClass('hidden');
+                    }
+                });
+        });
+
+        $(document)
+            .on("click",
+                ".equipments-import",
+                function() {
+                    App.dialogMultipart('#Product-import-form', '@Url.Action("BatchImport", "EquipmentInfo")');
+                });
+
+        var deleteCategory = function deleteCategory(obj) {
+            var $confirm = $(obj);
+            var message = $confirm.attr('data-confirmation-message');
+            App.confirm(function() {
+                postCommand($confirm.data("command").Url, $confirm.data("command").Command, $confirm);
+            }, function() {
+
+            }, message);
+        }
+    </script>
+}

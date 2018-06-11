@@ -1,0 +1,133 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.SystemSetting.Grouping.IndexViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">系统设置</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>组织架构管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE TITLE-->
+<h3 class="page-title"></h3>
+<!-- END PAGE TITLE-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>组查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index", "Grouping")" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">组织名称</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Query.Name" value="@Model.Query.Name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">组织代码</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Query.Code" value="@Model.Query.Code"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <input type="hidden" name="Query.DepartmentId" value="@Model.Query.DepartmentId"/>
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-offset-5">
+                                        <button type="submit" class="btn green">查询</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"> </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">组织列表</span>
+                </div>
+                <div class="actions">
+                    @if (WebAppContext.Current.User.HasPermission(ModuleType.组织架构管理, Permission.新增))
+                    {
+                        <a href="@Url.Action("Create", "Grouping", new { DepartmentId = Model.Query.DepartmentId })" class="btn green">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            新增
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th> 序号 </th>
+                                <th> 组织名称 </th>
+                                <th> 组织代码 </th>
+                                <th> 所属部门 </th>
+                                <th> 操作 </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var grouping in Model.Groupings)
+                            {
+                                <tr>
+                                    <td> @Model.Groupings.RowNumberOf(grouping) </td>
+                                    <td> @grouping.Name </td>
+                                    <td> @grouping.Code </td>
+                                    <td> @grouping.DepartementName </td>
+                                    <td>
+                                        @if (WebAppContext.Current.User.HasPermission(ModuleType.组织架构管理, Permission.编辑))
+                                        {
+                                            <a href="@Url.Action("Edit", "grouping", new { Id = grouping.Id })" class="btn default btn-xs red-stripe">编辑</a>
+                                        }
+                                        @if (WebAppContext.Current.User.HasPermission(ModuleType.组织架构管理, Permission.删除))
+                                        {
+                                            <a href="javascript:;" data-command="@Model.DeleteCommand(grouping.Id, grouping.DepartementId, Request.Url.ToString()).ToJavascript()" class="btn default btn-xs red-stripe">删除</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.Partial("_Pagination", Model.Groupings)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

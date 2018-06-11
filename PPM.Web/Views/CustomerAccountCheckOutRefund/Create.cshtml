@@ -1,0 +1,320 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.CustomerAccountCheckOutRefund.CreateViewModel
+
+@if (Model.RefundStatus != RefundStatus.新建)
+{
+    <div class="note note-warning">
+        <h4 class="block">提示! 当前客户退住数据有异常，请联系管理员！</h4>
+    </div>
+    return;
+}
+
+<div class="portlet light bordered">
+    <div class="portlet-title">
+        <div class="caption">
+            <i class="icon-bubble font-green-sharp"></i>
+            <span class="caption-subject font-green-sharp sbold">客户信息</span>
+        </div>
+    </div>
+    <div class="portlet-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label col-md-3">客户名称</label>
+                    <div class="col-md-9">
+                        @Model.CustomerAccount.Customer.Name
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label col-md-3">客户编号</label>
+                    <div class="col-md-9">
+                        @Model.CustomerAccount.Customer.CustomerNo
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label col-md-3">现金余额</label>
+                    <div class="col-md-9">
+                        @Model.CustomerAccount.Balance
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="control-label col-md-3">所属项目</label>
+                    <div class="col-md-9">
+                        @Model.CustomerAccount.Project.Name
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<form id="contract-refund-form" data-ajax="true" class="form form-horizontal" action="@Url.Action("Submit", "CustomerAccountCheckOutRefund")" method="POST">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">退款类型</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">退款类型</label>
+                            <div class="col-md-9">
+                                @Html.InputDropDownEnum(x => x.RefundType, typeof(RefundType), true)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">转院项目</label>
+                            <div class="col-md-9">
+                                <div class="radio-list">
+                                    <select name="ProjectId" class="form-control">
+                                        <option value="">--未选择--</option>
+                                        @foreach (var refundProject in Model.RefundProjects)
+                                        {
+                                            <option value="@refundProject.Id" @(Model.Project != null && Model.Project.Id == refundProject.Id ? "selected='selected'" : "") data-project="@refundProject.ToJavascript()">@refundProject.Name</option>
+                                        }
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">退款信息</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">收款人姓名1</label>
+                            <div class="col-md-9">
+                                @(Model.Project != null ? Html.InputText(x => x.RefundName, new { @class = "form-control", @readonly = "readonly" }) : Html.InputText(x => x.RefundName))
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">收款人银行1</label>
+                            <div class="col-md-9">
+                                @(Model.Project != null ? Html.InputText(x => x.RefundBank, new { @class = "form-control", @readonly = "readonly" }) : Html.InputText(x => x.RefundBank))
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">收款人卡号1</label>
+                            <div class="col-md-9">
+                                @(Model.Project != null ? Html.InputText(x => x.RefundAccountNo, new { @class = "form-control", @readonly = "readonly" }) : Html.InputText(x => x.RefundAccountNo))
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">退款金额1</label>
+                            <div class="col-md-9">
+                                @Html.InputText(x => x.RefundMoney)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">收款人姓名2</label>
+                            <div class="col-md-9">
+                                @Html.InputText(x => x.RefundName2)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">收款人银行2</label>
+                            <div class="col-md-9">
+                                @Html.InputText(x => x.RefundBank2)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">收款人卡号2</label>
+                            <div class="col-md-9">
+                                @Html.InputText(x => x.RefundAccountNo2)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">退款金额2</label>
+                            <div class="col-md-9">
+                                @Html.InputText(x => x.RefundMoney2)
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">收款人姓名3</label>
+                            <div class="col-md-9">
+                                @Html.InputText(x => x.RefundName3)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">收款人银行3</label>
+                            <div class="col-md-9">
+                                @Html.InputText(x => x.RefundBank3)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">收款人卡号3</label>
+                            <div class="col-md-9">
+                                @Html.InputText(x => x.RefundAccountNo3)
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="control-label col-md-3">退款金额3</label>
+                            <div class="col-md-9">
+                                @Html.InputText(x => x.RefundMoney3)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @Html.Hidden("CheckOutRefundId", Model.CheckOutRefundId)
+                @Html.Hidden("CustomerAccountId", Model.CustomerAccount.Id)
+
+                @if (Model.TrackingResult != null)
+                {
+                    @Html.Partial("~/Views/TrackingResult/_TrackingResults.cshtml", Model.TrackingResult)
+                }
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                <div class="form-actions margin-top-20">
+                    <div class="text-center">
+                        @if (Model.RefundStatus == RefundStatus.新建)
+                        {
+                            <button class="btn green btn-sm padding-lf-15">提交</button>
+                        }
+                        <a href="@Url.Action("Detail", "Customer",new { customerAccountId = Model.CustomerAccount.Id})" class="btn yellow btn-sm padding-lf-15">返回</a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function() {
+        var refundName = $("input[name=RefundName]");
+        var refundBank = $("input[name=RefundBank]");
+        var refundAccountNo = $("input[name=RefundAccountNo]");
+        var refundMoney = $("input[name=RefundMoney]");
+        var refundName2 = $("input[name=RefundName2]");
+        var refundBank2 = $("input[name=RefundBank2]");
+        var refundAccountNo2 = $("input[name=RefundAccountNo2]");
+        var refundMoney2 = $("input[name=RefundMoney2]");
+
+        var refundName3 = $("input[name=RefundName3]");
+        var refundBank3 = $("input[name=RefundBank3]");
+        var refundAccountNo3 = $("input[name=RefundAccountNo3]");
+        var refundMoney3 = $("input[name=RefundMoney3]");
+
+        var projectCheckList = $("select[name=ProjectId]");
+
+        if ($("select[name=RefundType]").val() === "") {
+            setReadonly();
+        }
+
+        $(document).on("change", "select[name=RefundType]", function() {
+            var $this = $(this);
+
+            if ($this.val() === '@RefundType.离院退款') {
+                refundName.removeAttr("readonly");
+                refundBank.removeAttr("readonly");
+                refundAccountNo.removeAttr("readonly");
+                refundMoney.removeAttr("readonly");
+                refundName.val("");
+                refundBank.val("");
+                refundAccountNo.val("");
+                refundName2.removeAttr("readonly");
+                refundBank2.removeAttr("readonly");
+                refundAccountNo2.removeAttr("readonly");
+                refundMoney2.removeAttr("readonly");
+
+                refundName3.removeAttr("readonly");
+                refundBank3.removeAttr("readonly");
+                refundAccountNo3.removeAttr("readonly");
+                refundMoney3.removeAttr("readonly");
+
+                projectCheckList.attr("disabled", "disabled").val("");
+            }
+            if ($this.val() === '@RefundType.转院退款') {
+                refundName.attr("readonly", "readonly");
+                refundBank.attr("readonly", "readonly");
+                refundAccountNo.attr("readonly", "readonly");
+                refundMoney.removeAttr("readonly");
+                refundName2.removeAttr("readonly");
+                refundBank2.removeAttr("readonly");
+                refundAccountNo2.removeAttr("readonly");
+                refundMoney2.removeAttr("readonly");
+                refundName.val("");
+                refundBank.val("");
+                refundAccountNo.val("");
+                projectCheckList.removeAttr("disabled");
+            }
+
+            if ($this.val() === "") {
+                setReadonly();
+            }
+        }).on("change", "select[name=ProjectId]", function () {
+            var $this = $(this);
+            var projectData = $this.find("option:selected").attr("data-project");
+            var projectInfo = JSON.parse(projectData);
+                refundName.val(projectInfo.CompanyName);
+                refundBank.val(projectInfo.CompanyAccountBank);
+                refundAccountNo.val(projectInfo.CompanyAccount);
+            });
+
+        function setReadonly() {
+            refundName.attr("readonly", "readonly");
+            refundBank.attr("readonly", "readonly");
+            refundAccountNo.attr("readonly", "readonly");
+            refundMoney.attr("readonly", "readonly");
+
+            refundName2.attr("readonly", "readonly");
+            refundBank2.attr("readonly", "readonly");
+            refundAccountNo2.attr("readonly", "readonly");
+            refundMoney2.attr("readonly", "readonly");
+
+            refundName3.attr("readonly", "readonly");
+            refundBank3.attr("readonly", "readonly");
+            refundAccountNo3.attr("readonly", "readonly");
+            refundMoney3.attr("readonly", "readonly");
+
+            refundName.val("");
+            refundBank.val("");
+            refundAccountNo.val("");
+            projectCheckList.attr("disabled", "disabled").val("");
+        }
+    });
+
+    
+</script>

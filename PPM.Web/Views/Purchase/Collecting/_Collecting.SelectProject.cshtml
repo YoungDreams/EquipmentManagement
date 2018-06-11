@@ -1,0 +1,32 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Purchase.SelectViewModel
+
+<form id="collecting-select-project-form" data-ajax="true" action="@Url.Action("Select", "Collecting")" method="POST" class="form-horizontal">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">出库</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">选择项目</label>
+                            <div class="col-md-9">
+                                @Html.InputDropDown(x => Model.ProjectId, Model.ProjectList)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,533 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Reports.CustomerReport.IndexViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css") rel="stylesheet" type="text/css" />
+}
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>CB入住客户分析统计图表</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE TITLE-->
+<h3 class="page-title"></h3>
+<!-- END PAGE TITLE-->
+<!-- END PAGE HEADER-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>CB入住客户分析统计 - 查询条件
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">所属项目</label>
+                                <div class="col-md-9">
+                                    @Html.DropDownListFor(x => x.ProjectIds, Model.ProjectList, new { multiple = "", @class = "selectpicker" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">时间范围</label>
+                                <div class="col-md-9">
+                                    <div class="input-group date-picker input-daterange" data-date-format="yyyy-mm-dd">
+                                        @Html.InputText(m => m.StartTime)
+                                        <span class="input-group-addon"> 到 </span>
+                                        @Html.InputText(m => m.EndTime)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">客户类型</label>
+                                <div class="col-md-9">
+                                    @Html.EnumTextDropDownListFor(x=>x.CustomerSalesType,typeof(CustomerSalesType))
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-3">入住不满一个月</label>
+                                <div class="col-md-9">
+                                    <select id="IsNotLivedForOneMonth" name="IsNotLivedForOneMonth" class="form-control input-small">
+                                        <option value="False" @(Model.IsNotLivedForOneMonth.HasValue && !Model.IsNotLivedForOneMonth.Value ? "selected=selected" : "")>不统计</option>
+                                        <option value="True" @(Model.IsNotLivedForOneMonth.HasValue && Model.IsNotLivedForOneMonth.Value ? "selected=selected" : "")>统计</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="text-center"><a id="searchReport" class="btn green btn-sm padding-lf-15 ">查询</a></div>
+                </div>
+
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 年龄结构 -->
+                            <div class="chart" id="report_age_all"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 自理客户年龄结构 -->
+                            <div class="chart" id="report_age_independence"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 生活照料客户年龄结构 -->
+                            <div class="chart" id="report_age_life"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 失智照护客户年龄结构 -->
+                            <div class="chart" id="report_age_dementia"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 护理级别结构 -->
+                            <div class="chart" id="report_nursing_level"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 独身（丧偶离异等）独自入住和年龄交叉 -->
+                            <div class="chart" id="report_single"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 失智1,2,3,4级分布 -->
+                            <div class="chart" id="report_DementiaCare"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 照料1,2,3,4级分布 -->
+                            <div class="chart" id="report_LifeCare"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 是否空巢 -->
+                            <div class="chart" id="report_living_their_children"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 客户来源 -->
+                            <div class="chart" id="report_customer_source"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 费用支出人 -->
+                            <div class="chart" id="report_expense_payment"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 房产是否出租 -->
+                            <div class="chart" id="report_premises_out"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 退休前从事行业 -->
+                            <div class="chart" id="report_work_industry"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 受教育水平 -->
+                            <div class="chart" id="report_education"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <!-- 入住客户渠道（按房间） -->
+                            <div class="chart" id="report_customer_type"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/echarts/echarts.min.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.selectpicker').selectpicker({
+                style: 'btn-xs',
+                iconBase: 'fa',
+                tickIcon: 'fa-check',
+                noneSelectedText: "--未选择--"
+            });
+            $("select[name='ProjectIds']").val(@Html.Raw(Json.Encode(Model.ProjectIds)));
+
+            $('.selectpicker').selectpicker('refresh');
+
+            $("#searchReport").on("click", function () {
+                var projectIds = $("select[name='ProjectIds']").val();
+                var startTime = $("#StartTime").val();
+                var endTime = $("#EndTime").val();
+                var isNotLivedForOneMonth = $("#IsNotLivedForOneMonth").val();
+                var customerSalesType = $("#CustomerSalesType").val();
+
+                if (customerSalesType == '@CustomerSalesType.在住' && startTime!=endTime) {
+                    $.alert("客户类型为在住，时间范围必须在同一天");
+                    return;
+                }
+                if (startTime && endTime) {
+                    setchart(projectIds, startTime, endTime, isNotLivedForOneMonth, customerSalesType);    
+                }
+            });
+        });
+        function setchart(projectIds, startTime, endTime, isNotLivedForOneMonth, customerSalesType) {
+            // 年龄结构
+            var ageReportAll = echarts.init(document.getElementById('report_age_all'));
+            var url = "@Url.Action("GetAgeReportAll", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(ageReportAll, '年龄结构', legends, result);
+            });
+
+            // 年龄结构饼图(独立)
+            url = "@Url.Action("GetAgeReportIndependence", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var ageReportIndependence = echarts.init(document.getElementById('report_age_independence'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(ageReportIndependence, '独立年龄结构', legends, result);
+            });
+
+            // 年龄结构饼图(生活照料)
+            url = "@Url.Action("GetAgeReportLife", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var ageReportLife = echarts.init(document.getElementById('report_age_life'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(ageReportLife, '生活照料年龄结构', legends, result);
+            });
+
+            // 年龄结构饼图(失智照护)
+            url = "@Url.Action("GetAgeReportDementia", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var ageReportDementia = echarts.init(document.getElementById('report_age_dementia'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(ageReportDementia, '失智照护年龄结构', legends, result);
+            });
+
+            // 护理级别结构饼图
+            url = "@Url.Action("GetNursingLevelReport", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var nursingLevelReport = echarts.init(document.getElementById('report_nursing_level'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(nursingLevelReport, '护理级别', legends, result);
+            });
+
+            //report_DementiaCare
+            url = "@Url.Action("GetDementiaCare", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var dementiaCareReport = echarts.init(document.getElementById('report_DementiaCare'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(dementiaCareReport, '失智照护', legends, result);
+            });
+            //report_LifeCare
+            url = "@Url.Action("GetLifeCare", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var lifeCareReport = echarts.init(document.getElementById('report_LifeCare'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(lifeCareReport, '生活照料', legends, result);
+            });
+
+            // 独身（丧偶离异等）独自入住和年龄交叉饼图
+            url = "@Url.Action("GetSingleReport", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var singleReport = echarts.init(document.getElementById('report_single'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(singleReport, '独身（丧偶离异等）独自入住和年龄交叉', legends, result);
+            });
+
+            // 与子女同住结构饼图
+            url = "@Url.Action("GetLivingTheirChildrenReport", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var livingTheirChildrenReport = echarts.init(document.getElementById('report_living_their_children'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(livingTheirChildrenReport, '与子女同住', legends, result);
+            });
+
+            // 客户来源结构饼图
+            url = "@Url.Action("GetCustomerSourceReport", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var customerSourceReport = echarts.init(document.getElementById('report_customer_source'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(customerSourceReport, '客户来源', legends, result);
+            });
+
+            // 费用支出人饼图
+            url = "@Url.Action("GetExpensePaymentReport", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var expensePaymentReport = echarts.init(document.getElementById('report_expense_payment'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(expensePaymentReport, '费用支出人', legends, result);
+            });
+
+            // 房产是否出租饼图
+            url = "@Url.Action("GetPremisesOutReport", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var premisesOutReport = echarts.init(document.getElementById('report_premises_out'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(premisesOutReport, '房产是否出租', legends, result);
+            });
+
+            // 退休前从事行业饼图
+            url = "@Url.Action("GetWorkIndustryReport", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var workIndustryReport = echarts.init(document.getElementById('report_work_industry'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(workIndustryReport, '退休前从事行业', legends, result);
+            });
+
+            // 受教育水平饼图
+            url = "@Url.Action("GetEducationReport", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var educationReport = echarts.init(document.getElementById('report_education'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(educationReport, '受教育水平', legends, result);
+            });
+
+            // 入住客户渠道饼图
+            url = "@Url.Action("GetCustomerTypeReport", "CustomerReport")" + "?startTime=" + startTime + "&endTime=" + endTime + "&isNotLivedForOneMonth=" + isNotLivedForOneMonth + "&customerSalesType=" + customerSalesType;
+            if (projectIds && projectIds.length > 0) {
+                $(projectIds).each(function (idx, val) {
+                    url += "&projectIds=" + val;
+                });
+            }
+            var customerTypeReport = echarts.init(document.getElementById('report_customer_type'));
+            $.get(url, function (result) {
+                var legends = [];
+                $(result).each(function (index, val) {
+                    legends.push(val);
+                });
+                setOption(customerTypeReport, '入住客户渠道', legends, result);
+            });
+        }
+
+        function setOption(report, titleText, legends, result) {
+            report.setOption({
+                title: {
+                    text: titleText,
+                    x: 'center'
+                },
+                tooltip: {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                legend: {
+                    orient: 'vertical',
+                    left: 'left',
+                    data: legends
+                },
+                series: [
+                    {
+                        name: '',
+                        type: 'pie',
+                        radius: '55%',
+                        center: ['50%', '60%'],
+                        data: result,
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            },
+                            normal: {
+                                label: {
+                                    show: true,
+                                    formatter: '{b} : {c} ({d}%)'
+                                },
+                                labelLine: { show: true }
+                            }
+                        }
+                    }
+                ]
+            });
+        }
+    </script>
+}

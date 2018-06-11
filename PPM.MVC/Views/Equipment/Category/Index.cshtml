@@ -1,0 +1,196 @@
+﻿@using PPM.Entities
+@using PPM.Shared
+@using PPM.Web.Common
+@model PPM.MVC.Views.Equipment.Category.IndexViewModel
+<!-- BEGIN PAGE BAR -->
+<!-- END PAGE BAR -->
+@*<div class="row">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>设备分类查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","EquipmentCategory",new {page = Model.Items.Page,pageSize = Model.Items.PageSize})" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">名称</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Query.Name" value="@Model.Query.Name" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">是否启用</label>
+                                    <div class="col-md-9">
+                                        <select name="Query.Published" class="form-control input-small">
+                                            <option value="">--未选择--</option>
+                                            <option value="True" @(Model.Query.Published.HasValue && Model.Query.Published.Value ? "selected=selected" : "")>启用</option>
+                                            <option value="False" @(Model.Query.Published.HasValue && !Model.Query.Published.Value ? "selected=selected" : "")>失效</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-offset-5">
+                                        <button type="submit" class="btn green">查询</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"> </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>*@
+
+        <div class="portlet" style="margin-top: 10px;min-height: 800px">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">分类列表</span>
+                </div>
+                <div class="actions">
+                    <a href="@Url.Action("Create", "EquipmentCategory")" class="btn green">
+                        <i class="fa fa-plus" aria-hidden="true"></i>
+                        新增
+                    </a>
+                    
+                    @*@if (WebAppContext.Current.User.HasPermission(ModuleType.商品分类管理, Permission.导入))
+                    {
+                        <a href="javascript:;" class="btn green productcategory-import">
+                            <i class="fa fa-rotate-left" aria-hidden="true"></i>
+                            导入
+                        </a>
+                    }*@
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <div class="table">
+                    <table id="tree" class="table table-condensed table-hover table-striped fancytree-fade-expander">
+                        <colgroup>
+                            <col width="80px"></col>
+                            <col width="30px"></col>
+                            <col width="*"></col>
+                            <col width="100px"></col>
+                            <col width="100px"></col>
+                            <col width="100px"></col>
+                        </colgroup>
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th>列表</th>
+                                <th>操作</th>
+                                <th></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+@section Scripts
+{
+    <script src=@Url.Content("~/assets/global/plugins/fancytree/jquery-ui.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/fancytree/jquery.fancytree.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/fancytree/jquery.fancytree.glyph.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/fancytree/jquery.fancytree.table.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/fancytree/jquery.fancytree.wide.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        @*$(document)
+            .on("click",
+                ".productcategory-import",
+                function() {
+                    App.dialogMultipart('#ProductCategory-import-form', '@Url.Action("Import", "ProductCategory")');
+                });*@
+
+        $(function () {
+
+            glyph_opts = {
+                map: {
+                    doc: "glyphicon glyphicon-file",
+                    docOpen: "glyphicon glyphicon-file",
+                    checkbox: "glyphicon glyphicon-unchecked",
+                    checkboxSelected: "glyphicon glyphicon-check",
+                    checkboxUnknown: "glyphicon glyphicon-share",
+                    dragHelper: "glyphicon glyphicon-play",
+                    dropMarker: "glyphicon glyphicon-arrow-right",
+                    error: "glyphicon glyphicon-warning-sign",
+                    expanderClosed: "glyphicon glyphicon-menu-right",
+                    expanderLazy: "glyphicon glyphicon-menu-right",  // glyphicon-plus-sign
+                    expanderOpen: "glyphicon glyphicon-menu-down",  // glyphicon-collapse-down
+                    folder: "glyphicon glyphicon-folder-close",
+                    folderOpen: "glyphicon glyphicon-folder-open",
+                    loading: "glyphicon glyphicon-refresh glyphicon-spin"
+                }
+            };
+
+            $("#tree").fancytree({
+                extensions: ["glyph", "table"],
+                glyph: glyph_opts,
+                source: { url: "@Url.Action("GetFancyTreeViewData", "EquipmentCategory")" },
+                table: {
+                    checkboxColumnIdx: 1,
+                    nodeColumnIdx: 2
+                },
+                activate: function(event, data) {
+                    $("#statusLine").text(event.type + ": " + data.node);
+                },
+                select: function(event, data) {
+                    $("#statusLine").text(event.type +
+                        ": " +
+                        data.node.isSelected() +
+                        " " +
+                        data.node);
+                },
+                renderColumns: function(event, data) {
+                    var node = data.node,
+                        $tdList = $(node.tr).find(">td");
+                    var id = node.key;
+                    var dataCommand = "@Model.DeleteCommand(999999999, Request.Url.ToString()).ToJavascript()";
+                    var edit = "@Url.Action("Edit", "EquipmentCategory", new { id = 666666666 })";
+                    $tdList.eq(3).html("<a href='" + edit.replace("666666666", id) +"' class='btn default btn-xs yellow-stripe'>编辑</a>" +
+                        "<a href='javascript:;' onclick='deleteCategory(this)' data-command='" + dataCommand.replace("999999999", id) + "' data-href='javascript:;' class='btn default btn-xs red-stripe'>删除</a>");
+                }
+            });
+        });
+
+        var deleteCategory = function deleteCategory(obj) {
+            var $confirm = $(obj);
+            var message = $confirm.attr('data-confirmation-message');
+            App.confirm(function() {
+                postCommand($confirm.data("command").Url, $confirm.data("command").Command, $confirm);
+            }, function() {
+
+            }, message);
+        }
+    </script>
+}

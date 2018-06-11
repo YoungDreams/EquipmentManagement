@@ -1,0 +1,120 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Contract.MoveOutViewModel
+<form id="customer-move-out-form" data-ajax="true" action="@Url.Action("MoveOut", "Contract")" method="POST" class="form-horizontal">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">办理退住</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="form-body">
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-6">
+                        <div class="form-group" style="white-space: nowrap;">
+                            <label class="control-label col-md-3">合同编号</label>
+                            <div class="col-md-9">
+                                <span>@Model.Contract.ContractNo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" style="white-space: nowrap;">
+                            <label class="control-label col-md-3">客户名称</label>
+                            <div class="col-md-9">
+                                <span>@Model.Customer.Name</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" style="white-space: nowrap;">
+                            <label class="control-label col-md-3">开始时间</label>
+                            <div class="col-md-9">
+                                <span>@Model.Contract.StartTime.DateString()</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" style="white-space: nowrap;">
+                            <label class="control-label col-md-3">结束时间</label>
+                            <div class="col-md-9">
+                                <span>@(Model.Contract.ActualEndTime?.DateString() ?? Model.Contract.EndTime.DateString())</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-6">
+                        <div class="form-group" style="white-space: nowrap;">
+                            <label class="control-label col-md-3">联系人</label>
+                            <div class="col-md-9">
+                                <span>@Html.InputText(m => m.Contact)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" style="white-space: nowrap;">
+                            <label class="control-label col-md-3">联系电话</label>
+                            <div class="col-md-9">
+                                <span>@Html.InputText(m => m.ContactPhone)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="portlet light bordered">
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">退房日期</label>
+                            <div class="col-md-9">
+                                @Html.InputDate("CheckOutDate", DateTime.Now)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">退住原因</label>
+                            <div class="col-md-9">
+                                @Html.EnumTextDropDownListFor(x => x.MoveOutReason, typeof(MoveOutReason), true)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <strong><i class="fa fa-info-circle"></i></strong> 退住当日正常计费。
+                </div>
+                <!-- END FORM-->
+            </div>
+            <div class="form-actions text-center">
+                @Html.Hidden("ContractId", Model.Contract.Id)
+                @Html.Hidden("CustomerId", Model.Customer.Id)
+                @Html.Hidden("CustomerAccountId", Model.CustomerAccount.Id)
+            </div>
+        </div>
+    </div>
+    <div class="errors alert alert-danger fade in" style="display: none;"></div>
+</form>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#CheckOutDate').datepicker({
+            autoclose: true,
+            todayBtn: true,
+            language: "zh-CN"
+        });
+    });
+</script>

@@ -1,0 +1,48 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Customer.DetailViewModel
+
+<div id="section-customer-expense" class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-body">
+                <div class="table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th> 序号 </th>
+                                <th> 开始日期 </th>
+                                <th> 结束日期 </th>
+                                <th> 项目 </th>
+                                <th> 楼栋 </th>
+                                <th> 单元 </th>
+                                <th> 房间 </th>
+                                <th> 床位 </th>
+                                <th> 生活能力类型 </th>
+                                <th> 月费 </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CustomerExpenseHistories)
+                            {
+                                <tr>
+                                    <td> @Model.CustomerExpenseHistories.RowNumberOf(item) </td>
+                                    <td> @item.StartDate.DateString() </td>
+                                    <td> @item.EndDate.DateString() </td>
+                                    <td> @item.Project.Name </td>
+                                    <td> @item.Building.Name </td>
+                                    <td> @item.Unit.Name </td>
+                                    <td> @item.Room.Name </td>
+                                    <td> @item.Bed.Name </td>
+                                    <td> @item.ConcernType.ToString() </td>
+                                    <td><span class="tooltips" data-container="body" data-html="true" data-placement="top" data-original-title="@item.MonthlyExpenseDesc"> @item.MonthlyExpense </span></td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

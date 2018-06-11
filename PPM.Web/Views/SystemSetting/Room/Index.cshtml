@@ -1,0 +1,784 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common;
+@model PensionInsurance.Web.Views.SystemSetting.Room.IndexViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index", "Home")">系统设置管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Project")">项目管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>房间管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">房间信息列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <table id="treetable" class="table table-condensed table-hover table-striped fancytree-fade-expander">
+                    <colgroup>
+                        <col width="80px"></col>
+                        <col width="30px"></col>
+                        <col width="*"></col>
+                        <col width="100px"></col>
+                        <col width="100px"></col>
+                        <col width="100px"></col>
+                    </colgroup>
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th></th>
+                            <th>列表</th>
+                            <th>操作</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal small fade" id="roomInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+        <form data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>新增房间信息
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="hidden" name="ProjectId" value="@Model.ProjectId" />
+                                            <label class="control-label col-md-4">所属楼栋</label>
+                                            <div class="col-md-8">
+                                                <input id="roomInfoBuidingText" disabled="disabled" type="text" class="form-control">
+                                                <input id="roomInfoBuidingValue" type="hidden" name="Building" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间所属单元</label>
+                                            <div class="col-md-8">
+                                                <input id="roomInfoUnitText" disabled="disabled" type="text" class="form-control">
+                                                <input id="roomInfoUnitValue" type="hidden" name="Unit" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间所属楼层</label>
+                                            <div class="col-md-8">
+                                                <input id="roomInfoFloorText" disabled="disabled" type="text" class="form-control">
+                                                <input id="roomInfoFloorValue" type="hidden" name="Floor" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间号</label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="Name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间类型</label>
+                                            <div class="col-md-8">
+                                                @Html.DropDownList("Type", Model.RoomTypes, "--未选择--", new { @class = "form-control input-small" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间说明</label>
+                                            <div class="col-md-8">
+                                                <textarea class="form-control" name="Remark" style="resize: none;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            <button class="btn green btn-sm padding-lf-15">生成</button>
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                        </div>
+                                    </p>
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal small fade" id="roomInfoList" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+        <form data-ajax="true" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>批量生成房间信息
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="hidden" name="ProjectId" value="@Model.ProjectId" />
+                                            <label class="control-label col-md-4">所属楼栋</label>
+                                            <div class="col-md-8">
+                                                <input id="roomInfoListBuidingText" disabled="disabled" type="text" class="form-control" >
+                                                <input id="roomInfoListBuidingValue" type="hidden" name="Building" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间所属单元</label>
+                                            <div class="col-md-8">
+                                                <input id="roomInfoListUnitText" disabled="disabled" type="text" class="form-control">
+                                                <input id="roomInfoListUnitValue" type="hidden" name="Unit" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间所属楼层</label>
+                                            <div class="col-md-8">
+                                                <input id="roomInfoListFloorText" disabled="disabled" type="text" class="form-control">
+                                                <input id="roomInfoListFloorValue" type="hidden" name="Floor" class="form-control">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">生成房间数量</label>
+                                            <div class="col-md-8">
+                                                <input id="roomInfoListCount" type="number" min="1" max="24" value="1" class="form-control" name="RoomCount">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间说明</label>
+                                            <div class="col-md-8">
+                                                <textarea id="roomInfoListRemark" class="form-control" name="Remark" style="resize: none;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            <button id="EditSubmit" class="btn green btn-sm padding-lf-15">生成</button>
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                        </div>
+                                    </p>
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal small fade" id="editRoomInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+        <form data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>编辑房间信息
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="hidden" name="RoomId" />
+                                            <label class="control-label col-md-4">房间编码</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="RoomNo" class="form-control input-small" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                           
+                                            <label class="control-label col-md-4">房间号</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="Name" class="form-control input-small" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            
+                                            <label class="control-label col-md-4">所属楼栋</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="BuildingName" class="form-control input-small" readonly />
+                                                <input type="hidden" name="Building" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间所属单元</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="UnitName" class="form-control input-small" readonly />
+                                                <input type="hidden" name="Unit" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间所属楼层</label>
+                                            <div class="col-md-8">
+                                                <input type="text" name="FloorName" class="form-control input-small" readonly />
+                                                <input type="hidden" name="Floor" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间类型</label>
+                                            <div class="col-md-8">
+                                                @Html.DropDownList("TypeId", Model.RoomTypes, "--未选择--", new { @class = "form-control input-small" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">房间说明</label>
+                                            <div class="col-md-8">
+                                                <textarea class="form-control" name="Remark" style="resize: none;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            <button class="btn green btn-sm padding-lf-15">保存</button>
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                        </div>
+                                    </p>
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal small fade" id="addBedInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+        <form data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>新增床位信息
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <input type="hidden" id="addBedInfoRoomId" name="RoomId" />
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">床位名称</label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="Name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">说明</label>
+                                            <div class="col-md-8">
+                                                <textarea class="form-control" name="Remark" style="resize: none;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            <button class="btn green btn-sm padding-lf-15">生成</button>
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                        </div>
+                                    </p>
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal small fade" id="editBedInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+        <form data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>编辑床位信息
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="hidden" id="editBedInfoBedId" name="BedId" />
+                                            <label class="control-label col-md-4">床位编码</label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" id="editBedInfoBedNo" name="BedNo">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">床位名称</label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" id="editBedInfoBedName" name="Name">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">是否启用</label>
+                                            <div class="col-md-8">
+                                                <select class="form-control input-small" name="IsEnabled">
+                                                    <option value="True">启用</option>
+                                                    <option value="False">不启用</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">说明</label>
+                                            <div class="col-md-8">
+                                                <textarea class="form-control" name="Remark" style="resize: none;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            <button class="btn green btn-sm padding-lf-15">保存</button>
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                        </div>
+                                    </p>
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/fancytree/jquery-ui.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/fancytree/jquery.fancytree.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/fancytree/jquery.fancytree.glyph.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/fancytree/jquery.fancytree.table.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/fancytree/jquery.fancytree.wide.js") type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var funcs = {
+            getRoomIds: function() {
+                var ids = [];
+                var checkboxes = $(".checkboxes");
+                $.each(checkboxes,
+                    function(i, item) {
+                        var chk = $(item);
+                        if (chk.is(":checked")) {
+                            var id = chk.val();
+                            ids.push(id);
+                        }
+                    });
+
+                return ids;
+            },
+            updateButtons: function() {
+                var checked = $(".checkboxes:checked").length > 0;
+                var buttons = $(".batch-button");
+                buttons.prop("disabled", !checked);
+                if (checked) {
+                    buttons.removeClass("disabled");
+                } else {
+                    buttons.addClass("disabled");
+                }
+            }
+        };
+
+        $(document).ready(function() {
+            // 批量房间弹出层
+            $("#addRoomList").click(function() {
+                var roomInfoList = $('#roomInfoList');
+                roomInfoList.modal('show');
+                clearFormValues("roomInfoList");
+            });
+
+            $("#EditSubmit").click(function() {
+                var building = $("#roomInfoListBuidingValue").val();
+                var roomCount = $("#roomInfoListCount").val();
+                var unit = $("#roomInfoListUnitValue").val();
+                var floor = $("#roomInfoListFloorValue").val();
+                var remark = $("#roomInfoListRemark").val();
+                if(building&&roomCount&&unit&&floor){
+                    window.location.href = "CreateListConfirm?roomCount=" + roomCount + "&building=" + building + "&unit=" + unit + "&floor=" + floor + "&remark=" + remark + "&ProjectId=" + @Model.Query.ProjectId;
+                }
+                return false;
+            });
+
+            // 房间弹出层
+            $("#addRoom").click(function() {
+                var roomInfo = $('#roomInfo');
+                roomInfo.modal('show');
+                roomInfo.find("form").attr("action", "@Url.Action("Create", "Room", new {returnUrl = Request.Url})");
+                clearFormValues("roomInfo");
+            });
+
+            $(".group-checkable").change(function() {
+                var checkAll = $(this);
+                var checked = checkAll.is(":checked");
+                checkAll.closest(".table").find(".checkboxes").prop("checked", checked).uniform("refresh");
+                funcs.updateButtons();
+            });
+
+            $(".checkboxes").change(function() {
+                funcs.updateButtons();
+            });
+
+            $("#valid").click(function() {
+                var ids = funcs.getRoomIds();
+                var url = '@Url.Action("ValidRooms", "Room", new {returnUrl = Request.Url})';
+                var command = {
+                    RoomIds: ids
+                };
+                postCommand(url, command);
+                return false;
+            });
+
+            $("#invalid").click(function() {
+                var ids = funcs.getRoomIds();
+                var url = '@Url.Action("InValidRooms", "Room", new {returnUrl = Request.Url})';
+                var command = {
+                    RoomIds: ids
+                };
+                postCommand(url, command);
+                return false;
+            });
+
+            cascadeDropdown("roomInfoList");
+            cascadeDropdown("roomInfo");
+
+            glyph_opts = {
+                map: {
+                    doc: "glyphicon glyphicon-file",
+                    docOpen: "glyphicon glyphicon-file",
+                    checkbox: "glyphicon glyphicon-unchecked",
+                    checkboxSelected: "glyphicon glyphicon-check",
+                    checkboxUnknown: "glyphicon glyphicon-share",
+                    dragHelper: "glyphicon glyphicon-play",
+                    dropMarker: "glyphicon glyphicon-arrow-right",
+                    error: "glyphicon glyphicon-warning-sign",
+                    expanderClosed: "glyphicon glyphicon-menu-right",
+                    expanderLazy: "glyphicon glyphicon-menu-right",  // glyphicon-plus-sign
+                    expanderOpen: "glyphicon glyphicon-menu-down",  // glyphicon-collapse-down
+                    folder: "glyphicon glyphicon-folder-close",
+                    folderOpen: "glyphicon glyphicon-folder-open",
+                    loading: "glyphicon glyphicon-refresh glyphicon-spin"
+                }
+            };
+
+            $("#treetable").fancytree({
+                extensions: ["glyph", "table"],
+                glyph: glyph_opts,
+                source: {url: "@Url.Action("GetRoomData", "Room", new { projectId = Model.Query.ProjectId })", debugDelay: 1000},
+                table: {
+                    checkboxColumnIdx: 1,
+                    nodeColumnIdx: 2
+                },
+
+                activate: function(event, data) {
+                },
+                lazyLoad: function(event, data) {
+                    //data.result = {url: "ajax-sub2.json", debugDelay: 1000};
+                },
+                renderColumns: function(event, data) {
+                    var node = data.node,
+                        $tdList = $(node.tr).find(">td");
+                    var id = node.data.Id;
+                    var kind = node.data.Kind;
+                    var dataCommand = "@Model.DeleteCommand(999999999, Request.Url.ToString()).ToJavascript()";
+                    if (kind === "Room") {
+                        $tdList.eq(3).html("<a href='javascript:void(0)' title='编辑房间' onclick='editRoom("+id+")' class='btn btn-default'><i class='fa fa-edit'>&nbsp;</i></a>" +
+                            "<a href='javascript:void(0)' onclick='deleteRoom(this)' title='删除房间' data-command='"+ dataCommand.replace("999999999",id) +"' class='btn btn-default'><i class='fa fa-remove'>&nbsp;</i></a>");
+                        $tdList.eq(4).html("<a href='javascript:void(0)' onclick='addBed(" + id + ")' title='添加床位' class='btn btn-default'><i class='fa fa-plus'>&nbsp;</i></a>");
+                    } else if(kind === "Bed") {
+                        $tdList.eq(3).html("<a href='javascript:void(0)' title='编辑床位' onclick='editBed("+id+")' class='btn btn-default'><i class='fa fa-edit'>&nbsp;</i></a>");
+                    }
+                    else if (kind === "Floor") {
+                        var unitId = node.parent.data.Id;
+                        var buildingId = node.parent.parent.data.Id;
+                        var floorId = node.data.Id;
+                        var unit = node.parent.title;
+                        var building = node.parent.parent.title;
+                        var floor = node.title;
+                        $tdList.eq(3).html("<a href='javascript:void(0)' title='批量添加房间' onclick='createRooms(this)' unitId='"+ unitId + "' buildingId='" + buildingId + "' floorId='" + floorId + "' unit='" + unit + "' building='" + building + "' floor='" + floor + "' class='btn btn-default'><i class='fa fa-plus-square'></a>");
+                        $tdList.eq(4).html("<a href='javascript:void(0)' title='添加一个房间' onclick='createRoom(this)' unitId='"+ unitId + "' buildingId='" + buildingId + "' floorId='" + floorId + "' unit='" + unit + "' building='" + building + "' floor='" + floor + "' class='btn btn-default'><i class='fa fa-plus'></i></a>");
+                    }
+                }
+            });
+
+        });
+
+        function cascadeDropdown(containerId) {
+            var building = $("#" + containerId).find("[name=Building]");
+            var unit = $("#" + containerId).find("[name=Unit]");
+            var floor = $("#" + containerId).find("[name=Floor]");
+            building.change(function() {
+                unit.empty();
+                unit.append("<option value=''>--未选择--</option>");
+                floor.empty();
+                floor.append("<option value=''>--未选择--</option>");
+                $.get("@Url.Action("GetUnits", "Room")" + "?buildingId=" + building.val(),
+                    function(result) {
+                        $.each(result,
+                            function(idx, data) {
+                                unit.append("<option value='" + data.Value + "'>" + data.Text + "</option>");
+                            });
+                    });
+            });
+
+            unit.change(function() {
+                floor.empty();
+                floor.append("<option value=''>--未选择--</option>");
+                $.get("@Url.Action("GetFloors", "Room")" + "?unitId=" + unit.val(),
+                    function(result) {
+                        $.each(result,
+                            function(idx, data) {
+                                floor.append("<option value='" + data.Value + "'>" + data.Text + "</option>");
+                            });
+                    });
+            });
+        }
+
+        // 编辑房间信息
+        function editRoom(roomId) {
+            var editRoomInfo = $('#editRoomInfo');
+            $.get("@Url.Action("Edit", "Room")" + "/" + roomId,
+                function(result) {
+                    editRoomInfo.modal('show');
+                    editRoomInfo.find("form").attr("action",
+                        "@Url.Action("Edit", "Room", new {returnUrl = Request.Url})");
+                    setFormValues(result);
+                });
+        }
+
+        // 批量房间弹出层
+        function createRooms(obj) {
+            var item = $(obj);
+            var roomInfoList = $('#roomInfoList');
+            roomInfoList.modal('show');
+            clearFormValues("roomInfoList");
+            initialRooms(item);
+        }
+
+        //初始化添加单个room弹层
+        function initialRoom(obj) {
+            $("#roomInfoBuidingText").val(obj.attr("building"));
+            $("#roomInfoBuidingValue").val(obj.attr("buildingid"));
+            $("#roomInfoUnitText").val(obj.attr("unit"));
+            $("#roomInfoUnitValue").val(obj.attr("unitid"));
+            $("#roomInfoFloorText").val(obj.attr("floor"));
+            $("#roomInfoFloorValue").val(obj.attr("floorid"));
+        }
+
+        //初始化添加多个room弹层
+        function initialRooms(obj) {
+            $("#roomInfoListBuidingText").val(obj.attr("building"));
+            $("#roomInfoListBuidingValue").val(obj.attr("buildingid"));
+            $("#roomInfoListUnitText").val(obj.attr("unit"));
+            $("#roomInfoListUnitValue").val(obj.attr("unitid"));
+            $("#roomInfoListFloorText").val(obj.attr("floor"));
+            $("#roomInfoListFloorValue").val(obj.attr("floorid"));
+        }
+
+        // 房间弹出层
+        function createRoom(obj) {
+            var item = $(obj);
+            var roomInfo = $('#roomInfo');
+            roomInfo.modal('show');
+            roomInfo.find("form").attr("action", "@Url.Action("Create", "Room", new {returnUrl = Request.Url})");
+            clearFormValues("roomInfo");
+            initialRoom(item);
+        }
+
+        function addBed(id) {
+            var roomInfo = $('#addBedInfo');
+            roomInfo.modal('show');
+            $("#addBedInfoRoomId").val(id);
+            roomInfo.find("form").attr("action", "@Url.Action("Create", "Bed", new { returnUrl = Request.Url })");
+        }
+
+        // 编辑床位信息
+        function editBed(bedId) {
+            var editBedInfo = $('#editBedInfo');
+            $.get("@Url.Action("Edit", "Bed")" + "/" + bedId, function (result) {
+                editBedInfo.modal('show');
+                editBedInfo.find("form").attr("action", "@Url.Action("Edit", "Bed", new { returnUrl = Request.Url })");
+                setFormValues(result);
+            });
+        }
+
+        function deleteRoom(obj) {
+            var $confirm = $(obj);
+            var message = $confirm.attr('data-confirmation-message');
+            App.confirm(function() {
+                postCommand($confirm.data("command").Url, $confirm.data("command").Command, $confirm);
+            }, function() {
+
+            }, message);
+        }
+
+        // 添加床位信息
+        function manageBedInfo(roomId) {
+            var bedInfo = $('#bedInfo');
+            $.get("@Url.Action("ManageBed", "Room")" + "/" + roomId,
+                function(result) {
+                    bedInfo.modal('show');
+                    bedInfo.find("form").attr("action",
+                        "@Url.Action("ManageBed", "Room", new {returnUrl = Request.Url})");
+                    setFormValues(result);
+                });
+        }
+
+
+
+    </script>
+}

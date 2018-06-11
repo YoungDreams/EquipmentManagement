@@ -1,0 +1,229 @@
+﻿@using System.Configuration
+@using Castle.Windsor.Installer
+@using PPM.Commands
+@using PPM.Web.Common
+@model PPM.MVC.Views.Equipment.Info.EditViewModel
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form data-ajax="true" action="@Url.Action("Edit", "EquipmentInfo")" method="POST" enctype="multipart/form-data">
+                    <div class="portlet" style="margin-top: 10px;">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>编辑设备信息
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                @{
+                                    if (Model.EquipmentInfo.EquipmentCategory != null)
+                                    {
+                                        <input type="hidden" name="EquipmentInfoId" value="@Model.EquipmentInfo.Id" />
+                                        var index = 0;
+                                        foreach (var equipmentCategoryColumn in Model.EquipmentInfo.EquipmentCategory.Columns)
+                                        {
+                                            if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.文件.ToString())
+                                            {
+                                                <div class="row margin-top-10">
+                                                    <div class="col-md-6 col-md-offset-2">
+                                                        <div class="form-group">
+                                                            <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                            <div class="col-md-9">
+
+                                                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                    <div class="input-group input-large">
+                                                                        <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                                                            <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                                            <span class="fileinput-filename">@Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value</span>
+                                                                        </div>
+                                                                        <span class="input-group-addon btn default btn-file">
+                                                                            <span class="fileinput-new">选择文件</span>
+                                                                            <span class="fileinput-exists">替换</span>
+                                                                            <input type="file" name="file">
+                                                                        </span>&nbsp;
+                                                                        @if (!string.IsNullOrEmpty(Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value))
+                                                                        {
+                                                                            <span class="input-group-addon btn default btn-file">
+                                                                                <a target="_blank" href="@(ConfigurationManager.AppSettings["Host"] + Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value)">查看文件</a>
+                                                                            </span>
+                                                                        }
+                                                                        <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.日期.ToString())
+                                            {
+                                                <div class="row">
+                                                    <div class="col-md-6 col-md-offset-2">
+                                                        <div class="form-group">
+                                                            <label class="control-label col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" class="form-control dateTypeField" name="Values[@index]" value="@Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="row">
+                                                    <div class="col-md-6 col-md-offset-2">
+                                                        <div class="form-group">
+                                                            <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName  (@equipmentCategoryColumn.ColumnType)</label>
+                                                            <div class="col-md-9">
+                                                                <input type="text" class="form-control" name="Values[@index]" value="@Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value" />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            index++;
+                                        }
+                                    }
+                                }
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <!--/row-->
+                                <div class="row text-center" style="margin-top: 10px;">
+                                    <div class="col-md-12">
+                                        <button type="submit" class="btn btn-sm green">保存</button>
+                                        <button type="button" class="btn yellow btn-sm padding-lf-15" onclick="javascript: history.back(-1);">返回上一页</button>
+                                    </div>
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                            <!-- END FORM-->
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal small fade" id="uploadInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift"></i>附件上传
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <!-- BEGIN FORM-->
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form id="fileupload" action="@Url.Action("UploadAttachment", "EquipmentInfo")" method="POST" enctype="multipart/form-data">
+                                        <div class="portlet-body form">
+                                            <!-- BEGIN FORM-->
+                                            <div class="form-body">
+                                                <div class="row">
+                                                    <!--/span-->
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                <div class="input-group input-large">
+                                                                    <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                                                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                                        <span class="fileinput-filename"> </span>
+                                                                    </div>
+                                                                    <span class="input-group-addon btn default btn-file">
+                                                                        <span class="fileinput-new">选择文件</span>
+                                                                        <span class="fileinput-exists">替换</span>
+                                                                        <input type="file" name="file">
+                                                                    </span>
+                                                                    <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <div class="text-center">
+                                                <button class="btn green btn-sm padding-lf-15">上传</button>
+                                                <button type="button" id="dissmissUpload" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js") type="text/javascript"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('.dateTypeField').datetimepicker({
+                autoclose: true,
+                todayBtn: true,
+                language: "zh-CN",
+                format: 'yyyy-mm-dd',
+                minView: 2,
+                todayHighlight: true,
+            });
+
+            // 附件上传弹出层
+            $("#uploadShow").click(function () {
+                var uploadInfo = $('#uploadInfo');
+                uploadInfo.modal('show');
+                clearFormValues("uploadInfo");
+            });
+
+            $("#fileupload").submit(function () {
+                var $form = $(this);
+                var formData = new FormData($form[0]);
+                if ($("#fileupload input[type=file]").val() === "") {
+                    $.bootstrapGrowl("请选择上传文件!", {
+                        type: "warning",
+                        offset: {
+                            from: "top",
+                            amount: 150
+                        },
+                        align: "center"
+                    });
+                    return false;
+                }
+                var url = $form.attr("action");
+                @*formData.append("OrderId", "@Model.PurchaseOrder.Id");*@
+                //postCommand(url, formData, $form);
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: formData,
+                    cache: false,
+                    processData: false, // 不处理发送的数据，因为data值是Formdata对象，不需要对数据做处理
+                    contentType: false, // 不设置Content-type请求头
+                    success: function(data) {
+                        var $file = $('#displayFile');
+                        $file.attr("href", data.FilePath.substring(1, data.FilePath.length));
+                        $file.text(data.FileName);
+                        $('#fileName').val(data.FileName);
+                        $('#dissmissUpload').click();
+                    },
+                    error: function() {}
+                });
+                return false;
+            });
+        });
+    </script>
+}

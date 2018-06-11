@@ -1,0 +1,988 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Contract.CreateViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("IndexCheckIn", "Customer")">客户信息</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>合同新增</span>
+            </li>
+        </ul>
+    </div>
+}
+<div class="tabbable-custom nav-justified">
+    <div id="tab_1_1_1" class="tab-pane active">
+        <div class="full-height-content-body">
+            <form id="contractInfo" data-ajax="true" action="@Url.Action("Create", "Contract")" method="POST" class="form-horizontal">
+            <div class="portlet light portlet-fit portlet-form protlet-border">
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">合同基本信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">客户编号</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="CilentNo" value="@Model.Customer.CustomerNo" readonly/>
+                                    @Html.HiddenFor(m => m.CustomerId)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">合同编号</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="ContractNo" value="@Model.ContractNo" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">签署类型</label>
+                                <div class="col-md-8">
+                                    @Html.EnumTextDropDownListFor(m => m.SignedType, typeof (SignedType), true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row">
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">合同模板</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="ContractTemplate" value="@Model.ContractTemplate" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">合同开始日期</label>
+                                <div class="col-md-8">
+                                    @Html.InputDate(x => x.StartTime)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">合同截至时间</label>
+                                <div class="col-md-8">
+                                    @Html.InputDate(x => x.EndTime)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">签约销售</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="UserName" value="@Model.UserName" readonly/>
+                                    @Html.HiddenFor(x => x.UserId)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">签约日期</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control form-control-inline date-picker" id="SignedOn" name="SignedOn" data-date-format="yyyy-mm-dd" />
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!--/span-->
+                </div>
+            </div>
+
+            @Html.Partial("_EditProject", Model.ProjectViewModel)
+
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">乙方信息（被送养人）</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">乙方姓名</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.BName)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">证件号</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.BIDcard)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">性别</label>
+                                <div class="col-md-8">
+                                    @Html.EnumTextDropDownListFor(m => m.BSex, typeof (Sex), true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">地址</label>
+                                <div class="col-md-10">
+                                    @Html.InputText(m => m.BAddress)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">丙方信息（送养人）</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">丙方姓名</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CName)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">性别</label>
+                                <div class="col-md-8">
+                                    @Html.EnumTextDropDownListFor(m => m.CSex, typeof (Sex), true)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">与乙方关系</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(m => m.CRelationship, SettingType.与被送养人关系, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">证件号</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CIDcard)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">手机号码</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CPhone)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">固定电话</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CTel)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">工作单位</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CCompany)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">电子邮箱</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CEmail)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">地址</label>
+                                <div class="col-md-10">
+                                    @Html.InputText(m => m.CAddress)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">丙方（非自然人）名称</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CLegalPersonCompany)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">法人代表</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CLegalPersonName)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">电子邮箱</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CLegalPersonEmail)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">联系人</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CLegalPersonContactName)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">手机号码</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CLegalPersonPhone)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">固定电话</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CLegalPersonTel)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">公司地址</label>
+                                <div class="col-md-10">
+                                    @Html.InputText(m => m.CLegalPersonAddress)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">丁方信息（送养人）</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">丁方姓名</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DName)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">性别</label>
+                                <div class="col-md-8">
+                                    @Html.EnumTextDropDownListFor(m => m.DSex, typeof (Sex), true)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">与乙方关系</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(m => m.DRelationship, SettingType.与被送养人关系, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">证件号</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DIDcard)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">手机号码</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DPhone)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">固定电话</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DTel)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">工作单位</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DCompany)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">电子邮箱</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DEmail)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">地址</label>
+                                <div class="col-md-10">
+                                    @Html.InputText(m => m.DAddress)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">丁方（非自然人）名称</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DLegalPersonCompany)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">法人代表</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DLegalPersonName)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">电子邮箱</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DLegalPersonEmail)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">联系人</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DLegalPersonContactName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">手机号码</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DLegalPersonPhone)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">固定电话</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DLegalPersonTel)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">地址</label>
+                                <div class="col-md-10">
+                                    @Html.InputText(m => m.DLegalPersonAddress)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">房间信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row" style="margin-top: 2px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">服务地点</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="ProjectInfo.PensionAddress" value="" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">是否包房</label>
+                                <div class="col-md-8">
+                                    <select id="IsCompartment" name="IsCompartment" class="form-control input-small">
+                                        <option value="">--未选择--</option>
+                                        <option value="True">包房</option>
+                                        <option value="False">单床</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">楼栋</label>
+                                <div class="col-md-8">
+                                    <select id="BuildingId" name="BuildingId" class="form-control input-small">
+                                        <option value="">--未选择--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">所属单元</label>
+                                <div class="col-md-8">
+                                    <select id="UnitId" name="UnitId" class="form-control input-small">
+                                        <option value="">--未选择--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">所属楼层</label>
+                                <div class="col-md-8">
+                                    <select id="FloorId" name="FloorId" class="form-control input-small">
+                                        <option value="">--未选择--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">房间号</label>
+                                <div class="col-md-8">
+                                    <select id="RoomId" name="RoomId" class="form-control input-small">
+                                        <option value="">--未选择--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">床位号</label>
+                                <div class="col-md-8">
+                                    <select id="BedId" name="BedId" class="form-control input-small">
+                                        <option value="">--未选择--</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">房型</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" name="RoomType" value="@Model.RoomType" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">服务项目</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row" style="margin-top: 2px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">生活能力类型</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(m => m.NursingType, SettingType.护理类型, true)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">服务包级别</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(m => m.ServicePackageLevel, SettingType.服务包级别, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">收费信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <div>
+                    <div class="row" style="margin-top: 2px;">
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">入住类型</label>
+                                <div class="col-md-8">
+                                    <input name="CheckinType" type="text" class="form-control" id="CheckinType" readonly/>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">押金</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.DepositCost)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">一次性安置费</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.RelocationCost, new {@class = "form-control", @readonly = true})
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- BEGIN FORM-->
+                <div>
+                    <label class="caption-subject font-green-sharp sbold">短期</label>
+                    <div class="form-body">
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">床位费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.ShortTermRoomCost)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">餐费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.ShortTermMealsCost, new {@class = "form-control", @readonly = true})
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">基础服务费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.ShortTermServiceCost, new {@class = "form-control", @readonly = true})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+
+                    <div class="row" style="margin-top: 5px;">
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">服务包费用</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" id="ShortTermServiceMonthlyCost" name="ShortTermServiceMonthlyCost" value="@Model.ShortTermServiceMonthlyCost" readonly/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">失智服务费</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.ShortTermNursingCost, new {@class = "form-control", @readonly = true})
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">附加服务费</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.ShortTermAttachCost, new {@class = "form-control"})
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label class="caption-subject font-green-sharp sbold">长期</label>
+                    <div class="form-body">
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">床位费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.LongTermRoomCost)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">餐费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.LongTermMealsCost, new {@class = "form-control", @readonly = true})
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">基础服务费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.LongTermServiceCost, new {@class = "form-control", @readonly = true})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="row" style="margin-top: 5px;">
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">服务包费用</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="LongTermServiceMonthlyCost" name="LongTermServiceMonthlyCost" value="@Model.LongTermServiceMonthlyCost" readonly/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">失智服务费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.LongTermNursingCost, new {@class = "form-control", @readonly = true})
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">附加服务费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.LongTermAttachCost, new {@class = "form-control"})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">请假退费信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">餐费</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.RefundCost, new {@class = "form-control", @readonly = true})
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">老带新信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">推荐人</label>
+                                <div class="col-md-8">
+                                    @Html.HiddenFor(m => m.CustomerAccountId)
+                                    <input type="text" autocomplete="off" class="form-control" id="ReferralsName" name="ReferralsName" data-provide="typeahead" data-items="5"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">推荐人奖励积分</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.RecommendPoint)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">被推荐人奖励积分</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.BonusPoint)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+                @Html.HiddenFor(m => m.PreviousContractId)
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                <div class="form-actions">
+                    <div class="text-center">
+                        <button id="create" type="submit" data-showloading="true" class="btn green btn-sm padding-lf-15 ">保存</button>
+                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户合同管理, Permission.新增))
+                        {
+                            <a id="submitContract" href="javascript:;" class="btn green btn-sm padding-lf-15">提交</a>
+                        }
+                        <button type="button" class="btn yellow btn-sm padding-lf-15" onclick="javascript: history.back(-1);">返回</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js") type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/initRoomSelect.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-typeahead.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var referralsName = $("#ReferralsName");
+            referralsName.blur(function () {
+                if (referralsName.val() == null || referralsName.val() == '' || referralsName.val() == undefined) {
+                    $("#CustomerAccountId").val(0);
+                }
+            });
+            referralsName.typeahead({
+                ajax: {
+                    url: '@Url.Action("GetCustomers", "CustomerAccount")',
+                    timeout: 300, // 延时
+                    method: 'post',
+                    triggerLength: 1, // 输入几个字符之后，开始请求
+                    loadingClass: null, // 加载数据时, 元素使用的样式类
+                    // preDispatch: null,　　　　　　　　// 发出请求之前，调用的预处理方法
+                    //preProcess: null　　　　　　　　　// Ajax 请求完成之后，调用的后处理方法
+                    preDispatch: function (query) {
+                        var para = { keyword: referralsName.val() };
+                        para.query = query;
+                        return para;
+                    },
+                    preProcess: function (result) {
+                        return result;
+                    }
+                },
+                display: "Name", // 默认的对象属性名称为 name 属性
+                val: "CId", // 默认的标识属性名称为 id 属性
+                items: 5, // 最多显示项目数量
+                itemSelected: function (item, val, text) { // 当选中一个项目的时候，回调函数
+                    //console.info(item);
+                    $("#CustomerAccountId").val(val);
+                }
+            });
+        });
+
+
+
+        var funcs = {
+            updateButtons: function () {
+                var checked = $(".checkboxes:checked").length > 0;
+                var buttons = $(".batch-button");
+                buttons.prop("disabled", !checked);
+                if (checked) {
+                    buttons.removeClass("disabled");
+                } else {
+                    buttons.addClass("disabled");
+                }
+            }
+        };
+
+        $(document).ready(function () {
+            //合同类型
+            $("#StartTime,#EndTime").datepicker().on("changeDate", function (e) {
+                var start = $("#StartTime").datepicker('getDate');
+                var end = $("#EndTime").datepicker('getDate');
+
+                if (start) {
+                    $("#EndTime").datepicker('setStartDate', start);
+                }
+
+                if (start && end) {
+                    var timeDiff = Math.abs(end.getTime() - start.getTime());
+                    var daysDiff = Math.ceil(timeDiff / (1000 * 3600 * 24));
+                    var checkInType = daysDiff >= 364 ? "长期" : "短期";
+                    $("#CheckinType").val(checkInType);
+                }
+
+                $("#StartTime").datepicker('hide');
+                $("#EndTime").datepicker('hide');
+            });
+
+            $(".group-checkable").change(function () {
+                var checkAll = $(this);
+                var checked = checkAll.is(":checked");
+                checkAll.closest(".table").find(".checkboxes").prop("checked", checked).uniform("refresh");
+                funcs.updateButtons();
+            });
+
+            $(".checkboxes").change(function () {
+                funcs.updateButtons();
+            });
+
+            $("#submitContract").on("click", function () {
+                App.confirm(function () {
+                    $("#contractInfo").attr("action", "@Url.Action("CreateSubmit", "Contract")");
+                    $("#contractInfo").submit();
+                }, function () {
+
+                });
+            });
+
+            $("#create").click(function () {
+                $("#contractInfo").attr("action", "@Url.Action("Create", "Contract")");
+            });
+            
+            cascadeDropdown();
+        });
+
+        function cascadeDropdown() {
+            initRoomSelect($("#PreviousContractId").val(), "#IsCompartment", "#BuildingId", "#UnitId", "#FloorId", "#RoomId", "#BedId", "#ProjectId");
+        }
+    </script>
+}

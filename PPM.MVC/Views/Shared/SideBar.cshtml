@@ -1,0 +1,105 @@
+﻿<div class="page-sidebar-wrapper">
+    <!-- BEGIN SIDEBAR -->
+    <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+    <!-- DOC: Change data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+    <div class="page-sidebar navbar-collapse collapse">
+        <!-- BEGIN SIDEBAR MENU -->
+        <!-- DOC: Apply "page-sidebar-menu-light" class right after "page-sidebar-menu" to enable light sidebar menu style(without borders) -->
+        <!-- DOC: Apply "page-sidebar-menu-hover-submenu" class right after "page-sidebar-menu" to enable hoverable(hover vs accordion) sub menu mode -->
+        <!-- DOC: Apply "page-sidebar-menu-closed" class right after "page-sidebar-menu" to collapse("page-sidebar-closed" class must be applied to the body element) the sidebar sub menu mode -->
+        <!-- DOC: Set data-auto-scroll="false" to disable the sidebar from auto scrolling/focusing -->
+        <!-- DOC: Set data-keep-expand="true" to keep the submenues expanded -->
+        <!-- DOC: Set data-auto-speed="200" to adjust the sub menu slide up/down speed -->
+        <ul class="page-sidebar-menu  page-header-fixed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" data-height="911">
+            <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
+            <li class="sidebar-toggler-wrapper hide">
+                <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+                <div class="sidebar-toggler"> </div>
+                <!-- END SIDEBAR TOGGLER BUTTON -->
+            </li>
+            <li class="nav-item start ">
+                <a href="@Url.Action("Index", "Home")" data-id="0" data-title="首页" class="nav-link nav-toggle">
+                    <i class="icon-home"></i>
+                    <span class="title">首页</span>
+                    @*<span class="arrow"></span>*@
+                </a>
+                @*<ul class="sub-menu">
+                        <li class="nav-item start ">
+                            <a href="index.html" class="nav-link ">
+                                <i class="icon-bar-chart"></i>
+                                <span class="title">Dashboard 1</span>
+                            </a>
+                        </li>
+                        <li class="nav-item start ">
+                            <a href="dashboard_2.html" class="nav-link ">
+                                <i class="icon-bulb"></i>
+                                <span class="title">Dashboard 2</span>
+                                <span class="badge badge-success">1</span>
+                            </a>
+                        </li>
+                        <li class="nav-item start ">
+                            <a href="dashboard_3.html" class="nav-link ">
+                                <i class="icon-graph"></i>
+                                <span class="title">Dashboard 3</span>
+                                <span class="badge badge-danger">5</span>
+                            </a>
+                        </li>
+                    </ul>*@
+            </li>
+            <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
+            <li class="nav-item ">
+                <a data-href="@Url.Action("Index", "User")" data-id="1" data-title="用户管理" onclick="addPageTab(this)" class="nav-link nav-toggle">
+                    <i class="icon-user"></i>
+                    <span class="title">用户管理</span>
+                    @*<span class="arrow"></span>*@
+                </a>
+                @*<ul class="sub-menu">
+                        <li class="nav-item start ">
+                            <a href="index.html" class="nav-link ">
+                                <i class="icon-bar-chart"></i>
+                                <span class="title">Dashboard 1</span>
+                            </a>
+                        </li>
+                        <li class="nav-item start ">
+                            <a href="dashboard_2.html" class="nav-link ">
+                                <i class="icon-bulb"></i>
+                                <span class="title">Dashboard 2</span>
+                                <span class="badge badge-success">1</span>
+                            </a>
+                        </li>
+                        <li class="nav-item start ">
+                            <a href="dashboard_3.html" class="nav-link ">
+                                <i class="icon-graph"></i>
+                                <span class="title">Dashboard 3</span>
+                                <span class="badge badge-danger">5</span>
+                            </a>
+                        </li>
+                    </ul>*@
+            </li>
+            <li class="nav-item ">
+                <a class="nav-link nav-toggle">
+                    <i class="icon-user"></i>
+                    <span class="title">设备管理</span>
+                    <span class="arrow"></span>
+                </a>
+                <ul class="sub-menu">
+                    <li class="nav-item start ">
+                        <a data-href="@Url.Action("Index", "EquipmentCategory")" data-id="2" data-title="设备分类" onclick="addPageTab(this)" class="nav-link ">
+                            <i class="icon-bar-chart"></i>
+                            <span class="title">设备分类</span>
+                        </a>
+                    </li>
+                    <li class="nav-item start ">
+                        <a data-href="@Url.Action("Index", "EquipmentInfo")" data-id="3" data-title="设备信息" onclick="addPageTab(this)" class="nav-link ">
+                            <i class="icon-bulb"></i>
+                            <span class="title">设备信息</span>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+        <!-- END SIDEBAR MENU -->
+    </div>
+    <!-- END SIDEBAR -->
+</div>

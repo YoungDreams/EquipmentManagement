@@ -1,0 +1,262 @@
+﻿@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Purchase.Checking.CheckingProjectItemDetailViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Purchase")">采购管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>在用资产盘点</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet" style="margin-top: 10px;">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>在用资产盘点信息
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="control-label col-md-3">项目</div>
+                            <div class="col-md-9">
+                                @Model.CheckingProject.Project.Name
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="control-label col-md-3">盘点月份</div>
+                            <div class="col-md-9">
+                                @Model.OpenDate.ToString("yyyy-MM")
+                            </div>
+                        </div>
+                    </div>
+                    <!--/row-->
+                </div>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row margin-top-10">
+    <div class="col-md-12">
+        <form id="collectingProducts" action="@Url.Action("SubmitAssetInUseItems", "Checking")" method="POST" data-ajax="true" enctype="multipart/form-data" class="form-horizontal">
+            <div class="portlet light bordered" style="height: auto;">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <span class="caption-subject font-green bold uppercase">在用资产明细</span>
+                    </div>
+                </div>
+
+                <input type="hidden" name="CollectingDate" id="collecting-date-to-submit" value="" />
+                <div class="portlet-body">
+                    <div class="table">
+                        <table id="collectingProductlist" class="table table-hover table-scrollable">
+                            <thead>
+                                <tr>
+                                    <th> 序号 </th>
+                                    <th> 产品编码 </th>
+                                    <th> 产品名称 </th>
+                                    <th> 产品分类 </th>
+                                    <th> 供应商 </th>
+                                    <th> 品牌 </th>
+                                    <th> 规格 </th>
+                                    <th> 单位 </th>
+                                    <th> 单价 </th>
+                                    <th> 本月出库数量 </th>
+                                    <th> 领取时间 </th>
+                                    <th> 领用部门 </th>
+                                    <th> 领取人 </th>
+                                    <th> 位置 </th>
+                                    <th> 备注及用途 </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @{ var row = 1; }
+                                @foreach (var item in Model.Items)
+                                {
+                                    for(var i = 0; i < item.CurrentMonthStockOutCount; i++)
+                                    {
+                                        <tr>
+                                            <td> @row </td>
+                                            <td> @item.ProductCode</td>
+                                            <td> @item.PurchaseProductName </td>
+                                            <td> @item.PurchaseProductCategory </td>
+                                            <td> @item.PurchaseSupplier </td>
+                                            <td> @item.Brand </td>
+                                            <td> @item.Specification </td>
+                                            <td> @item.Unit </td>
+                                            <td> @item.SinglePrice.ToString("F2") </td>
+                                            <td> 1 </td>
+                                            <td>
+                                                <input type="text" class="CollectDate" name="Items[@(row-1)].CollectDate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                                                <input type="hidden" class="CheckingProjectItemId" name="Items[@(row-1)].CheckingProjectItemId" value="@item.Id" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="CollectDepartment" name="Items[@(row-1)].CollectDepartment" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="Collector" name="Items[@(row-1)].Collector" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="Location" name="Items[@(row-1)].Location" />
+                                            </td>
+                                            <td>
+                                                <input type="text" class="Remarks" name="Items[@(row-1)].Remarks" />
+                                            </td>
+                                        </tr>
+                                        row++;
+                                    }
+                                }
+                                <tr>
+                                    <td> 总价 </td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td>@(Model.Items?.Sum(x => x.SinglePrice * x.CurrentMonthStockOutCount).ToString("F2"))</td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <input type="hidden" id="fileName" name="fileName" />
+                    <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                    <div class="form-actions">
+                        <div class="text-center">
+                            <input type="hidden" id="CheckingProjectId" name="CheckingProjectId" value="@Model.CheckingProject.Id" />
+                            <button type="submit" class="btn btn-sm green">确定</button>
+                            <a href="@Url.Action("Index", "Home")" class="btn green">
+                                取消
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js") type="text/javascript"></script>
+    <script type="text/javascript">
+
+        var addCollectingProduct = function(product) {
+            var collectingModal = $('#collectingModal');
+            collectingModal.modal('show');
+            collectingModal.find("form").attr("action", "@Url.Action("SubmitAssetInUseItems", "Checking")");
+            clearFormValues("collectingModal");
+            setFormValues(product);
+        };
+
+        $(document).ready(function() {
+            $('.CollectDate').datetimepicker({
+                autoclose: true,
+                todayBtn: true,
+                language: "zh-CN",
+                format: 'yyyy-mm-dd',
+                minView: 2,
+                todayHighlight: true,
+            });
+
+            $('#CollectingDate').on('change',
+                function() {
+                    var collectingDate = $(this).val();
+                    $('#collecting-date-to-submit').val(collectingDate);
+                });
+
+            $("#ConfirmAdd").click(function() {
+                var url = '@Url.Action("SubmitAssetInUseItems", "Checking")';
+                var command = {
+                    CheckingProjectId: $("#CheckingProjectId").val(),
+                    Items: []
+                };
+                var collectDates = $(".CollectDate");
+                var checkingProjectItemIds = $(".CheckingProjectItemId");
+                var collectDepartments = $(".CollectDepartment");
+                var collectors = $(".Collector");
+                var locations = $(".Location");
+                var remarks = $(".Remarks");
+
+                for (var i = 0; i < collectDates.length; i++) {
+                    command.Items.push({
+                        CheckingProjectItemId: $(checkingProjectItemIds[i]).val(),
+                        CollectDate: $(collectDates[i]).val(),
+                        Collector: $(collectors[i]).val(),
+                        CollectDepartment: $(collectDepartments[i]).val(),
+                        Location: $(locations[i]).val(),
+                        Remarks: $(remarks[i]).val()
+                    });
+                }
+                postCommand(url, command, $(this));
+                //$('#collectingProducts').attr("action", url).submit();
+            });
+
+            // 附件上传弹出层
+            $("#uploadShow").click(function() {
+                var uploadInfo = $('#uploadInfo');
+                uploadInfo.modal('show');
+                clearFormValues("uploadInfo");
+            });
+
+            $("#fileupload").submit(function() {
+                var $form = $(this);
+                var formData = new FormData($form[0]);
+                if ($("#fileupload input[type=file]").val() === "") {
+                    $.bootstrapGrowl("请选择上传文件!",
+                        {
+                            type: "warning",
+                            offset: {
+                                from: "top",
+                                amount: 150
+                            },
+                            align: "center"
+                        });
+                    return false;
+                }
+                var url = $form.attr("action");
+                @*formData.append("OrderId", "@Model.PurchaseOrder.Id");*@
+                //postCommand(url, formData, $form);
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    data: formData,
+                    cache: false,
+                    processData: false, // 不处理发送的数据，因为data值是Formdata对象，不需要对数据做处理
+                    contentType: false, // 不设置Content-type请求头
+                    success: function(data) {
+                        var $file = $('#displayFile');
+                        $file.attr("href", data.FilePath.substring(1, data.FilePath.length));
+                        $file.text(data.FileName);
+                        $('#fileName').val(data.FileName);
+                        $('#dissmissUpload').click();
+                    },
+                    error: function() {}
+                });
+                return false;
+            });
+        });
+    </script>
+}

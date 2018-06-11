@@ -1,0 +1,1084 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Contract.DetailViewModel
+
+<div class="full-height-content-body">
+    <form data-ajax="true" action="@Url.Action("Edit", "Contract")" method="POST" class="form-horizontal">
+        <div class="portlet light portlet-fit portlet-form protlet-border">
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">合同基本信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">客户编号</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.Customer.CustomerNo, Model.Customer.CustomerNo)
+                                    @Html.HiddenFor(m => m.CustomerId)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">合同编号</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.ContractNo, Model.ContractNo)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">签署类型</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.SignedType, Model.SignedType.ToString())
+                                    @Html.HiddenFor(m => m.ContractId)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row">
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">合同模板</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.ContractTemplate, Model.ContractTemplate.ToString())
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">合同开始日期</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.StartTime, Model.StartTime.Value.DateString())
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">合同截至时间</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.EndTime, Model.EndTime.Value.DateString())
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">签约销售</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.UserName, Model.UserName)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">签约日期</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.SignedOn, Model.SignedOn.Value.DateString())
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                </div>
+            </div>
+            @Html.Partial("_DetailProject", Model.Project)
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">乙方（入住老年人）</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">乙方姓名</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.BName, Model.BName ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">性别</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.BSex, Model.BSex ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">年龄</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.BAge, Model.BAge.ToString() ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">
+                                    @Html.LabelFor(m => m.BCredentialType, Model.BCredentialType.ToString() ?? string.Empty)
+                                </label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.BIDcard, Model.BIDcard ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">联系电话</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.BPhone, Model.BPhone ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">电子邮箱</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.BEmail, Model.BEmail ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">地址</label>
+                                <div class="col-md-10">
+                                    @Html.LabelFor(m => m.BAddress, Model.BAddress ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">乙方监护人</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">乙方监护人姓名</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CName, Model.CName ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">性别</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CSex, Model.CSex ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">与乙方关系</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CRelationship, Model.CRelationship ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">
+                                    @Html.LabelFor(m => m.CCredentialType, Model.CCredentialType.ToString() ?? string.Empty)
+                                </label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CIDcard, Model.CIDcard ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">手机号码</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CPhone, Model.CPhone ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">固定电话</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CTel, Model.CTel ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">工作单位</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CCompany, Model.CCompany ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">电子邮箱</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CEmail, Model.CEmail ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">通讯地址</label>
+                                <div class="col-md-10">
+                                    @Html.LabelFor(m => m.CAddress, Model.CAddress ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">邮政编码</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CPostcode, Model.CPostcode ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">经常居住地地址</label>
+                                <div class="col-md-10">
+                                    @Html.LabelFor(m => m.CliveAddress, Model.CliveAddress ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">乙方监护人（非自然人）名称</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CLegalPersonCompany, Model.CLegalPersonCompany ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">法人代表</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CLegalPersonName, Model.CLegalPersonName ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">电子邮箱</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CLegalPersonEmail, Model.CLegalPersonEmail ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">联系人</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CLegalPersonContactName, Model.CLegalPersonContactName ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">手机号码</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CLegalPersonPhone, Model.CLegalPersonPhone ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">固定电话</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CLegalPersonTel, Model.CLegalPersonTel ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">公司地址</label>
+                                <div class="col-md-10">
+                                    @Html.LabelFor(m => m.CLegalPersonAddress, Model.CLegalPersonAddress ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">邮政编码</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.CLegalPersonPostcode, Model.CLegalPersonPostcode ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">丙方</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">丙方作为入住老人的</label>
+                                <div class="col-md-4">
+                                    @Html.LabelFor(m => m.CAsTypes, string.Join(",", Model.CAsTypes.Select(x => x)) ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">丙方姓名</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DName, Model.DName ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">性别</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DSex, Model.DSex ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">与乙方关系</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DRelationship, Model.DRelationship ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">@Html.LabelFor(m => m.DCredentialType, Model.DCredentialType.ToString() ?? string.Empty)</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DIDcard, Model.DIDcard ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">手机号码</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DPhone, Model.DPhone ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">固定电话</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DTel, Model.DTel ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">工作单位</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DCompany, Model.DCompany ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">电子邮箱</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DEmail, Model.DEmail ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">通讯地址</label>
+                                <div class="col-md-10">
+                                    @Html.LabelFor(m => m.DAddress, Model.DAddress ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">邮政编码</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DPostcode, Model.DPostcode ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">经常居住地地址</label>
+                                <div class="col-md-10">
+                                    @Html.LabelFor(m => m.DliveAddress, Model.DliveAddress ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">丙方（非自然人）名称</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DLegalPersonCompany, Model.DLegalPersonCompany ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">法人代表</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DLegalPersonName, Model.DLegalPersonName ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">电子邮箱</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DLegalPersonEmail, Model.DLegalPersonEmail ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">联系人</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DLegalPersonContactName, Model.DLegalPersonContactName ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">手机号码</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DLegalPersonPhone, Model.DLegalPersonPhone ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">固定电话</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DLegalPersonTel, Model.DLegalPersonTel ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/span-->
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">公司地址</label>
+                                <div class="col-md-10">
+                                    @Html.LabelFor(m => m.DLegalPersonAddress, Model.DLegalPersonAddress ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">邮政编码</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.DLegalPersonPostcode, Model.DLegalPersonPostcode ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">房间信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row" style="margin-top: 2px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">服务地点</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.Project.PensionAddress, Model.Project.PensionAddress)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">是否包房</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.IsCompartment, Model.IsCompartment.GetText("包房", "单床"))
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">楼栋</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.BuildingInfo.Name, Model.BuildingInfo.Name)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">所属单元</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.UnitInfo.Name, Model.UnitInfo.Name)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">所属楼层</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.FloorInfo.Name, Model.FloorInfo.Name)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">房间号</label>
+                                <div class="col-md-8">
+                                    @if (Model.RoomInfo != null)
+                                    {
+                                        @Html.LabelFor(m => m.RoomInfo.Name, Model.RoomInfo.Name)
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">床位号</label>
+                                <div class="col-md-8">
+                                    @if (Model.BedInfo != null)
+                                    {
+                                        @Html.LabelFor(m => m.BedInfo.Name, Model.BedInfo.Name)
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">房型</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.RoomType, Model.RoomType ?? string.Empty)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">服务项目</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row" style="margin-top: 2px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">生活能力类型</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.NursingType, Model.NursingType)
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">服务包级别</label>
+                                <div class="col-md-8">
+                                    @Html.LabelFor(m => m.ServicePackageLevel, Model.ServicePackageLevel)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">收费信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <div>
+                    <div class="row" style="margin-top: 2px;">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">押金类型</label>
+                                <div class="col-md-8">
+                                    <label>@Model.DepositType</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">押金</label>
+                                <div class="col-md-8">
+                                    <label>@Model.DepositCost</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">一次性安置费</label>
+                                <div class="col-md-8">
+                                    <label>@Model.RelocationCost</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- BEGIN FORM-->
+                <div>
+                    <div class="form-body">
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">收费类型</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.ChargeType</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">床位费</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.LongTermRoomCost</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">餐费</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.LongTermMealsCost</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">基础服务费</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.LongTermServiceCost</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/span-->
+                        <div class="row" style="margin-top: 5px;">
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">服务包费用</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.LongTermServiceMonthlyCost</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">失智服务费</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.LongTermNursingCost</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">附加服务费</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.LongTermAttachCost</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @if (Model.ChargeType == ChargeType.非标准收费.ToString())
+                        {
+                            <div class="row" style="margin-top:5px;">
+                                <div class="col-md-8">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-2">非标准收费说明</label>
+                                        <div class="col-md-10">
+                                            <label>@Model.ChargeDescription</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">请假退费信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <!--/span-->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">餐费</label>
+                                <div class="col-md-8">
+                                    <label>@Model.RefundCost</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">违约金信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <!--/span-->
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">违约金</label>
+                                <div class="col-md-8">
+                                    <label>@Model.LiquidatedDamages</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">老带新信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!--推荐人 BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">推荐人</label>
+                                <div class="col-md-8">
+                                    @if (Model.RecommendCustomerAccount != null)
+                                    {
+                                        <label>@Model.RecommendCustomerAccount.Customer.Name-@Model.RecommendCustomerAccount.Customer.CustomerNo-@Model.RecommendCustomerAccount.Project.Name</label>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">推荐人奖励积分</label>
+                                <div class="col-md-8">
+                                    <label>@Model.RecommendPoint</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">被推荐人奖励积分</label>
+                                <div class="col-md-7">
+                                    <label>@Model.BonusPoint</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @if (!string.IsNullOrWhiteSpace(Model.AttachmentName))
+            {
+                <div class="portlet-title title-style">
+                    <div class="caption">
+                        <i class="icon-bubble font-green-sharp"></i>
+                        <span class="caption-subject font-green-sharp sbold">合同扫描件</span>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <!--/span-->
+                        <div class="row">
+
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <div class="col-md-8">
+                                        <a href="@Url.Content(Model.AttachmentPath)" target="_blank">@Model.AttachmentName</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            }
+        @if (Model.Status == ContractStatus.失效)
+        {
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">退住信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!--推荐人 BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">退住日期</label>
+                                <div class="col-md-8">
+                                    <label>@(Model.ActualEndTime?.DateString())</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">退住原因</label>
+                                <div class="col-md-8">
+                                    <label>@Model.MoveOutReason</label>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-md-4">
+                            <div class="form-group">
+                                <label class="control-label col-md-5">备注</label>
+                                <div class="col-md-7">
+                                    <label>@Model.MoveOutDesc</label>
+                                </div>
+                            </div>
+                        </div>*@
+                    </div>
+                </div>
+            </div>
+        }
+            @if (Model.CurrentWorkFlowStep != null && Model.IsLockedAttachment == false)
+            {
+                @Html.Partial("_Contract.Detail.Approval", Model)
+            }
+            else
+            {
+                @Html.Partial("~/Views/TrackingResult/_TrackingResults.cshtml", Model.TrackingResult)
+            }
+        </div>
+
+        <div class="errors alert alert-danger fade in" style="display: none;"></div>
+
+        <div class="form-actions">
+            <div class="text-center">
+                @if (Model.Status == ContractStatus.待审批)
+                {
+                    if (Model.CurrentWorkFlowStep != null && WebAppContext.Current.User == Model.CurrentWorkFlowStep.User)
+                    {
+                        <a id="ApprovalContract" href="javascript:;" class="btn green btn-sm padding-lf-15">提交</a>
+                    }
+                    <a href="@Url.Action("IndexCheckIn", "Customer")" class="btn yellow btn-sm padding-lf-15">返回</a>
+                }
+            </div>
+        </div>
+    </form>
+
+    @if (Model.Status == ContractStatus.已审批)
+    {
+        <div class="form-actions">
+            <div class="text-center">
+                @if (Model.CurrentWorkFlowStep != null && Model.CurrentWorkFlowStep.WorkflowStepCategory == WorkflowStepCategory.打印签字 && WebAppContext.Current.User == Model.CurrentWorkFlowStep.User)
+                {
+                    <a href="javascript:;" data-command="@Model.PrintContractCommand(Model.ContractId).ToJavascript()" target="_blank" class="btn blue btn-sm padding-lf-15">打印</a>
+                    <a id="SubmitPrintContract" href="javascript:;" class="btn green btn-sm padding-lf-15">提交</a>
+                }
+
+                @if (Model.CurrentWorkFlowStep != null && Model.CurrentWorkFlowStep.WorkflowStepCategory == WorkflowStepCategory.生效 && WebAppContext.Current.User == Model.CurrentWorkFlowStep.User)
+                {
+                    <a id="EffectiveContract" href="javascript:;" class="btn green btn-sm padding-lf-15">提交</a>
+                }
+                <a href="@Url.Action("IndexCheckIn", "Customer")" class="btn yellow btn-sm padding-lf-15">返回</a>
+            </div>
+        </div>
+    }
+
+    @if (Model.Status == ContractStatus.生效)
+    {
+        <div class="form-actions">
+            <div class="text-center">
+                @if (!Model.IsLockedAttachment && Model.CurrentWorkFlowStep != null && WebAppContext.Current.User == Model.CurrentWorkFlowStep.User && Model.CurrentWorkFlowStep.WorkflowStepCategory == WorkflowStepCategory.扫描件上传)
+                {
+                    <a id="UploadContract" href="javascript:;" class="btn blue btn-sm padding-lf-15">上传</a>
+                }
+                @if (!Model.IsLockedAttachment && Model.CurrentWorkFlowStep != null && WebAppContext.Current.User == Model.CurrentWorkFlowStep.User && Model.CurrentWorkFlowStep.WorkflowStepCategory == WorkflowStepCategory.扫描件上传)
+                {
+                    <a href="javascript:;" data-confirmation-message="确认合同扫描件上传正确！" data-command="@Model.SubmitAttachmentCommand(Model.ContractId, Model.CurrentWorkflowStepId).ToJavascript()" class="btn green btn-sm padding-lf-15">提交附件</a>
+                }
+                @if (!Model.IsLockedAttachment && Model.CurrentWorkFlowStep != null && WebAppContext.Current.User == Model.CurrentWorkFlowStep.User && Model.CurrentWorkFlowStep.WorkflowStepCategory == WorkflowStepCategory.扫描件确认)
+                {
+                    <a id="LockedAttachmentContract" href="javascript:;" class="btn green btn-sm padding-lf-15">提交</a>
+                }
+                <a href="@Url.Action("IndexCheckIn", "Customer")" class="btn yellow btn-sm padding-lf-15">返回</a>
+            </div>
+        </div>
+    }
+</div>
+
+
+<div class="modal small fade" id="uploadInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 400px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift"></i>附件上传
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <!-- BEGIN FORM-->
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form id="fileupload" action="@Url.Action("UploadContract", "Contract", new {ContractId = Model.ContractId})" method="POST" enctype="multipart/form-data">
+                                        <div class="portlet-body form">
+                                            <!-- BEGIN FORM-->
+                                            <div class="form-body">
+                                                <div class="row">
+                                                    <!--/span-->
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                <div class="input-group input-large">
+                                                                    <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                                                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                                        <span class="fileinput-filename"> </span>
+                                                                    </div>
+                                                                    <span class="input-group-addon btn default btn-file">
+                                                                        <span class="fileinput-new">选择文件</span>
+                                                                        <span class="fileinput-exists">替换</span>
+                                                                        <input type="file" name="file">
+                                                                    </span>
+                                                                    <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <div class="text-center">
+                                                <button class="btn green btn-sm padding-lf-15">上传</button>
+                                                <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

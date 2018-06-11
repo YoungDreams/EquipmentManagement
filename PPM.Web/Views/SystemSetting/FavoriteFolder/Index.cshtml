@@ -1,0 +1,126 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.SystemSetting.FavoriteFolder.IndexViewModel
+@section Styles{
+
+}
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">系统设置</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>收藏夹管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE TITLE-->
+<h3 class="page-title"></h3>
+<!-- END PAGE TITLE-->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet box green">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>收藏夹查询
+                </div>
+                <div class="tools">
+                    <a href="javascript:;" class="collapse" data-original-title="" title=""> </a>
+                    <a href="javascript:;" class="reload" data-original-title="" title=""> </a>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","FavoriteFolder",new {page = Model.Items.Page,pageSize = Model.Items.PageSize})" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">收藏夹名称</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="FavoriteFolderName" value="@Model.Query.FavoriteFolderName" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-offset-5">
+                                        <button type="submit" class="btn green">查询</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"> </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">收藏夹列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <a href="@Url.Action("Create", "FavoriteFolder")" class="btn green">                                
+                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                新增
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th> 序号 </th>
+                                <th> 收藏夹名称 </th>
+                                <th> 描述 </th>
+                                <th> 操作 </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td> @Model.Items.RowNumberOf(item)</td>
+                                    <td> @item.Name </td>
+                                    <td> @item.Description </td>
+                                    <td>
+                                        <a href="@Url.Action("Edit", "FavoriteFolder", new {id = item.Id})" class="btn default btn-xs yellow-stripe">编辑</a>
+                                        <a href="javascript:;" data-command="@Model.DeleteCommand(item.Id).ToJavascript()" class="btn default btn-xs red-stripe">
+                                            删除
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.Partial("_Pagination", Model.Items)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

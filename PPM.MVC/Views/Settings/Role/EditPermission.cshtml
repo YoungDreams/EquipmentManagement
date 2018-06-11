@@ -1,0 +1,683 @@
+﻿@using PensionInsurance.Entities
+@model PensionInsurance.Web.Views.SystemSetting.Role.EditPermissionViewModel
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">系统设置</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>权限分配</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE TITLE-->
+<h3 class="page-title"></h3>
+<!-- END PAGE TITLE-->
+<div class="row">
+    <div class="col-md-12">
+        <form data-ajax-permission="true" action="@Url.Action("EditPermission", "Role")" method="POST" class="form-horizontal">
+            <div class="portlet light bordered">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-social-dribbble font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">权限列表</span>
+                    </div>
+                </div>
+                <div class="portlet-body">
+                    <div class="table">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-3">模块</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.座席接电管理">@ModuleType.座席接电管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.座席接电管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.座席接电管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.座席接电管理详细" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.座席接电管理 && x.Permission == Permission.座席接电管理详细) == null ? "" : "checked='checked'")>座席接电管理详细</label>
+
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.咨询接待管理">@ModuleType.咨询接待管理</label>
+                                    </td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.启用" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.启用) == null ? "" : "checked='checked'")>@Permission.启用</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.失效" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.失效) == null ? "" : "checked='checked'")>@Permission.失效</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.客户入住" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.客户入住) == null ? "" : "checked='checked'")>@Permission.客户入住</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.客户收藏" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.客户收藏) == null ? "" : "checked='checked'")>@Permission.客户收藏</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.客户转交" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.客户转交) == null ? "" : "checked='checked'")>@Permission.客户转交</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看D类客户" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.查看D类客户) == null ? "" : "checked='checked'")>@Permission.查看D类客户</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看无效客户" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.咨询接待管理 && x.Permission == Permission.查看无效客户) == null ? "" : "checked='checked'")>@Permission.查看无效客户</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户跟踪管理">@ModuleType.客户跟踪管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户跟踪管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户跟踪管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户跟踪管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户跟踪管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户跟踪管理 && x.Permission == Permission.导出) == null ? "" : "checked='checked'")>@Permission.导出</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.电话管理">电话管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.电话管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导入" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.电话管理 && x.Permission == Permission.导入) == null ? "" : "checked='checked'")>@Permission.导入</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.电话管理 && x.Permission == Permission.导出) == null ? "" : "checked='checked'")>@Permission.导出</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.电话管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.渠道管理">@ModuleType.渠道管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.渠道管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.渠道管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.渠道管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.渠道管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.启用" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.渠道管理 && x.Permission == Permission.启用) == null ? "" : "checked='checked'")>@Permission.启用</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.失效" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.渠道管理 && x.Permission == Permission.失效) == null ? "" : "checked='checked'")>@Permission.失效</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户合同管理">@ModuleType.客户合同管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户合同管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户合同管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.作废" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户合同管理 && x.Permission == Permission.作废) == null ? "" : "checked='checked'")>@Permission.作废</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.补录附件" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户合同管理 && x.Permission == Permission.补录附件) == null ? "" : "checked='checked'")>@Permission.补录附件</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户合同管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.合同补充协议补打印" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户合同管理 && x.Permission == Permission.合同补充协议补打印) == null ? "" : "checked='checked'")>@Permission.合同补充协议补打印</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑合同基础信息" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户合同管理 && x.Permission == Permission.编辑合同基础信息) == null ? "" : "checked='checked'")>@Permission.编辑合同基础信息</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.费用变更补充协议">@ModuleType.费用变更补充协议</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.费用变更补充协议 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.费用变更补充协议 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.作废" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.费用变更补充协议 && x.Permission == Permission.作废) == null ? "" : "checked='checked'")>@Permission.作废</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.服务包补充协议">@ModuleType.服务包补充协议</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务包补充协议 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务包补充协议 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.作废" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务包补充协议 && x.Permission == Permission.作废) == null ? "" : "checked='checked'")>@Permission.作废</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.换房补充协议">@ModuleType.换房补充协议</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.换房补充协议 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.换房补充协议 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.作废" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.换房补充协议 && x.Permission == Permission.作废) == null ? "" : "checked='checked'")>@Permission.作废</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户信息管理">@ModuleType.客户信息管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.付款" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.付款) == null ? "" : "checked='checked'")>@Permission.付款</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.退住" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.退住) == null ? "" : "checked='checked'")>@Permission.退住</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.退款" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.退款) == null ? "" : "checked='checked'")>@Permission.退款</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.续签" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.续签) == null ? "" : "checked='checked'")>@Permission.续签</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.账单减免" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.账单减免) == null ? "" : "checked='checked'")>@Permission.账单减免</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.客户信息查看全部客户" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.客户信息查看全部客户) == null ? "" : "checked='checked'")>查看全部客户</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.客户信息查看入住客户" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.客户信息查看入住客户) == null ? "" : "checked='checked'")>查看入住客户</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.客户信息查看退住客户" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.客户信息查看退住客户) == null ? "" : "checked='checked'")>查看退住客户</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.客户信息查看客户账单" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.客户信息查看客户账单) == null ? "" : "checked='checked'")>查看账单</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.账单打印" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.账单打印) == null ? "" : "checked='checked'")>账单打印</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.客户信息查看客户账户" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.客户信息查看客户账户) == null ? "" : "checked='checked'")>查看账户</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.事故事件上报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户信息管理 && x.Permission == Permission.事故事件上报) == null ? "" : "checked='checked'")>@Permission.事故事件上报</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户点单">@ModuleType.客户点单</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户点单 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户点单 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户点单 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户点单 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户点餐">@ModuleType.客户点餐</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户点餐 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户点餐 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户点餐 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户点餐 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户亲属">@ModuleType.客户亲属</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户亲属 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户亲属 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户亲属 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户亲属 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户请假">@ModuleType.客户请假</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户请假 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户请假 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户请假 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户请假 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.打印" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户请假 && x.Permission == Permission.打印) == null ? "" : "checked='checked'")>打印</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.客户销假" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户请假 && x.Permission == Permission.客户销假) == null ? "" : "checked='checked'")>销假</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户转账">@ModuleType.客户转账</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户转账 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.转账" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户转账 && x.Permission == Permission.转账) == null ? "" : "checked='checked'")>@Permission.转账</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户医嘱">@ModuleType.客户医嘱</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户医嘱 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户医嘱 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户医嘱 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户医嘱 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.医嘱生效确认" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户医嘱 && x.Permission == Permission.医嘱生效确认) == null ? "" : "checked='checked'")>@Permission.医嘱生效确认</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.医嘱作废确认" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户医嘱 && x.Permission == Permission.医嘱作废确认) == null ? "" : "checked='checked'")>@Permission.医嘱作废确认</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.医嘱作废" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户医嘱 && x.Permission == Permission.医嘱作废) == null ? "" : "checked='checked'")>@Permission.医嘱作废</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户用药单">@ModuleType.客户用药单</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户用药单 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户用药单 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户用药单 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户用药单 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.摆药确认" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户用药单 && x.Permission == Permission.摆药确认) == null ? "" : "checked='checked'")>@Permission.摆药确认</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.发药确认" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户用药单 && x.Permission == Permission.发药确认) == null ? "" : "checked='checked'")>@Permission.发药确认</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.项目信息管理" />@ModuleType.项目信息管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.项目信息管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.项目信息管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.项目信息管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.项目信息管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.月账单管理">@ModuleType.月账单管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.月账单管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.账单生成" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.月账单管理 && x.Permission == Permission.账单生成) == null ? "" : "checked='checked'")>@Permission.账单生成</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.账单确认" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.月账单管理 && x.Permission == Permission.账单确认) == null ? "" : "checked='checked'")>@Permission.账单确认</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.账单打印" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.月账单管理 && x.Permission == Permission.账单打印) == null ? "" : "checked='checked'")>@Permission.账单打印</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.重新生成账单" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.月账单管理 && x.Permission == Permission.重新生成账单) == null ? "" : "checked='checked'")>@Permission.重新生成账单</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.费用特别变更" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.月账单管理 && x.Permission == Permission.费用特别变更) == null ? "" : "checked='checked'")>@Permission.费用特别变更</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.生成调整账单" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.月账单管理 && x.Permission == Permission.生成调整账单) == null ? "" : "checked='checked'")>@Permission.生成调整账单</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.月账单管理 && x.Permission == Permission.导出) == null ? "" : "checked='checked'")>@Permission.导出</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.月账单减免" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.月账单管理 && x.Permission == Permission.月账单减免) == null ? "" : "checked='checked'")>@Permission.月账单减免</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户账户管理">@ModuleType.客户账户管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户账户管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户现金管理">@ModuleType.客户现金管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户现金管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.确认" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户现金管理 && x.Permission == Permission.确认) == null ? "" : "checked='checked'")>@Permission.确认</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户现金流水管理">@ModuleType.客户现金流水管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户现金流水管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户现金流水管理 && x.Permission == Permission.导出) == null ? "" : "checked='checked'")>导出</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.客户现金流水批量确认" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户现金流水管理 && x.Permission == Permission.客户现金流水批量确认) == null ? "" : "checked='checked'")>批量确认</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户积分管理">@ModuleType.客户积分管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户积分管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户积分管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.确认" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户积分管理 && x.Permission == Permission.确认) == null ? "" : "checked='checked'")>@Permission.确认</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.统计报表">@ModuleType.统计报表</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看未办结业务列表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看未办结业务列表) == null ? "" : "checked='checked'")>@Permission.查看未办结业务列表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出未办结业务列表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出未办结业务列表) == null ? "" : "checked='checked'")>@Permission.导出未办结业务列表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看客户有效入住天数列表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看客户有效入住天数列表) == null ? "" : "checked='checked'")>@Permission.查看客户有效入住天数列表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出客户有效入住天数列表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出客户有效入住天数列表) == null ? "" : "checked='checked'")>@Permission.导出客户有效入住天数列表</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看入住客户独立月费报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看入住客户独立月费报表) == null ? "" : "checked='checked'")>@Permission.查看入住客户独立月费报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出入住客户独立月费报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出入住客户独立月费报表) == null ? "" : "checked='checked'")>@Permission.导出入住客户独立月费报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看销售日报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看销售日报) == null ? "" : "checked='checked'")>@Permission.查看销售日报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出销售日报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出销售日报) == null ? "" : "checked='checked'")>@Permission.导出销售日报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出房间价目表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出房间价目表) == null ? "" : "checked='checked'")>@Permission.导出房间价目表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看客户退住通知单统计报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看客户退住通知单统计报表) == null ? "" : "checked='checked'")>@Permission.查看客户退住通知单统计报表</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看客户账户汇总报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看客户账户汇总报表) == null ? "" : "checked='checked'")>@Permission.查看客户账户汇总报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出客户账户汇总报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出客户账户汇总报表) == null ? "" : "checked='checked'")>@Permission.导出客户账户汇总报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出合同台账" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出合同台账) == null ? "" : "checked='checked'")>@Permission.导出合同台账</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看合同台账" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看合同台账) == null ? "" : "checked='checked'")>@Permission.查看合同台账</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看客户点单信息汇总表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看客户点单信息汇总表) == null ? "" : "checked='checked'")>@Permission.查看客户点单信息汇总表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出客户点单信息汇总表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出客户点单信息汇总表) == null ? "" : "checked='checked'")>@Permission.导出客户点单信息汇总表</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看入住客户的家庭分布" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看入住客户的家庭分布) == null ? "" : "checked='checked'")>@Permission.查看入住客户的家庭分布</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看入住客户分析统计图表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看入住客户分析统计图表) == null ? "" : "checked='checked'")>@Permission.查看入住客户分析统计图表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看成交统计" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看成交统计) == null ? "" : "checked='checked'")>@Permission.查看成交统计</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出成交统计" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出成交统计) == null ? "" : "checked='checked'")>@Permission.导出成交统计</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看客户月费日报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看客户月费日报表) == null ? "" : "checked='checked'")>@Permission.查看客户月费日报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出客户月费日报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出客户月费日报表) == null ? "" : "checked='checked'")>@Permission.导出客户月费日报表</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看RpuRpr报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看RpuRpr报表) == null ? "" : "checked='checked'")>@Permission.查看RpuRpr报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出RpuRpr报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出RpuRpr报表) == null ? "" : "checked='checked'")>@Permission.导出RpuRpr报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看房间有效入住天数列表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看房间有效入住天数列表) == null ? "" : "checked='checked'")>@Permission.查看房间有效入住天数列表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出房间有效入住天数列表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出房间有效入住天数列表) == null ? "" : "checked='checked'")>@Permission.导出房间有效入住天数列表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看入住客户变动日报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看入住客户变动日报) == null ? "" : "checked='checked'")>@Permission.查看入住客户变动日报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出入住客户变动日报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出入住客户变动日报) == null ? "" : "checked='checked'")>@Permission.导出入住客户变动日报</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看客户收入报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看客户收入报表) == null ? "" : "checked='checked'")>@Permission.查看客户收入报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出客户收入报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出客户收入报表) == null ? "" : "checked='checked'")>@Permission.导出客户收入报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看咨询客户销售日报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看咨询客户销售日报) == null ? "" : "checked='checked'")>@Permission.查看咨询客户销售日报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看咨询客户销售周报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看咨询客户销售周报) == null ? "" : "checked='checked'")>@Permission.查看咨询客户销售周报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看咨询客户销售月报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看咨询客户销售月报) == null ? "" : "checked='checked'")>@Permission.查看咨询客户销售月报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看咨询客户个人销售周报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看咨询客户个人销售周报) == null ? "" : "checked='checked'")>@Permission.查看咨询客户个人销售周报</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看咨询客户个人销售日报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看咨询客户个人销售日报) == null ? "" : "checked='checked'")>@Permission.查看咨询客户个人销售日报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看咨询客户个人销售月报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看咨询客户个人销售月报) == null ? "" : "checked='checked'")>@Permission.查看咨询客户个人销售月报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出咨询客户个人销售日报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出咨询客户个人销售日报) == null ? "" : "checked='checked'")>@Permission.导出咨询客户个人销售日报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出咨询客户个人销售月报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出咨询客户个人销售月报) == null ? "" : "checked='checked'")>@Permission.导出咨询客户个人销售月报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出咨询客户个人销售周报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出咨询客户个人销售周报) == null ? "" : "checked='checked'")>@Permission.导出咨询客户个人销售周报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出咨询客户销售日报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出咨询客户销售日报) == null ? "" : "checked='checked'")>@Permission.导出咨询客户销售日报</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出咨询客户销售月报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出咨询客户销售月报) == null ? "" : "checked='checked'")>@Permission.导出咨询客户销售月报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出咨询客户销售周报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出咨询客户销售周报) == null ? "" : "checked='checked'")>@Permission.导出咨询客户销售周报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看预期销售日报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看预期销售日报) == null ? "" : "checked='checked'")>@Permission.查看预期销售日报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出预期销售日报" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出预期销售日报) == null ? "" : "checked='checked'")>@Permission.导出预期销售日报</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看CB入住情况统计报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看CB入住情况统计报表) == null ? "" : "checked='checked'")>@Permission.查看CB入住情况统计报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出CB入住情况统计报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出CB入住情况统计报表) == null ? "" : "checked='checked'")>@Permission.导出CB入住情况统计报表</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看客户获知渠道统计报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看客户获知渠道统计报表) == null ? "" : "checked='checked'")>@Permission.查看客户获知渠道统计报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出客户获知渠道统计报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出客户获知渠道统计报表) == null ? "" : "checked='checked'")>@Permission.导出客户获知渠道统计报表</label>
+
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看座席接电汇总表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看座席接电汇总表) == null ? "" : "checked='checked'")>@Permission.查看座席接电汇总表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出座席接电汇总表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出座席接电汇总表) == null ? "" : "checked='checked'")>@Permission.导出座席接电汇总表</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看资产出入库台账" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看资产出入库台账) == null ? "" : "checked='checked'")>@Permission.查看资产出入库台账</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出资产出入库台账" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出资产出入库台账) == null ? "" : "checked='checked'")>@Permission.导出资产出入库台账</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看在用资产台账" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看在用资产台账) == null ? "" : "checked='checked'")>@Permission.查看在用资产台账</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出在用资产台账" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出在用资产台账) == null ? "" : "checked='checked'")>@Permission.导出在用资产台账</label>
+                                        <br />
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看资产统计报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.查看资产统计报表) == null ? "" : "checked='checked'")>@Permission.查看资产统计报表</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出资产统计报表" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.统计报表 && x.Permission == Permission.导出资产统计报表) == null ? "" : "checked='checked'")>@Permission.导出资产统计报表</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.数据字典管理">@ModuleType.数据字典管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.数据字典管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.数据字典管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.数据字典管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.数据字典管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.用户管理">@ModuleType.用户管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.用户管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.用户管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.用户管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.用户管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.角色管理">@ModuleType.角色管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.角色管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.角色管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.角色管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.角色管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.服务包管理">@ModuleType.服务包管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务包管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务包管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务包管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务包管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.服务项目管理">@ModuleType.服务项目管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务项目管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务项目管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务项目管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.服务项目管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.项目管理">@ModuleType.项目管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.项目管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.项目管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.项目管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.项目管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.房间管理">@ModuleType.房间管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.房间管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.房间管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.房间管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.房间管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.床位管理">@ModuleType.床位管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.床位管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.床位管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.床位管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.床位管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.销控图">@ModuleType.销控图</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.销控图 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看客户销控图费用" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.销控图 && x.Permission == Permission.查看客户销控图费用) == null ? "" : "checked='checked'")>@Permission.查看客户销控图费用</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.商品分类管理">@ModuleType.商品分类管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品分类管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品分类管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品分类管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品分类管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.商品管理">@ModuleType.商品管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导入" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品管理 && x.Permission == Permission.导入) == null ? "" : "checked='checked'")>@Permission.导入</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.下载商品价格模版" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品管理 && x.Permission == Permission.下载商品价格模版) == null ? "" : "checked='checked'")>@Permission.下载商品价格模版</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导入商品价格" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品管理 && x.Permission == Permission.导入商品价格) == null ? "" : "checked='checked'")>@Permission.导入商品价格</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.生成商品助记词" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.商品管理 && x.Permission == Permission.生成商品助记词) == null ? "" : "checked='checked'")>@Permission.生成商品助记词</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.供应商管理">@ModuleType.供应商管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.供应商管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.供应商管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.供应商管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.供应商管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.供应商价格管理">@ModuleType.供应商价格管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.供应商价格管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.供应商价格管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.供应商价格管理 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.供应商价格管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.采购管理">@ModuleType.采购管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.采购订单" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.采购订单) == null ? "" : "checked='checked'")>@Permission.采购订单</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.采购商品" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.采购商品) == null ? "" : "checked='checked'")>@Permission.采购商品</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.计划采购" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.计划采购) == null ? "" : "checked='checked'")>@Permission.计划采购</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.运营紧急采购" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.运营紧急采购) == null ? "" : "checked='checked'")>@Permission.运营紧急采购</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.食材采购" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.食材采购) == null ? "" : "checked='checked'")>@Permission.食材采购</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.食材紧急采购" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.食材紧急采购) == null ? "" : "checked='checked'")>@Permission.食材紧急采购</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.餐饮部计划采购" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.餐饮部计划采购) == null ? "" : "checked='checked'")>@Permission.餐饮部计划采购</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.营销类计划性采购" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.营销类计划性采购) == null ? "" : "checked='checked'")>@Permission.营销类计划性采购</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.营销类特殊性采购" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.营销类特殊性采购) == null ? "" : "checked='checked'")>@Permission.营销类特殊性采购</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.营销类紧急性采购" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.营销类紧急性采购) == null ? "" : "checked='checked'")>@Permission.营销类紧急性采购</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.固定资产采购" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.固定资产采购) == null ? "" : "checked='checked'")>@Permission.固定资产采购</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.确认" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.确认) == null ? "" : "checked='checked'")>@Permission.确认</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.打印" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购管理 && x.Permission == Permission.打印) == null ? "" : "checked='checked'")>@Permission.打印</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.采购统计分析">@ModuleType.采购统计分析</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购统计分析 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.出库">@ModuleType.出库</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.出库 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.出库 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.出库 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.出库 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.盘点">@ModuleType.盘点</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.出库 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.出库 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.出库 && x.Permission == Permission.编辑) == null ? "" : "checked='checked'")>@Permission.编辑</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.出库 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.采购预算管理">@ModuleType.采购预算管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购预算管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购预算管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导入" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购预算管理 && x.Permission == Permission.导入) == null ? "" : "checked='checked'")>@Permission.导入</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.采购预算管理 && x.Permission == Permission.导出) == null ? "" : "checked='checked'")>@Permission.导出</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.销售预算管理">@ModuleType.销售预算管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.销售预算管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.销售预算管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导入" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.销售预算管理 && x.Permission == Permission.导入) == null ? "" : "checked='checked'")>@Permission.导入</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导出" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.销售预算管理 && x.Permission == Permission.导出) == null ? "" : "checked='checked'")>@Permission.导出</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.NC凭证管理">@ModuleType.NC凭证管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.NC凭证管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.生成客户月账单凭证" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.NC凭证管理 && x.Permission == Permission.生成客户月账单凭证) == null ? "" : "checked='checked'")>@Permission.生成客户月账单凭证</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.生成客户一次性安置费账单凭证" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.NC凭证管理 && x.Permission == Permission.生成客户一次性安置费账单凭证) == null ? "" : "checked='checked'")>@Permission.生成客户一次性安置费账单凭证</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.导入" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.NC凭证管理 && x.Permission == Permission.导入) == null ? "" : "checked='checked'")>导入NC凭证</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.NC凭证管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.首页">@ModuleType.首页</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.欠费提醒" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.首页 && x.Permission == Permission.欠费提醒) == null ? "" : "checked='checked'")>@Permission.欠费提醒</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.人事资料">@ModuleType.人事资料</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.人事资料 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.人事资料 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.员工入职" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.人事资料 && x.Permission == Permission.员工入职) == null ? "" : "checked='checked'")>@Permission.员工入职</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.人事资料 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.现结餐费账单管理">@ModuleType.现结餐费账单管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.现结餐费账单管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.付款" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.现结餐费账单管理 && x.Permission == Permission.付款) == null ? "" : "checked='checked'")>@Permission.付款</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.撤销付款" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.现结餐费账单管理 && x.Permission == Permission.撤销付款) == null ? "" : "checked='checked'")>@Permission.撤销付款</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.现结餐费流水管理">@ModuleType.现结餐费流水管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.现结餐费流水管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.确认" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.现结餐费流水管理 && x.Permission == Permission.确认) == null ? "" : "checked='checked'")>@Permission.确认</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.客户餐饮管理">@ModuleType.客户餐饮管理</label></td>
+                                    <td>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户餐饮管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.新增" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户餐饮管理 && x.Permission == Permission.新增) == null ? "" : "checked='checked'")>@Permission.新增</label>
+                                        <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.删除" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.客户餐饮管理 && x.Permission == Permission.删除) == null ? "" : "checked='checked'")>@Permission.删除</label>
+                                    </td>
+                                </tr>
+                            <tr>
+                                <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.健康管理">@ModuleType.健康管理</label></td>
+                                <td>
+                                    <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.健康管理 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                    <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看更多长者信息" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.健康管理 && x.Permission == Permission.查看更多长者信息) == null ? "" : "checked='checked'")>@Permission.查看更多长者信息</label>
+                                    <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.去查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.健康管理 && x.Permission == Permission.去查看) == null ? "" : "checked='checked'")>@Permission.去查看</label>
+                                    <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.去评估" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.健康管理 && x.Permission == Permission.去评估) == null ? "" : "checked='checked'")>@Permission.去评估</label>
+                                    <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.编辑健康报告" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.健康管理 && x.Permission == Permission.编辑健康报告) == null ? "" : "checked='checked'")>@Permission.编辑健康报告</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.预约访问">@ModuleType.预约访问</label></td>
+                                <td>
+                                    <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.预约访问 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label class="checkbox-inline"><input type="checkbox" class="group-checkable" value="@ModuleType.在线客服">@ModuleType.在线客服</label></td>
+                                <td>
+                                    <label class="checkbox-inline"><input type="checkbox" class="checkboxes" value="@Permission.查看" @(Model.RolePermissions.FirstOrDefault(x => x.ModuleType == ModuleType.在线客服 && x.Permission == Permission.查看) == null ? "" : "checked='checked'")>@Permission.查看</label>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <input name="RoleId" type="hidden" value="@Model.RoleId" />
+                    </div>
+                </div>
+
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+
+                <!--/row-->
+                <div class="row text-center">
+                    <div class="col-md-12">
+                        <button type="submit" class="btn btn-sm green">保存</button>
+                        <button type="button" class="btn yellow btn-sm padding-lf-15" onclick="javascript: history.back(-1);">返回上一页</button>
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+@section scripts{
+
+    <script type="text/javascript">
+        var funcs = {
+            getPermissions: function() {
+                var permissions = [];
+                var checkboxes = $(".checkboxes");
+                $.each(checkboxes, function(i, item) {
+                    var chk = $(item);
+                    if (chk.is(":checked")) {
+                        var permission = {
+                            RoleId:"@Model.RoleId",
+                            Permission: chk.val(),
+                            ModuleType: chk.closest("tr").find(".group-checkable").val()
+                        };
+                        permissions.push(permission);
+                    }
+                });
+
+                return permissions;
+            },
+            updateButtons: function() {
+                var checked = $(".checkboxes:checked").length > 0;
+                var buttons = $(".batch-button");
+                buttons.prop("disabled", !checked);
+                if (checked) {
+                    buttons.removeClass("disabled");
+                } else {
+                    buttons.addClass("disabled");
+                }
+            }
+        };
+
+        $(document).ready(function() {
+            $(".group-checkable").change(function() {
+                var checkAll = $(this);
+                var checked = checkAll.is(":checked");
+                checkAll.closest("tr").find(".checkboxes").prop("checked", checked).uniform("refresh");
+                funcs.updateButtons();
+            });
+
+            $(".checkboxes").change(function() {
+                funcs.updateButtons();
+            });
+
+            $('form[data-ajax-permission=true]').submit(function () {
+                var permissions = funcs.getPermissions();
+                var url = '@Url.Action("EditPermission", "Role")';
+                var command = {
+                    RolePermissions: permissions,
+                    RoleId:@Model.RoleId
+                    };
+                postCommand(url, command);
+                return false;
+            });
+        });
+    </script>
+}

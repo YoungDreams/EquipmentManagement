@@ -1,0 +1,430 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Web.Common
+@using PensionInsurance.Shared
+@model PensionInsurance.Web.Views.ContractServicePackChange.EditViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("IndexCheckIn", "Customer")">客户信息</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Detail","Customer" , new {customerAccountId=Model.CustomerAccountId})">@Model.Contract.BName</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>服务包补充协议查看</span>
+            </li>
+        </ul>
+    </div>
+}
+<div>
+
+    <div class="full-height-content-body">
+        <form data-ajax="true" action="@Url.Action("Effective", "ContractServicePackChange", new {ContractServicePackChangeId = Model.ContractServicePackChangeId, ContractId = Model.ContractId})" method="POST" class="form-horizontal">
+            <div class="portlet light portlet-fit portlet-form protlet-border">
+                <div class="portlet-title title-style">
+                    <div class="caption">
+                        <i class="icon-bubble font-green-sharp"></i>
+                        <span class="caption-subject font-green-sharp sbold">协议信息</span>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">客户姓名</label>
+                                    <div class="col-md-8">
+                                        @Html.LabelFor(m => m.CustomerName, Model.CustomerName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">协议编号</label>
+                                    <div class="col-md-8">
+                                        @Html.LabelFor(m => m.ContractServicePackChangeNo, Model.ContractServicePackChangeNo)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">变更日期</label>
+                                    <div class="col-md-8">
+                                        @Html.LabelFor(m => m.ChangeDate, Model.ChangeDate.DateString())
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">变更结束日期</label>
+                                    <div class="col-md-8">
+                                        @Html.LabelFor(m => m.ChangeEndDate, Model.ChangeEndDate.DateString())
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">生活能力级别</label>
+                                    <div class="col-md-8">
+                                        @Html.LabelFor(m => m.ConcernType, Model.ConcernType)
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">服务包级别</label>
+                                    <div class="col-md-8">
+                                        @Html.LabelFor(m => m.ServiceLevel, Model.ServiceLevel)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="portlet-title title-style">
+                    <div class="caption">
+                        <i class="icon-bubble font-green-sharp"></i>
+                        <span class="caption-subject font-green-sharp sbold">收费信息</span>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    @if (Model.Contract.ContractTemplate == ContractTemplate.养老机构服务合同20160101)
+                    {
+                        <label class="caption-subject font-green-sharp sbold">短期</label>
+                        <div class="row" style="margin-top: 5px;">
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">服务包费用</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.ShortServiceMonthlyAmount.FormatString()</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">失智服务费</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.ShortConcernAmount.FormatString()</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">附加服务费</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.ShortAttachAmount.FormatString()</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <label class="caption-subject font-green-sharp sbold">长期</label>
+                    }
+                    <div class="form-body">
+                        <div class="row" style="margin-top: 5px;">
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">服务包费用</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.LongServiceMonthlyAmount.FormatString()</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">失智服务费</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.LongConcernAmount.FormatString()</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">附加服务费</label>
+                                    <div class="col-md-8">
+                                        <label>@Model.LongAttachAmount.FormatString()</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.FilePath))
+                {
+                    <div class="portlet-title title-style">
+                        <div class="caption">
+                            <i class="icon-bubble font-green-sharp"></i>
+                            <span class="caption-subject font-green-sharp sbold">合同附件</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <!-- BEGIN FORM-->
+                        <div class="form-body">
+                            <div class="row" style="margin-top: 2px;">
+                                <div class="col-md-12">
+                                    <a href="@Url.Content(Model.FilePath)" target="_blank">@Model.FileName</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.CurrentWorkFlowStep != null && Model.IsLockedAttachment == false)
+                {
+                    @Html.Partial("_Approval", Model)
+                }
+                else
+                {
+                    @Html.Partial("~/Views/TrackingResult/_TrackingResults.cshtml", Model.TrackingResult)
+                }
+            </div>
+            <div class="errors alert alert-danger fade in" style="display: none;"></div>
+            <div class="form-actions">
+                <div class="text-center">
+                    @if (Model.Status == ContractAddtionalStatus.已提交 && Model.CurrentWorkFlowStep != null && Model.CurrentWorkFlowStep.User == WebAppContext.Current.User)
+                    {
+                        <a href="javascript:;" id="ServicePackChangeApproval" class="btn green btn-sm padding-lf-15">提交</a>
+                    }
+                    @if (Model.Status == ContractAddtionalStatus.已审批)
+                    {
+                        if (Model.CurrentWorkFlowStep != null && Model.CurrentWorkFlowStep.WorkflowStepCategory == WorkflowStepCategory.打印签字 && WebAppContext.Current.User == Model.CurrentWorkFlowStep.User)
+                        {
+                            <a target="_blank" href="javascript:;" data-command="@Model.Print(Model.ContractServicePackChangeId).ToJavascript()" class="btn green btn-sm padding-lf-15">打印</a>
+                            <a id="SubmitPrintContractServicePackChange" href="javascript:;" class="btn green btn-sm padding-lf-15">提交</a>
+                        }
+                        if (Model.CurrentWorkFlowStep != null && Model.CurrentWorkFlowStep.WorkflowStepCategory == WorkflowStepCategory.生效 && WebAppContext.Current.User == Model.CurrentWorkFlowStep.User)
+                        {
+                            <a id="EffectiveContractServicePackChange" href="javascript:;" class="btn green btn-sm padding-lf-15">提交</a>
+                        }
+                    }
+                    @if (Model.Status == ContractAddtionalStatus.生效)
+                    {
+                        if (!Model.IsLockedAttachment && Model.CurrentWorkFlowStep != null && Model.CurrentWorkFlowStep.WorkflowStepCategory == WorkflowStepCategory.扫描件上传 && Model.CurrentWorkFlowStep.User == WebAppContext.Current.User)
+                        {
+                            <a id="uploadShow" href="javascript:;" class="btn blue btn-sm padding-lf-15">上传</a>
+                        }
+                        if (!Model.IsLockedAttachment && Model.CurrentWorkFlowStep != null && Model.CurrentWorkFlowStep.WorkflowStepCategory == WorkflowStepCategory.扫描件确认 && Model.CurrentWorkFlowStep.User == WebAppContext.Current.User)
+                        {
+                            <a href="javascript:;" id="LockedAttachmentServicePackChange" class="btn green btn-sm padding-lf-15">提交</a>
+                        }
+                    }
+                    <a href="@Url.Action("Detail", "Customer", new {customerAccountId = Model.CustomerAccountId})" class="btn yellow btn-sm padding-lf-15">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal small fade" id="uploadInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 400px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift"></i>附件上传
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <!-- BEGIN FORM-->
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form id="fileupload" action="@Url.Action("UploadContractServicePackChange", "ContractServicePackChange", new {ContractServicePackChangeId = Model.ContractServicePackChangeId, ContractId = Model.ContractId,CurrentWorkflowStepId=Model.CurrentWorkflowStepId})" method="POST" enctype="multipart/form-data">
+                                        <div class="portlet-body form">
+                                            <!-- BEGIN FORM-->
+                                            <div class="form-body">
+                                                <div class="row">
+                                                    <!--/span-->
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                <div class="input-group input-large">
+                                                                    <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                                                        <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                                        <span class="fileinput-filename"> </span>
+                                                                    </div>
+                                                                    <span class="input-group-addon btn default btn-file">
+                                                                        <span class="fileinput-new">选择文件</span>
+                                                                        <span class="fileinput-exists">替换</span>
+                                                                        <input type="file" name="file">
+                                                                    </span>
+                                                                    <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-actions">
+                                            <div class="text-center">
+                                                <button class="btn green btn-sm padding-lf-15">上传并提交</button>
+                                                <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js") type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $("#SubmitPrintContractServicePackChange").on("click", function () {
+                App.confirm(function() {
+                    $("#Description").text();
+                    var url = '@Url.Action("SubmitPrint", "ContractServicePackChange")';
+                    var contractId = @Model.ContractId;
+                    var contractServicePackChangeId=@Model.ContractServicePackChangeId;
+                    var result = $("input[name='Result']:checked").val();
+                    var description = $('#Description').val();
+                    var currentWorkflowStepId=@Model.CurrentWorkflowStepId;
+                    if (typeof  result == "undefined") {
+                        result = "";
+                    }
+                    var command = {
+                        ContractServicePackChangeId:contractServicePackChangeId,
+                        ContractId: contractId,
+                        Result:result,
+                        Description:description,
+                        CurrentWorkflowStepId:currentWorkflowStepId
+                    };
+                    postCommand(url, command, $(this));
+                }, function() {}, "确认已完成合同打印");
+                return false;
+            });
+
+            $("#EffectiveContractServicePackChange").on("click", function () {
+                $("#Description").text();
+                var url = '@Url.Action("Effective", "ContractServicePackChange")';
+                var contractId = @Model.ContractId;
+                var contractServicePackChangeId=@Model.ContractServicePackChangeId;
+                var result = $("input[name='Result']:checked").val();
+                var description = $('#Description').val();
+                var currentWorkflowStepId=@Model.CurrentWorkflowStepId;
+                if (typeof  result == "undefined") {
+                    result = "";
+                }
+                var command = {
+                    ContractServicePackChangeId:contractServicePackChangeId,
+                    ContractId: contractId,
+                    Result:result,
+                    Description:description,
+                    CurrentWorkflowStepId:currentWorkflowStepId
+                };
+                postCommand(url, command, $(this));
+                return false;
+            });
+            //确认保存
+            $("#LockedAttachmentServicePackChange").on("click", function () {
+                $("#Description").text();
+                var url = '@Url.Action("LockedAttachment", "ContractServicePackChange")';
+                var contractId = @Model.ContractId;
+                var contractServicePackChangeId=@Model.ContractServicePackChangeId;
+                var result = $("input[name='Result']:checked").val();
+                var description = $('#Description').val();
+                var currentWorkflowStepId=@Model.CurrentWorkflowStepId;
+                if (typeof  result == "undefined") {
+                    result = "";
+                }
+                var command = {
+                    ContractServicePackChangeId:contractServicePackChangeId,
+                    ContractId: contractId,
+                    Result:result,
+                    Description:description,
+                    CurrentWorkflowStepId:currentWorkflowStepId
+                };
+                postCommand(url, command, $(this));
+                return false;
+            });
+            //审批保存
+            $("#ServicePackChangeApproval").on("click", function () {
+                $("#Description").text();
+                var url = '@Url.Action("Approval", "ContractServicePackChange")';
+                var contractId = @Model.ContractId;
+                var contractServicePackChangeId=@Model.ContractServicePackChangeId;
+                var result = $("input[name='Result']:checked").val();
+                var description = $('#Description').val();
+                var currentWorkflowStepId=@Model.CurrentWorkflowStepId;
+                if (typeof  result == "undefined") {
+                    result = "";
+                }
+                var command = {
+                    ContractServicePackChangeId:contractServicePackChangeId,
+                    ContractId: contractId,
+                    Result:result,
+                    Description:description,
+                    CurrentWorkflowStepId:currentWorkflowStepId
+                };
+                postCommand(url, command, $(this));
+                return false;
+            });
+            // 附件上传弹出层
+            $("#uploadShow").click(function () {
+                var uploadInfo = $('#uploadInfo');
+                uploadInfo.modal('show');
+                clearFormValues("uploadInfo");
+            });
+
+            $("#fileupload").submit(function () {
+                var $form = $(this);
+                var formData = new FormData($form[0]);
+                if ($("#fileupload input[type=file]").val() === "") {
+                    $.bootstrapGrowl("请选择上传文件!", {
+                        type: "warning",
+                        offset: {
+                            from: "top",
+                            amount: 150
+                        },
+                        align: "center"
+                    });
+                    return false;
+                }
+                $.post($form.attr("action"), formData, function (data) {
+
+                });
+                return false;
+            });
+        });
+    </script>
+}

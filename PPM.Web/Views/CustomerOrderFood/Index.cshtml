@@ -1,0 +1,226 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common;
+@model PensionInsurance.Web.Views.CustomerOrderFood.IndexViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <span>现结餐饮账单管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>现结餐饮账单查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","CustomerOrderFood")" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">项目</label>
+                                    <div class="col-md-9">
+                                        @Html.InputDropDown(x => Model.Query.ProjectId, Model.Projects, true)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">点单来源</label>
+                                    <div class="col-md-9">
+                                        @Html.EnumTextDropDownListFor(m => m.Query.SourceType, typeof (OrderFoodSourceType), true)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">详细来源</label>
+                                    <div class="col-md-9">
+                                        @Html.InputText(m => m.Query.SourceMsg)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">录入人</label>
+                                    <div class="col-md-9">
+                                        @Html.InputText(m => m.Query.Name)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">是否完成</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(m => m.Query.Status, true)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="text-center">
+                            <button type="submit" class="btn green btn-sm padding-lf-15 ">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">现结餐饮账单列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>点餐日期</th>
+                                <th>项目</th>
+                                <th>点单来源</th>
+                                <th>详细来源</th>
+                                <th>餐饮类型</th>
+                                <th>单价</th>
+                                <th>数量</th>
+                                <th>账单金额</th>
+                                <th>录入人</th>
+                                <th>已缴金额</th>
+                                <th>未缴金额</th>
+                                <th>待确认金额</th>
+                                <th>备注</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.CashPaidOrderFoods)
+                            {
+                                <tr>
+                                    <td>@Model.CashPaidOrderFoods.RowNumberOf(item)</td>
+                                    <td>@item.ServiceDate.ToString("yyyy-MM-dd")</td>
+                                    <td>
+                                        @{
+                                            var projectName = item.Project == null ? "" : item.Project.Name;
+                                        }@projectName
+                                    </td>
+                                    <td>@item.SourceType</td>
+                                    <td>@Model.GetSourceMsg(item.SourceType, item.ForeignkeyId)</td>
+                                    <td>@item.ProjectServicePackCatalog.ServicePackCatalog.Name</td>
+                                    <td>@item.UnitPrice.FormatString()</td>
+                                    <td>@Decimal.ToInt32(item.ServiceAmount)</td>
+                                    <td>@item.Total.FormatString()</td>
+                                    <td>@item.User.RealName</td>
+                                    <td>@item.PaidMoney.FormatString()</td>
+                                    <td>
+                                        @{
+                                            var unPaidMoney = (item.Total - item.PaidMoney).FormatString();
+                                        }
+                                        @unPaidMoney
+                                    </td>
+                                    <td>
+                                        @{
+                                            decimal waitingConfirm = 0;
+                                            if (item.ConsutlingPayments != null && item.ConsutlingPayments.Any())
+                                            {
+                                                waitingConfirm = item.ConsutlingPayments.Where(m => !m.Status).Sum(m => m.PayMoney);
+                                            }
+                                        }
+                                        @waitingConfirm.FormatString()
+                                    </td>
+                                    <td>@item.Remark</td>
+                                    <td>
+                                        @{
+                                            var status = item.Status ? "已完成" : "未完成";
+                                        }@status
+                                    </td>
+                                    <td>
+                                       @if(item.Total != item.PaidMoney)
+                                        {
+                                                @*if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.现结餐费账单管理, Permission.删除) && PensionInsurance.Shared.WebAppContext.Current.User.Username.Equals(item.CreatedBy, StringComparison.CurrentCultureIgnoreCase))
+                                                    {
+                                                        <a href="javascript:;" data-command="@Model.DeleteCommand(item.Id).ToJavascript()" class="btn default btn-xs red-stripe">删除</a>
+                                                    }*@
+                                            if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.现结餐费账单管理, Permission.付款))
+                                            {
+                                                <div class="btn-group">
+                                                    <a class="btn default btn-xs blue-stripe" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                                                        付款
+                                                    </a>
+                                                    <ul class="dropdown-menu">
+                                                        <li>
+                                                            <a href="javascript:;" class="customer-pay" data-id="@item.Id" data-payment-type="@((int) PaymentType.现金)">
+                                                                <i class="fa fa-cny"></i> 现金
+                                                            </a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="javascript:;" class="customer-pay" data-id="@item.Id" data-payment-type="@((int) PaymentType.刷卡手工)">
+                                                                <i class="fa fa-credit-card-alt"></i> POS（手工）
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            }
+                                            if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.现结餐费账单管理, Permission.撤销付款))
+                                            {
+                                                <a href="javascript:;" data-command="@Model.CancelPayMentCommand(item.Id).ToJavascript()" class="btn default btn-xs yellow-stripe">撤销付款</a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                             }
+                        </tbody>
+                    </table>
+                    @Html.Partial("_Pagination", Model.CashPaidOrderFoods)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(document).on("click",
+                ".customer-pay",
+                function () {
+                    var $this = $(this);
+                    var paymentType = $this.attr("data-payment-type");
+                    var cashPayFoodId = $this.attr("data-id");
+                    App.dialog('#customer-order-food-pay-form',
+                        '@Url.Action("GetPay", "CustomerOrderFood")' +
+                        '?id=' +
+                        cashPayFoodId +
+                        '&paymentType=' +
+                        paymentType,
+                        'col-md-8 col-md-offset-2');
+                });
+        });
+    </script>
+}

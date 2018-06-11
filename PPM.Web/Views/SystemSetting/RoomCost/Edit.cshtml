@@ -1,0 +1,87 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.SystemSetting.RoomCost.EditViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index", "Home")">系统设置管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","RoomCost")">房型价格管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>房型价格编辑</span>
+            </li>
+        </ul>
+    </div>
+}
+<div class="full-height-content full-height-content-scrollable">
+    <div class="full-height-content-body">
+        <form data-ajax="true" action="@Url.Action("Edit", "RoomCost")" method="POST" class="form-horizontal">
+            <div class="portlet box green" style="margin-top: 10px;">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-gift"></i>房型编辑
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-2">
+                                <div class="form-group">
+                                    <label class="col-md-3 text-right">长期费用</label>
+                                    <div class="col-md-9">
+                                        @Html.InputText(m => m.LongTermCost)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-2">
+                                <div class="form-group">
+                                    <label class="col-md-3 text-right">短期费用</label>
+                                    <div class="col-md-9">
+                                        @Html.InputText(m => m.ShortTermCost)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-2">
+                                <div class="form-group">
+                                    <label class="col-md-3 text-right">是否可用</label>
+                                    <div class="col-md-9">
+                                        @Html.BooleanRadioButtonFor(m => m.IsEnabled)
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-2">
+                                <div class="form-group">
+                                    <label class="col-md-3 text-right">房型</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownList("RoomTypeId", Model.RoomTypes, "--未选择--", new { @class = "form-control input-small" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                    <div class="form-actions">
+                        <div class="text-center">
+                            <button type="submit" class="btn green btn-sm padding-lf-15">保存</button>
+                            <button type="button" class="btn yellow btn-sm padding-lf-15" onclick="javascript: history.back(-1);">返回上一页</button>
+                        </div>
+                    </div>
+                    <!-- END FORM-->
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

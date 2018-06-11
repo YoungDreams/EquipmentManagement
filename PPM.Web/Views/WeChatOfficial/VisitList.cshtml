@@ -1,0 +1,60 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.WeChatOfficial.IndexViewModel
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+	<div class="page-bar">
+		<ul class="page-breadcrumb">
+			<li>
+				<span>销售管理</span>
+				<i class="fa fa-circle"></i>
+			</li>
+			<li>
+				<span>预约信息</span>
+			</li>
+		</ul>
+	</div>
+}
+
+<div class="row">
+	<div class="col-md-12">
+		<div class="portlet light bordered">
+			<div class="portlet-title">
+				<div class="caption">
+					<i class="icon-social-dribbble font-green"></i>
+					<span class="caption-subject font-green bold uppercase">预约信息</span>
+				</div>
+			</div>
+			<div class="portlet-body">
+				<div class="table">
+					<table class="table table-hover table-scrollable">
+						<thead>
+						<tr>
+							<th> 姓名 </th>
+							<th> 电话 </th>
+							<th> 参观时间 </th>
+							<th> 城市 </th>
+							<th> 公寓/社区 </th>
+						</tr>
+						</thead>
+						<tbody>
+						@foreach (var item in Model.WeChatOfficialVisits)
+						{
+							<tr>
+								<td> @item.Name </td>
+								<td> @item.Phone </td>
+								<td> @(item.VisitDate?.ToString("yyyy/MM/dd") + " " + item.VisitTime) </td>
+								<td> @(item.Area?.Name) </td>
+								<td> @(item.ApartmentName)</td>
+							</tr>
+						}
+						</tbody>
+					</table>
+					@Html.Partial("_Pagination", Model.WeChatOfficialVisits)
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

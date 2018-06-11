@@ -1,0 +1,113 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Customer.DetailViewModel
+<div class="row" style="margin-top: 5px;">
+    <div class="col-md-3">
+        <div class="form-group">
+            <label class="control-label col-md-6">现金余额</label>
+            <div class="col-md-6">
+                @Model.CustomerInfo.Balance
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label class="control-label col-md-5">待确认金额</label>
+            <div class="col-md-7">
+                @Model.CustomerInfo.PaddingConfirmCost
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label class="control-label col-md-5">积分余额</label>
+            <div class="col-md-7">
+                @Model.CustomerInfo.Points
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-group">
+            <label class="control-label col-md-5">押金余额</label>
+            <div class="col-md-7">
+                @Model.CustomerInfo.Deposit
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="section-customer-account" class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet protlet-border">    
+            <div class="portlet-title title-style">
+                <i class="fa fa-cny"></i>
+                <span class="caption-subject font-green bold uppercase">现金信息</span>
+            </div>
+            <div class="table-scrollable">
+                <table id="customer-payment-items" class="table table-hover" data-src="@Url.Action("Detail", "Customer", new {customerId = Model.CustomerInfo.CustomerId, customerAccountId = Model.CustomerAccountId})">
+                    <thead>
+                    <tr>
+                        <th class="th-15-percent">收支日期</th>
+                        <th class="th-15-percent">收支方式</th>
+                        <th class="th-10-percent">收入金额</th>
+                        <th class="th-10-percent">支出金额</th>
+                        @*<tclass="th-25-percent";">实到金额</th>
+                          <tclass="th-25-percent";">财务成本</th>*@
+                        <th class="th-30-percent">备注</th>
+                        <th class="th-10-percent">收支人</th>
+                        <th class="th-10-percent">操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.CustomerPaymentList)
+                    {
+                        <tr>
+                            <td style="white-space: nowrap;">@item.PaymentDate.DateString()</td>
+                            <td>@item.PaymentType</td>
+                            @if (item.Payment > 0)
+                            {
+                                <td class="paymentcaption" data-id="@item.Id"><a href="javascript:;">@item.Payment</a></td>
+                                <td></td>
+                            }
+                            else
+                            {
+                                <td></td>
+                                <td>@item.Payment</td>
+                            }
+                            <td>@item.Description</td>
+                            <td>@item.AgentName</td>
+                            <td style="white-space: nowrap;">
+                                @if (item.Status != CustomerPaymentStatus.确认)
+                                {
+                                    if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户现金管理, Permission.删除) && item.PaymentCategory != PaymentCategory.退款 && item.PaymentCategory != PaymentCategory.跨项目转账)
+                                    {
+                                        <a href="javascript:;" data-command="@Model.DeletePayment(item.Id).ToJavascript()" class="btn default btn-xs red-stripe" data-refresh="#customer-payment-items">删除</a>
+                                    }
+                                }
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Partial("_CustomerPoint", Model)
+@Html.Partial("_CustomerRefund", Model)
+@Html.Partial("_CustomerTransfer", Model)
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(document).on("click", ".paymentcaption", function() {
+            var $this = $(this);
+            var paymentId = $this.attr("data-id");
+            $.get("@Url.Action("GetPaymentCaption", "CustomerAccount")" + "?id=" + paymentId,
+                function (result) {
+                    App.alert({ title: "收支详细信息", content: result });
+                });
+        });
+    });
+</script>

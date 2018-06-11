@@ -1,0 +1,98 @@
+﻿@{
+	Layout = "~/Views/Shared/_WeChatOfficial.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+	<title>走进椿萱--微官网</title>
+</head>
+<body>
+<div class="header">
+	<div class="page-logo">
+		<img src="/assets/global/img/we-chat-header.png" alt="logo" class="we-chat-logo">
+	</div>
+</div>
+<div class="container" id="content">
+    <div class="we-chat-content border-radios-10">
+        <form>
+            <div class="row">
+                <div class="col-sm-12 form-group">
+                    <div class="btn-group btn-group-lg btn-group-solid border-radios-10 width-full">
+                        <button type="button" class="btn btn-navigation quarter" data-id="110100">北京</button>
+                        <button type="button" class="btn btn-navigation quarter" data-id="310100">上海</button>
+                        <button type="button" class="btn btn-navigation quarter" data-id="440100">广州</button>
+                        <button type="button" class="btn btn-navigation quarter" data-id="420100">武汉</button>
+                    </div>	
+                </div>
+                <div class="col-sm-12 form-group">
+                    <div class="btn-group btn-group-lg btn-group-solid border-radios-10 width-full">
+                        <button type="button" class="btn btn-navigation quarter" data-id="510100">成都</button>
+                        <button type="button" class="btn btn-navigation quarter" data-id="320500">苏州</button>
+                        <button type="button" class="btn btn-navigation quarter" data-id="210200">大连</button>
+                        <button type="button" class="btn btn-navigation quarter" data-id="120100">天津</button>
+                    </div>	
+                </div>
+                <div class="form-divider gap">
+                </div>
+                <ul id="apartmentUl">
+
+                </ul>
+            </div>
+
+        </form>
+    </div>
+</div>
+<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=9m1N4vGOG5EGhwVEhPc2PUdDRU2zv2Sd"></script>
+<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
+<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
+<script>
+    var geolocation = new BMap.Geolocation();
+    geolocation.getCurrentPosition(function(r) {
+        if (this.getStatus() == BMAP_STATUS_SUCCESS) {
+            currentPosition = r.point;
+            defaultSelectCity(r.address.city);
+        }
+    });
+
+
+    $(function() {
+        var apartmentDatas = weChatOfficialData.Apartments;
+
+        function showApartment(id) {
+            var li = "";
+            for (var i = 0; i < apartmentDatas.length; i++) {
+                var apartment = apartmentDatas[i];
+                if (id != apartment.cityCode) continue;
+                li += "<li class='list-unstyled we-chat-li'><div class='row'><div class='col-xs-5' style='padding:0'><img src='"+ apartment.image +"' style='width:100%;'/></div><div class='col-xs-7'><div><label>" + apartment.apartmentName +"</label></div><div class='we-chat-li-font'>位置 - " + apartment.apartmentLocation +"</div></div></li>";
+            }
+            $("#apartmentUl").html(li);
+        }
+
+        $('button').on('click',
+            function() {
+                var cityId = $(this).attr("data-id");
+                showApartment(cityId);
+            });
+    });
+
+    function defaultSelectCity(cityName) {
+        var buttons = $("button");
+        var isMatch = false;
+        for (var i = 0; i < buttons.length; i++) {
+            var button = buttons[i];
+            if (cityName.indexOf($(button).text()) >= 0) {
+                button.click();
+                isMatch = true;
+            }
+        }
+        if (!isMatch) {
+            buttons[0].click();
+        }
+    }
+
+
+</script>
+</body>
+</html>

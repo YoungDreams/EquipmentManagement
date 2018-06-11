@@ -1,0 +1,336 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.CustomerMoveOutTicket.CreateViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Employee")">客户退住通知单</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>新增</span>
+            </li>
+        </ul>
+    </div>
+}
+
+<div class="full-height-content-body">
+    <form data-ajax="true" id="create-customer-moveoutticket" action="@Url.Action("Create", "CustomerMoveOutTicket")" method="POST" class="form-horizontal">
+        <div class="portlet light portlet-fit portlet-form protlet-border">
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">基本信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">项目</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.ProjectName, new { @class = "form-control", @readonly = "readonly" })
+                                    @Html.HiddenFor(x => x.Id)
+                                    @Html.HiddenFor(x => x.ContractId)
+                                    @Html.HiddenFor(x => x.CurrentWorkflowStepId)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">姓名</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CustomerName, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">性别</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.Sex, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">年龄</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.Age, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">月费</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.MonthCost, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">入住时间</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" value="@Model.CheckInTime.DateString()" readonly>
+                                    @Html.HiddenFor(x => x.CheckInTime)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">退住时间</label>
+                                <div class="col-md-8">
+                                    <input type="text" class="form-control" value="@Model.MoveOuTime.DateString()" readonly>
+                                    @Html.HiddenFor(x => x.MoveOuTime)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">合同时限</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.ContractTerm, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">入住时信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">生活能力类型</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.CheckInNursinglevel, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">配偶情况</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(m => m.SpouseInfo, SettingType.配偶情况, true)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">与子女同住情况</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(m => m.LivingWithChildren, SettingType.子女同住, true)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">入住其他养老机构</label>
+                                <div class="col-md-8">
+                                    @Html.DropDownListFor(m => m.HasOtherAgencie, true)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">退住时信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">当前照护级别</label>
+                                <div class="col-md-8">
+                                    @Html.InputText(m => m.Nursinglevel, new {@class = "form-control", @readonly = "readonly"})
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">退住时状态</label>
+                                <div class="col-md-8">
+                                    @Html.EnumTextDropDownListFor(m => m.CustomerMoveOutStatus, typeof(CustomerMoveOutStatus), true)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">退住后去向</label>
+                                <div class="col-md-8">
+                                    @Html.EnumTextDropDownListFor(m => m.CustomerMoveOutWhereAbouts, typeof (CustomerMoveOutWhereAbouts), true)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">退住原因</label>
+                                <div class="col-md-8">
+                                    @Html.EnumTextDropDownListFor(x => x.MoveOutCauses, typeof(MoveOutCause), new { multiple = "", @class = "selectpicker" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-bubble font-green-sharp"></i>
+                    <span class="caption-subject font-green-sharp sbold">其他信息</span>
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">长辈入住意向</label>
+                                <div class="col-md-8">
+                                    @Html.EnumTextDropDownListFor(m => m.EldersCheckInIntention, typeof (CheckInIntention), true)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">家属入住意向</label>
+                                <div class="col-md-8">
+                                    @Html.EnumTextDropDownListFor(m => m.FamiliesCheckInIntention, typeof (CheckInIntention), true)
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">资金来源</label>
+                                <div class="col-md-10">
+                                    @Html.EnumTextDropDownListFor(x => x.SourceFunds, typeof (SourceFunds), new {multiple = "", @class = "selectpicker"})
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">联系人</label>
+                                <div class="col-md-8">
+                                   @Html.InputText(m => m.Contact, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label class="control-label col-md-4">联系电话</label>
+                                <div class="col-md-8">
+                                   @Html.InputText(m => m.ContactPhone, new { @class = "form-control", @readonly = "readonly" })
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label class="control-label col-md-1">生活经理总结</label>
+                                <div class="col-md-11">
+                                    <textarea class="form-control" name="Summarizes" style="min-height: 80px;"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @Html.Partial("~/Views/TrackingResult/_TrackingResults.cshtml", Model.TrackingResult)
+
+        </div>
+        <div class="errors alert alert-danger fade in" style="display: none;"></div>
+        <div class="form-actions">
+            <div class="text-center">
+                @if (Model.CurrentWorkFlowStep != null && Model.CurrentWorkFlowStep.User == WebAppContext.Current.User)
+                {
+                    <a id="submitCustmerMoveoutForm" class="btn green btn-sm padding-lf-15 ">提交</a>
+                }
+                <button type="button" class="btn yellow btn-sm padding-lf-15 " onclick="javascript: history.back(-1);">返回上一页</button>
+            </div>
+        </div>
+    </form>
+</div>
+@section Scripts{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js") type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.selectpicker').selectpicker({
+                style: 'btn-xs',
+                iconBase: 'fa',
+                tickIcon: 'fa-check',
+                noneSelectedText: "--未选择--"
+            });
+            //SourceFunds
+            $("select[name='MoveOutCause']").val(@Html.Raw(Json.Encode(Model.MoveOutCauses?.Select(x => x.ToString()))));
+            $("select[name='SourceFunds']").val(@Html.Raw(Json.Encode(Model.SourceFunds?.Select(x => x.ToString()))));
+            $('.selectpicker').selectpicker('refresh');
+
+            $("#submitCustmerMoveoutForm").on("click",
+                function () {
+                    var form = $("#create-customer-moveoutticket");
+                    App.confirm(function () {
+                        form.submit();
+                    },
+                        function () {
+                            App.unblockUI();
+                        },
+                        "请确认退住通知单内信息填写准确无误，该流程不可逆!");
+                    return false;
+                });
+        });
+    </script>
+}
+
+

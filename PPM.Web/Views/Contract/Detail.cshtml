@@ -1,0 +1,202 @@
+﻿@using PensionInsurance.Entities
+@model PensionInsurance.Web.Views.Contract.DetailViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("IndexCheckIn", "Customer")">客户信息</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Detail","Customer" , new {customerAccountId=Model.CustomerAccount.Id})">@Model.BName</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>合同查看</span>
+            </li>
+        </ul>
+    </div>
+}
+<div class="tabbable-custom nav-justified">
+    @if (Model.ContractTemplate == ContractTemplate.养老机构服务合同20160101)
+    {
+        @Html.Partial("_DetailContract", Model)
+    }
+    else
+    {
+      @Html.Partial("_DetailContract20170301", Model)
+    }
+</div>
+@section Scripts{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js") type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            //审批保存
+            $("#ApprovalContract").on("click", function () {
+                $("#Description").text();
+                var url = '@Url.Action("ApprovalContract", "Contract")';
+                var contractId = @Model.ContractId;
+                var result = $("input[name='Result']:checked").val();
+                var description = $('#Description').val();
+                var currentWorkflowStepId=@Model.CurrentWorkflowStepId;
+                if (typeof  result == "undefined") {
+                    result = "";
+                }
+                var command = {
+                    ContractId: contractId,
+                    Result:result,
+                    Description:description,
+                    CurrentWorkflowStepId:currentWorkflowStepId
+                };
+                postCommand(url, command, $(this));
+                return false;
+            });
+            //生效保存
+            $("#EffectiveContract").on("click", function () {
+                $("#Description").text();
+                var url = '@Url.Action("EffectiveContract", "Contract")';
+                var contractId = @Model.ContractId;
+                var result = $("input[name='Result']:checked").val();
+                var description = $('#Description').val();
+                var currentWorkflowStepId=@Model.CurrentWorkflowStepId;
+                if (typeof  result == "undefined") {
+                    result = "";
+                }
+                var command = {
+                    ContractId: contractId,
+                    Result:result,
+                    Description:description,
+                    CurrentWorkflowStepId:currentWorkflowStepId
+                };
+                postCommand(url, command, $(this));
+                return false;
+            });
+
+            //确认附件保存
+            $("#SubmitPrintContract").on("click", function () {
+               
+                App.confirm(function() {
+                    $("#Description").text();
+                var url = '@Url.Action("SubmitPrintContract", "Contract")';
+                var contractId = @Model.ContractId;
+                var result = $("input[name='Result']:checked").val();
+                var description = $('#Description').val();
+                var currentWorkflowStepId=@Model.CurrentWorkflowStepId;
+                if (typeof  result == "undefined") {
+                    result = "";
+                }
+                var command = {
+                    ContractId: contractId,
+                    Result:result,
+                    Description:description,
+                    CurrentWorkflowStepId:currentWorkflowStepId
+                };
+                    postCommand(url, command, $(this));
+                }, function() {
+                }, "确认已完成合同打印");
+                return false;
+            });
+
+            //确认附件保存
+            $("#SubmitAttachmentContract").on("click", function () {
+                $("#Description").text();
+                var url = '@Url.Action("LockedAttachment", "Contract")';
+                var contractId = @Model.ContractId;
+                var result = $("input[name='Result']:checked").val();
+                var description = $('#Description').val();
+                var currentWorkflowStepId=@Model.CurrentWorkflowStepId;
+                if (typeof  result == "undefined") {
+                    result = "";
+                }
+                var command = {
+                    ContractId: contractId,
+                    Result:result,
+                    Description:description,
+                    CurrentWorkflowStepId:currentWorkflowStepId
+                };
+                postCommand(url, command, $(this));
+                return false;
+            });
+
+            //确认附件保存
+            $("#LockedAttachmentContract").on("click", function () {
+                $("#Description").text();
+                var url = '@Url.Action("LockedAttachment", "Contract")';
+                var contractId = @Model.ContractId;
+                var result = $("input[name='Result']:checked").val();
+                var description = $('#Description').val();
+                var currentWorkflowStepId=@Model.CurrentWorkflowStepId;
+                if (typeof  result == "undefined") {
+                    result = "";
+                }
+                var command = {
+                    ContractId: contractId,
+                    Result:result,
+                    Description:description,
+                    CurrentWorkflowStepId:currentWorkflowStepId
+                };
+                postCommand(url, command, $(this));
+                return false;
+            });
+
+            // 提交按钮
+            $("#submitContracts").click(function() {
+                var contractId = @Model.ContractId;
+                var url = '@Url.Action("SubmitContract", "Contract", new {returnUrl = Url.Action("Detail", "Contract", new {id = Model.ContractId})})';
+                var command = {
+                    ContractId: contractId
+                };
+                postCommand(url, command, $(this));
+                return false;
+            });
+
+            // 附件上传弹出层
+            $("#UploadContract").click(function () {
+                var uploadInfo = $('#uploadInfo');
+                uploadInfo.modal('show');
+                clearFormValues("uploadInfo");
+            });
+
+            $(document)
+                // 费用变更按钮
+                .on("click", "#add-cost-change", function() {
+                    var modal = $('#cost-change-modal');
+                    modal.modal('show');
+                    modal.find("form")
+                        .attr("action", "@Url.Action("Create", "ContractCostChange", new { returnUrl = Request.Url })")[0].reset();
+                })
+                .on("click", ".edit-cost-change", function() {
+                    var data = $(this).data("item");
+                    var modal = $('#cost-change-modal');
+                    modal.modal('show');
+                    modal.find("form")
+                        .attr("action", "@Url.Action("Edit", "ContractCostChange", new { returnUrl = Request.Url })")
+                        .populate(data);
+                });
+        });
+    </script>
+}

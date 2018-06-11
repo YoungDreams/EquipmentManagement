@@ -1,0 +1,154 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common;
+@model PensionInsurance.Web.Views.Reports.CustomerDistributionReport.IndexViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css") rel="stylesheet" type="text/css" />
+    <style type="text/css">
+        #customer-distribution-map {
+            height: 630px;
+            width: 100%;
+        }
+    </style>
+}
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index", "Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Reports")">统计报表</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li><span>入住客户家庭分布图</span></li>
+        </ul>
+    </div>
+}
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>入住客户家庭分布图 - 查询条件
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index", "CustomerDistributionReport")" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">所属项目</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(x => x.Query.ProjectIds, Model.ProjectList, new { multiple = "", @class = "selectpicker" })
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="text-center">
+                            <button type="submit" class="btn green btn-sm padding-lf-15 " data-showloading="true">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green-sharp bold uppercase">入住客户的家庭分布</span>
+                </div>
+                <div class="actions">
+                </div>
+            </div>
+            <div class="portlet-title">
+                <div class="portlet-body">
+                    <div id="customer-distribution-map" class="baidu-maps"></div>  
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=9m1N4vGOG5EGhwVEhPc2PUdDRU2zv2Sd"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var map = new BMap.Map("customer-distribution-map");
+            map.centerAndZoom(new BMap.Point(116.402544, 39.91582), 13);
+            map.enableScrollWheelZoom(true);
+            var index = 0;
+            var myGeo = new BMap.Geocoder();
+            var addresses = [
+                @Html.Raw(string.Join(",", Model.Addresses.Select(x=>$"'{x}'")))
+            ];
+
+            var icon = new BMap.Icon('@Url.Content("~/assets/baidumap/img/marker.png")', new BMap.Size(10, 14));
+
+            $(addresses).each(function (idx, address) {
+                myGeo.getPoint(address, function (point) {
+                    if (point) {
+                        var latLong = new BMap.Point(point.lng, point.lat);
+                        var marker = new BMap.Marker(latLong, { icon: icon });
+                        map.addOverlay(marker);
+                    }
+                });
+            });
+
+            var menu = new BMap.ContextMenu();
+            var txtMenuItem = [
+                {
+                    text: '放大',
+                    callback: function () { map.zoomIn() }
+                },
+                {
+                    text: '缩小',
+                    callback: function () { map.zoomOut() }
+                },
+                {
+                    text: '全屏',
+                    callback: function () {
+                        $('#customer-distribution-map').css('height', document.documentElement.clientHeight);
+                        $('#customer-distribution-map').addClass('fullscreen');
+                        $('.fullscreen').click();
+                        $('#customer-distribution-map').removeClass('fullscreen');
+                    },
+                }
+            ];
+            for (var i = 0; i < txtMenuItem.length; i++) {
+                menu.addItem(new BMap.MenuItem(txtMenuItem[i].text, txtMenuItem[i].callback, 100));
+            }
+            map.addContextMenu(menu);
+
+            $('.selectpicker').selectpicker({
+                style: 'btn-xs',
+                iconBase: 'fa',
+                tickIcon: 'fa-check',
+                noneSelectedText: "--未选择--"
+            });
+
+            $("select[name='Query.ProjectIds']").val(@Html.Raw(Json.Encode(Model.Query.ProjectIds)));
+            $('.selectpicker').selectpicker('refresh');
+        });
+    </script>
+}

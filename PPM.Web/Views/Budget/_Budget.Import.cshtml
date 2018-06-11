@@ -1,0 +1,83 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Budget.ImportViewModel
+
+<form id="Budget-import-form" data-ajax="true" action="@Url.Action("Import", "Budget")" method="POST" class="form-horizontal" enctype="multipart/form-data">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">导入项目预算信息</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">选择项目</label>
+                            <div class="col-md-10">
+                                @Html.InputDropDown(x => Model.ProjectId, Model.ProjectList, true)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">年度</label>
+                            <div class="col-md-10">
+                                <div class="input-group month-picker input-daterange">
+                                    <input type="text" class="form-control form-control-inline" id="Year" name="Year" data-date-format="yyyy">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-2">EXCEL文件</label>
+                            <div class="col-md-10">
+                                <div class="fileinput fileinput-new" data-provides="fileinput">
+                                    <div class="input-group input-large">
+                                        <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                            <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                            <span class="fileinput-filename"> </span>
+                                        </div>
+                                        <span class="input-group-addon btn default btn-file">
+                                            <span class="fileinput-new">选择文件</span>
+                                            <span class="fileinput-exists">替换</span>
+                                            <input type="file" name="file">
+                                        </span>
+                                        <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#Year').datetimepicker({
+            format: 'yyyy',
+            weekStart: 1,
+            autoclose: true,
+            startView: 4,
+            minView: 4,
+            forceParse: false,
+            language: 'zh-CN'
+        });
+    });
+</script>

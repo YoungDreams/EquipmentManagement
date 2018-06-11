@@ -1,0 +1,193 @@
+﻿@using Foundation.Core
+@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+
+@model PensionInsurance.Web.Views.Customer.DetailViewModel
+
+<div class="row margin-top-15 margin-bottom-10">
+    <div class="col-md-2">
+        <!-- PORTLET MAIN -->
+        <div class="light profile-sidebar-portlet">
+            <div class="profile-userpic">
+                @if (string.IsNullOrWhiteSpace(Model.CustomerInfo.AvatarThumbnail))
+                {
+                    <img src="@Url.Content("~/assets/layouts/layout/img/confirm.png")" class="img-responsive" alt="">
+                }
+                else
+                {
+                    <img src="@Url.Content(Model.CustomerInfo.AvatarThumbnail)" class="img-responsive" alt="">
+                }
+
+            </div>
+        </div>
+        <!-- END PORTLET MAIN -->
+    </div>
+    <div class="col-md-10">
+        <div class="row">
+            <div class="col-md-3 margin-top-10">
+                <div class="portlet-body">
+                    <div class="row static-info">
+                        <div class="col-md-4 name"> 项目: </div>
+                        <div class="col-md-8 value">
+                            @Model.CustomerInfo.ProjectName
+                        </div>
+                    </div>
+                    <div class="row static-info">
+                        <div class="col-md-4 name"> 状态: </div>
+                        <div class="col-md-8 value">
+                            @Model.CustomerType.ToString()
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 margin-top-10">
+                <div class="portlet-body">
+                    <!-- BEGIN FORM-->
+                    <div class="row static-info">
+                        <div class="col-md-6 name"> 客户名称: </div>
+                        <div class="col-md-6 value">
+                            @Model.CustomerInfo.CustomerName
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 margin-top-10">
+                <div class="portlet-body">
+                    <div class="row static-info">
+                        <div class="col-md-4 name"> 年龄: </div>
+                        <div class="col-md-8 value">
+                            @Model.CustomerInfo.Birthday.ToAge()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-10">
+                <div class="btn-toolbar">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.编辑))
+                    {
+                        <div class="btn-group">
+                            <a class="btn green btn-sm" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-user"></i> 客户
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="javascript:;" class="edit-customer">
+                                        <i class="fa fa-pencil"></i> 编辑
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" class="edit-customer-avatar">
+                                        <i class="fa fa-file-photo-o"></i> 照片
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户亲属, Permission.新增))
+                    {
+                        <div class="btn-group">
+                            <a class="btn green btn-sm add-customer-family" href="javascript:;">
+                                <i class="fa fa-users"></i> 亲属
+                            </a>
+                        </div>
+                    }
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.付款))
+                    {
+                        <div class="btn-group">
+                            <a class="btn green btn-sm" href="javascript:;" data-toggle="dropdown" aria-expanded="false">
+                                <i class="fa fa-credit-card"></i> 付款
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a href="javascript:;" class="customer-pay" data-payment-type="@PaymentType.现金">
+                                        <i class="fa fa-cny"></i> 现金
+                                    </a>
+                                </li>
+                                @*<li>
+                                    <a href="javascript:;" class="customer-pay" data-payment-type="@PaymentType.刷卡">
+                                        <i class="fa fa-credit-card"></i> 刷卡
+                                    </a>
+                                </li>*@
+                                <li>
+                                    <a href="javascript:;" class="customer-pay" data-payment-type="@PaymentType.银行转账">
+                                        <i class="fa fa-bank"></i> 银行转账
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" class="customer-pay" data-payment-type="@PaymentType.支票">
+                                        <i class="fa fa-money"></i> 支票
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="javascript:;" class="customer-pay" data-payment-type="@PaymentType.刷卡手工">
+                                        <i class="fa fa-credit-card-alt"></i> POS（手工）
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    }
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.退款))
+                    {
+                        <div class="btn-group">
+                            <a class="btn green btn-sm customer-refund" href="javascript:;">
+                                <i class="fa fa-cny"></i> 退款
+                            </a>
+                        </div>
+                    }
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.账单减免))
+                    {
+                        <div class="btn-group">
+                            <a class="btn green btn-sm update-customer-Bill" data-showloading="true" href="@Url.Action("Create", "ReliefBill", new { customerAccountId = Model.CustomerAccountId})">
+                                <i class="fa fa-rmb"></i> 账单减免
+                            </a>
+                        </div>
+                    }
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户转账, Permission.转账))
+                {
+                    <div class="btn-group">
+                        <a class="btn green btn-sm transfer-customer-account" data-showloading="true" href="@Url.Action("CreateAndSubmit", "CustomerAccountTransfer", new { customerAccountId = Model.CustomerAccountId })">
+                            <i class="fa fa-sheqel"></i> 转账
+                        </a>
+                    </div>
+                }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $(document)
+             @*.on("click", ".update-customer-Bill", function () {
+
+                 $.get("@Url.Action("GetCustomerBill", "Bill", new { customerAccountId = Model.CustomerAccountId })", function (result) {
+                     if (!result.success) {
+                         App.alert({ title: "操作失败", content: "<h5>" + result.message + "</h5>" });
+                         return;
+                     } else {
+                         window.location.href = result.redirect;
+                         return;
+                     }
+                 });
+             })*@
+            .on("click", ".customer-refund", function () {
+                $.get('@Url.Action("ValidateCheckOutRefund", "Customer",new { customerAccountId = Model.CustomerAccountId})', function(result) {
+                    if (!result.success) {
+                        if (result.redirect) {
+                            window.location.href = result.redirect;
+                        } else {
+                            App.alert({ title: "操作失败", content: "<h5>" + result.message + "</h5>" });
+                        }
+                        return;
+                    } else {
+                        window.location.href = result.redirect;
+                        return;
+                    }
+                });
+
+            });
+    });
+</script>

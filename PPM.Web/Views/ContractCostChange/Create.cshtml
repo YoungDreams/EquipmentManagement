@@ -1,0 +1,327 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Web.Common
+@using PensionInsurance.Shared
+@model PensionInsurance.Web.Views.ContractCostChange.CreateViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+
+}
+<div>
+    <div class="full-height-content-body">
+        <form id="contractCostChangeForm" data-ajax="true" action="@Url.Action("CreateAndSubmit", "ContractCostChange")" method="POST" class="form-horizontal">
+            <div class="portlet light portlet-fit portlet-form protlet-border">
+                <div class="portlet-title title-style">
+                    <div class="caption">
+                        <i class="icon-bubble font-green-sharp"></i>
+                        <span class="caption-subject font-green-sharp sbold">协议信息</span>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">客户姓名</label>
+                                    <div class="col-md-8">
+                                        @Model.CustomerName
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">开始日期</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control form-control-inline date-picker" id="ChangeDate" name="ChangeDate" onchange="changelimit();" data-date-format="yyyy-mm-dd" />
+                                        @Html.HiddenFor(m => m.ContractId)
+                                        @Html.HiddenFor(m => m.CustomerName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">结束日期</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control form-control-inline date-picker" id="ChangeEndDate" name="ChangeEndDate" onchange="changelimit();" data-date-format="yyyy-mm-dd" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <div class="radio-list">
+                                            <label class="radio-inline">
+                                                <span class=""><input type="radio" name="ChangeType" value="@ChangeType.定额变更"></span>@ChangeType.定额变更
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">月床位费</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="ChangeRoomCost" onchange="changelimit();" name="ChangeRoomCost" value="" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">月餐费</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="ChangeMealsCost" onchange="changelimit();" name="ChangeMealsCost" value="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <div class="col-md-4">
+                                        <div class="radio-list">
+                                            <label class="radio-inline">
+                                                    <span class=""><input type="radio" name="ChangeType" value="@ChangeType.比例变更"></span>@ChangeType.比例变更
+                                                </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">比例</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" onchange="changelimit();" id="ChangeRatio" name="ChangeRatio" value="" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label class="control-label col-md-8">说明</label>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="form-group">
+                                    <div class="col-md-12">
+                                        <textarea class="form-control" name="Description"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">月变更金额</label>
+                                    <div class="col-md-5">
+                                        <input type="text" class="form-control" id="ChangeLimit" name="ChangeLimit" readonly/>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="checkbox">
+                                            <label>
+                                                <span class=""><input id="IsIncluded" name="IsIncluded" value="true" type="checkbox"></span>不计入减免额度
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">本次累计变更金额</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="CurrentDiscount" name="CurrentDiscount" value="@Model.CurrentDiscount" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">客户当年已优惠额度</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="CustomerCurrentYearDiscount" name="CustomerCurrentYearDiscount" value="@Model.CustomerCurrentYearDiscount" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">项目当年已优惠额度</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" id="ProjectYearDiscount" name="ProjectYearDiscount" value="@Model.ProjectYearDiscount" readonly="readonly" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <div class="errors alert alert-danger fade in" style="display: none;"></div>
+            <div class="form-actions">
+                <div class="text-center">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.费用变更补充协议, Permission.新增))
+                    {
+                        <button type="submit" class="btn green btn-sm padding-lf-15 ">提交</button>
+                    }
+                    <a href="javascript:;" class="btn yellow btn-sm padding-lf-15"  onclick="javascript: history.back(-1);">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js") type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+
+    <script type="text/javascript">
+
+        $(document).ready(function() {
+            $("#ChangeRoomCost").attr("readonly", "readonly");
+            $("#ChangeMealsCost").attr("readonly", "readonly");
+            $("#ChangeRatio").attr("readonly", "readonly");
+        });
+        $(document).on("click", "input:radio[name='ChangeType']", function() {
+            var $this = $(this);
+            var changeType = $this.val();
+
+            var changeRoomCost = $("#ChangeRoomCost");
+            var changeMealsCost = $("#ChangeMealsCost");
+
+            var changeRatio = $("#ChangeRatio");
+            if ('@ChangeType.定额变更' === changeType) {
+                changeRatio.attr("disabled", "disabled");
+                changeMealsCost.removeAttr("disabled");
+                changeRoomCost.removeAttr("disabled");
+                changeMealsCost.removeAttr("readonly");
+                changeRoomCost.removeAttr("readonly");
+            }
+            if ('@ChangeType.比例变更' === changeType) {
+                changeRoomCost.attr("disabled", "disabled");
+                changeMealsCost.attr("disabled", "disabled");
+                changeRatio.removeAttr("disabled");
+                changeRatio.removeAttr("readonly");
+            }
+
+            $("#CurrentDiscount").val(0);
+            $("#ChangeLimit").val(0);
+           
+            $("#ChangeRoomCost").val(0);
+            $("#ChangeMealsCost").val(0);
+            $("#ChangeRatio").val(0);
+        });
+
+        function changelimit() {
+            var changeRatio = $("#ChangeRatio").val();
+            var changeDate = $("#ChangeDate").val();
+            var changeRoomCost = $("#ChangeRoomCost").val();
+            var changeMealsCost = $("#ChangeMealsCost").val();
+            var changeEndDate = $("#ChangeEndDate").val();
+            var changeLimit = 0;
+            var radio = $('input:radio[name="ChangeType"]:checked').val();
+
+            if (changeDate != "" && changeRatio != "" && '@ChangeType.比例变更' == radio) {
+                $.get("@Url.Action("GetChangeLimit", "ContractCostChange")" + "?changeDate=" + changeDate + "&contractId=" + @Model.ContractId + "&changeRatio=" + changeRatio, function(result) {
+                    if (result.success) {
+                        $("#ChangeLimit").val(result.ChangeLimit);
+                    } else {
+                        $("#ChangeLimit").val(0);
+                    }
+                    changeLimit = result.ChangeLimit;
+                    if (changeLimit > 0) {
+                        $("#IsIncluded").removeAttr("checked").attr("disabled", "disabled").uniform("refresh");
+                    } else {
+                        $("#IsIncluded").removeAttr("disabled", false).uniform("refresh");
+                    }
+                    if (changeLimit != 0 && changeDate != "" && changeEndDate != "") {
+                        $.get("@Url.Action("GetChangeCost", "ContractCostChange")" + "?changeDate=" + changeDate + "&changeEndDate=" + changeEndDate + "&changeLimit=" + changeLimit, function(result) {
+                            if (result.success) {
+                                $("#CurrentDiscount").val(result.ChangeCost);
+                            } else {
+                                $("#CurrentDiscount").val(0);
+                            }
+                        });
+                    }
+
+                });
+
+            }
+            if ('@ChangeType.定额变更' == radio) {
+                changeLimit = parseFloat(changeRoomCost) + parseFloat(changeMealsCost);
+                if (isNaN(changeLimit)) {
+                    changeLimit = 0;
+                }
+                if (changeLimit > 0) {
+                    $("#IsIncluded").removeAttr("checked").attr("disabled", "disabled").uniform("refresh");
+                } else {
+                    $("#IsIncluded").removeAttr("disabled", false).uniform("refresh");
+                }
+                $("#ChangeLimit").val(changeLimit);
+                if (changeLimit != 0 && changeDate != "" && changeEndDate != "") {
+                    $.get("@Url.Action("GetChangeCost", "ContractCostChange")" + "?changeDate=" + changeDate + "&changeEndDate=" + changeEndDate + "&changeLimit=" + changeLimit, function(result) {
+                        if (result.success) {
+                            $("#CurrentDiscount").val(result.ChangeCost);
+                        } else {
+                            $("#CurrentDiscount").val(0);
+                        }
+                    });
+                }
+            }
+
+        }
+
+        function changeValue() {
+            var changeLimit = $("#ChangeLimit").val();
+            var changeDate = $("#ChangeDate").val();
+            var changeEndDate = $("#ChangeEndDate").val();
+            if (changeLimit != 0 && changeDate != "" && changeEndDate != "") {
+                $.get("@Url.Action("GetChangeCost", "ContractCostChange")" + "?changeDate=" + changeDate + "&changeEndDate=" + changeEndDate + "&changeLimit=" + changeLimit, function(result) {
+                    if (result.success) {
+                        $("#CurrentDiscount").val(result.ChangeCost);
+                    } else {
+                        $("#CurrentDiscount").val(0);
+                    }
+                });
+            }
+        }
+
+    </script>
+}

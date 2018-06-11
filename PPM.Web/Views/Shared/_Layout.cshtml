@@ -1,0 +1,124 @@
+﻿<!DOCTYPE html>
+<!--[if IE 8]> <html class="ie8 no-js"> <![endif]-->
+<!--[if IE 9]> <html class="ie9 no-js"> <![endif]-->
+<!-- END HEAD -->
+<!--[if !IE]><!-->
+<html>
+<!--<![endif]-->
+<!-- BEGIN HEAD -->
+<head>
+    <meta charset="utf-8" />
+    <title>远洋集团养老经营管理系统</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href=@Url.Content("~/assets/global/plugins/font-awesome/css/font-awesome.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/simple-line-icons/simple-line-icons.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap/css/bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/uniform/css/uniform.default.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css") rel="stylesheet" />
+    <link href=@Url.Content("~/assets/global/plugins/jquery-confirm/css/jquery-confirm.css") rel="stylesheet" />
+
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <link href=@Url.Content("~/assets/global/plugins/jstree/dist/themes/default/style.min.css") rel="stylesheet" type="text/css" />
+    @RenderSection("Styles", false)
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <link href=@Url.Content("~/assets/global/css/components.min.css") rel="stylesheet" id="style_components" type="text/css" />
+    <link href=@Url.Content("~/assets/global/css/plugins.css") rel="stylesheet" type="text/css" />
+    <!-- END THEME GLOBAL STYLES -->
+    <!-- BEGIN THEME LAYOUT STYLES -->
+    <link href=@Url.Content("~/assets/layouts/layout/css/layout.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/layouts/layout/css/themes/blue.min.css") rel="stylesheet" type="text/css" id="style_color" />
+    <link href=@Url.Content("~/assets/layouts/layout/css/custom.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.css") rel="stylesheet" type="text/css" />
+    <!-- END THEME LAYOUT STYLES -->
+    <!-- BEGIN THEME PAGES STYLES -->
+    <link href=@Url.Content("~/assets/pages/css/pricing.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/fancytree/skin-bootstrap/ui.fancytree.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <!-- END THEME PAGES STYLES -->
+    <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" />
+    <script src=@Url.Content("~/assets/global/plugins/jquery.min.js") type="text/javascript"></script>
+</head>
+
+<body class="page-header-fixed page-sidebar-closed-hide-logo page-content-white page-full-width">
+    @{ Html.RenderAction("NavHeader", "Home");}
+    <div class="page-container">
+        @*@Html.Partial("_Sidebar")*@
+        <div class="page-sidebar-wrapper">
+            <div class="page-sidebar navbar-collapse collapse">
+                <ul class="page-sidebar-menu  page-header-fixed hidden-sm hidden-xs" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+                    <!-- DOC: To remove the sidebar toggler from the sidebar you just need to completely remove the below "sidebar-toggler-wrapper" LI element -->
+                    <li class="sidebar-toggler-wrapper hide">
+                        <!-- BEGIN SIDEBAR TOGGLER BUTTON -->
+                        <div class="sidebar-toggler"> </div>
+                        <!-- END SIDEBAR TOGGLER BUTTON -->
+                    </li>
+                </ul>
+                @Html.Partial("_SidebarMenu")
+            </div>
+        </div>
+        <!-- BEGIN CONTAINER -->
+        <!-- BEGIN CONTENT -->
+        <div class="page-content-wrapper">
+            <!-- BEGIN CONTENT BODY -->
+            <div class="page-content">
+                @RenderSection("Breadcrumb", false)
+                <!-- BEGIN PAGE HEADER-->
+                @RenderBody()
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+    </div>
+    <!-- END CONTAINER -->
+    <!-- BEGIN FOOTER -->
+    <div class="page-footer">
+        <div class="scroll-to-top">
+            <i class="icon-arrow-up"></i>
+        </div>
+    </div>
+    <!-- END FOOTER -->
+    <!--[if lt IE 9]>
+    <script src=@Url.Content("~/assets/global/plugins/respond.min.js")></script>
+    <script src=@Url.Content("~/assets/global/plugins/excanvas.min.js")></script>
+    <![endif]-->
+    <!-- BEGIN CORE PLUGINS -->
+    <script src=@Url.Content("~/assets/populate.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/autoRefresh.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/postCommand.js") type="text/javascript"></script>
+
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap/js/bootstrap.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/js.cookie.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/jquery.blockui.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/uniform/jquery.uniform.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-growl/jquery.bootstrap-growl.min.js") type="text/javascript"></script>
+
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js") type="text/javascript"></script>
+
+    <script src=@Url.Content("~/assets/global/plugins/jquery-confirm/js/jquery-confirm.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/jstree/dist/jstree.min.js") type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/i18n/zh-CN.js") type="text/javascript"></script>
+    <!-- BEGIN THEME LAYOUT SCRIPTS -->
+    <script src=@Url.Content("~/assets/global/scripts/app.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/layouts/layout/scripts/layout.min.js") type="text/javascript"></script>
+
+    @RenderSection("Scripts", false)
+    <!-- END THEME LAYOUT SCRIPTS -->
+    <script src=@Url.Content("~/assets/app.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/pages/scripts/ui-tree.js") type="text/javascript"></script>
+</body>
+
+</html>

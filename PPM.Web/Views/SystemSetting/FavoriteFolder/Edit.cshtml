@@ -1,0 +1,73 @@
+﻿@model PensionInsurance.Web.Views.SystemSetting.FavoriteFolder.EditViewModel
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">系统设置</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="javascript:;">收藏夹管理</a>
+            </li>
+            <li>
+                <span>编辑</span>
+            </li>
+        </ul>
+    </div>
+}
+
+<!-- END PAGE BAR -->
+<div class="full-height-content full-height-content-scrollable">
+    <div class="full-height-content-body">
+        <form data-ajax="true" action="@Url.Action("Edit", "FavoriteFolder")" method="POST" class="form-horizontal">
+            <div class="portlet box green" style="margin-top: 10px;">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-gift"></i>收藏夹信息
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">收藏夹名称</label>
+                                    <div class="col-md-9">
+                                        <input type="text" value="@Model.Name" class="form-control" name="Name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">描述</label>
+                                    <div class="col-md-9">
+                                        <input type="text" value="@Model.Description" class="form-control" name="Description"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="errors alert alert-danger fade in" style="display: none;"></div>
+
+                        <!--/row-->
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                @Html.HiddenFor(x=>x.FavoriteFolderId)
+                                <button type="submit" class="btn btn-sm green">保存</button>
+                                <button type="button" class="btn yellow btn-sm padding-lf-15" onclick="javascript: history.back(-1);">返回上一页</button>
+                            </div>
+                        </div>
+                        <!-- END FORM-->
+
+                    </div>
+                    <!-- END FORM-->
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

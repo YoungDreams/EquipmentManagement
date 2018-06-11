@@ -1,0 +1,55 @@
+﻿@using Foundation.Core
+@using PensionInsurance.Entities
+@using PensionInsurance.Query
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Customer.DetailViewModel
+@if (Model.CustomerRefundList.Any() && PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户信息管理, Permission.退款))
+{
+    <div id="section-customer-refund" class="row" style="margin-top: 10px;">
+        <div class="col-md-12">
+            <div class="portlet protlet-border">
+                <div class="portlet-title title-style">
+                    <i class="fa fa-product-hunt"></i>
+                    <span class="caption-subject font-green bold uppercase">退款信息</span>
+                </div>
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th class="th-15-percent">退款类型</th>
+                        <th class="th-10-percent">收款人姓名1</th>
+                        <th class="th-10-percent">收款人卡号1</th>
+                        <th class="th-10-percent">退款金额1</th>
+                        <th class="th-10-percent">收款人姓名2</th>
+                        <th class="th-10-percent">收款人卡号2</th>
+                        <th class="th-10-percent">退款金额2</th>
+                        <th>退款确认单</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.CustomerRefundList)
+                    {
+                        <tr>
+                            <td style="white-space: nowrap;">@item.RefundType.ToString()</td>
+                            <td>@item.RefundName</td>
+                            <td>@item.RefundAccountNo</td>
+                            <td>@item.RefundMoney</td>
+                            <td>@item.RefundName2</td>
+                            <td>@item.RefundAccountNo2</td>
+                            <td>@item.RefundMoney2</td>
+                            <td>
+                                @if (!item.RefundReceiptFile.IsNullOrWhiteSpace())
+                                {
+                                    <a target="_blank" href="@Url.Content(item.RefundReceiptFile)">@item.RefundReceiptFileName</a>
+                                }
+                            </td>
+                            <td><a href="@Url.Action("Detail", "CustomerAccountCheckOutRefund", new {id = item.Id})" class="btn default btn-xs green-stripe">查看</a></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}

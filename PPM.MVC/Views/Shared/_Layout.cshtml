@@ -1,0 +1,145 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>惠齐电力设备管理系统</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="" name="description" />
+    <meta content="" name="author" />
+    <!-- BEGIN GLOBAL MANDATORY STYLES -->
+    <link href=@Url.Content("~/assets/global/plugins/font-awesome/css/font-awesome.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/simple-line-icons/simple-line-icons.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap/css/bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/uniform/css/uniform.default.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.css") rel="stylesheet" />
+    <link href=@Url.Content("~/assets/global/plugins/jquery-confirm/css/jquery-confirm.css") rel="stylesheet" />
+
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <!-- END GLOBAL MANDATORY STYLES -->
+    <link href=@Url.Content("~/assets/global/plugins/jstree/dist/themes/default/style.min.css") rel="stylesheet" type="text/css" />
+
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <link href=@Url.Content("~/assets/global/css/components.min.css") rel="stylesheet" id="style_components" type="text/css" />
+    <link href=@Url.Content("~/assets/global/css/plugins.css") rel="stylesheet" type="text/css" />
+    <!-- END THEME GLOBAL STYLES -->
+    <!-- BEGIN THEME LAYOUT STYLES -->
+    <link href=@Url.Content("~/assets/layouts/layout/css/layout.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/layouts/layout/css/themes/darkblue.min.css") rel="stylesheet" type="text/css" id="style_color" />
+    <link href=@Url.Content("~/assets/layouts/layout/css/custom.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-touchspin/bootstrap.touchspin.css") rel="stylesheet" type="text/css" />
+    <!-- END THEME LAYOUT STYLES -->
+    <!-- BEGIN THEME PAGES STYLES -->
+    <link href=@Url.Content("~/assets/pages/css/pricing.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/fancytree/skin-bootstrap/ui.fancytree.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <!-- END THEME PAGES STYLES -->
+    <link rel="shortcut icon" href="@Url.Content("~/favicon.ico")" />
+    @*@Styles.Render("~/Content/css")
+        @Scripts.Render("~/bundles/modernizr")*@
+    @RenderSection("Styles", false)
+    <!-- 引入样式 -->
+    @*<link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">*@
+    <!-- 引入组件库 -->
+    @*<script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script src="https://unpkg.com/element-ui/lib/index.js"></script>*@
+    <script src=@Url.Content("~/assets/global/plugins/jquery.min.js") type="text/javascript"></script>
+    
+</head>
+<body class="page-header-fixed page-footer-fixed page-sidebar-closed-hide-logo page-content-white">
+    @Html.Partial("NavBar")
+    <div class="page-container">
+        @Html.Partial("SideBar")
+        <div class="page-content-wrapper">
+            <!-- BEGIN CONTENT BODY -->
+            <div class="page-content" style="min-height:895px">
+                <!-- BEGIN PAGE HEADER-->
+                <!-- BEGIN THEME PANEL -->
+                <!-- END THEME PANEL -->
+                <!-- BEGIN PAGE BAR -->
+                <div class="page-bar">
+                    <!-- 此处是相关代码 -->
+                    <ul class="nav nav-tabs" role="tablist"></ul>
+                    <div class="tab-content" style="width:100%;">
+                    </div>
+                    <!-- 相关代码结束 -->
+                </div>
+                <!-- END PAGE BAR -->
+                <!-- BEGIN PAGE TITLE-->
+                <h3 class="page-title">
+                    @RenderSection("PageTitle", false)
+                </h3>
+                <!-- END PAGE TITLE-->
+                <!-- END PAGE HEADER-->
+                <div id="#content">
+                    @RenderBody()
+                </div>
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+    </div>
+    <div class="page-footer">
+        <div class="page-footer-inner">
+            &copy; @DateTime.Now.Year - Copyright Reserved.
+        </div>
+
+        <div class="scroll-to-top" style="display: block;">
+            <i class="glyphicon glyphicon-plane"></i>
+        </div>
+    </div>
+    <!--[if lt IE 9]>
+        <script src=@Url.Content("~/assets/global/plugins/respond.min.js")></script>
+        <script src=@Url.Content("~/assets/global/plugins/excanvas.min.js")></script>
+    <![endif]-->
+    <!-- BEGIN CORE PLUGINS -->
+    <script src=@Url.Content("~/assets/populate.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/autoRefresh.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/postCommand.js") type="text/javascript"></script>
+
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap/js/bootstrap.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/js.cookie.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-hover-dropdown/bootstrap-hover-dropdown.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/jquery.blockui.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/uniform/jquery.uniform.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-switch/js/bootstrap-switch.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-growl/jquery.bootstrap-growl.min.js") type="text/javascript"></script>
+
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js") type="text/javascript"></script>
+
+    <script src=@Url.Content("~/assets/global/plugins/jquery-confirm/js/jquery-confirm.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/jstree/dist/jstree.min.js") type="text/javascript"></script>
+    <!-- END CORE PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/jquery-slimscroll/jquery.slimscroll.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/i18n/zh-CN.js") type="text/javascript"></script>
+    <!-- BEGIN THEME LAYOUT SCRIPTS -->
+    <script src=@Url.Content("~/assets/global/scripts/app.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/layouts/layout/scripts/layout.min.js") type="text/javascript"></script>
+
+    <!-- END THEME LAYOUT SCRIPTS -->
+    <script src=@Url.Content("~/assets/app.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/bootstrap-closable-tab.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/pages/scripts/ui-tree.js") type="text/javascript"></script>
+    <script>
+        @*$(function () {
+            var item = { 'id': '0', 'name': '首页', 'url': '@Url.Action("Index", "Home")', 'closable': false };
+            closableTab.addTab(item);
+            
+        });*@
+        function addPageTab(e) {
+            var $this = $(e);
+            var url = $this.data("href");
+            var id = $this.data("id");
+            var name = $this.data("title");
+            var item = { 'id': id, 'name': name, 'url': url, 'closable': true };
+            closableTab.addTab(item);
+        }
+    </script>
+    @RenderSection("scripts", false)
+</body>
+</html>

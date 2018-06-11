@@ -1,0 +1,315 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common;
+@model PensionInsurance.Web.Views.SystemSetting.Bed.IndexViewModel
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index", "Home")">系统设置管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Project")">项目管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index", "Room", new { ProjectId = Model.Query.ProjectId })">房间管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>床位管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">床位信息列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.床位管理, Permission.新增))
+                            {
+                                <a id="addBed" href="javascript:;" class="btn green" role="button">
+                                    <i class="fa fa-plus"></i>新增
+                                </a>
+                            }
+                            @*@if (PensionInsurance.Shared.AppContext.Current.User.HasPermission(ModuleType.床位管理, Permission.启用))
+                            {
+                                <a id="valid" href="javascript:;" class="btn green disabled batch-button">
+                                    <i class="fa fa-unlock" aria-hidden="true"></i>
+                                    启用
+                                </a>
+                            }
+                            @if (PensionInsurance.Shared.AppContext.Current.User.HasPermission(ModuleType.床位管理, Permission.失效))
+                            {
+                                <a id="invalid" href="javascript:;" class="btn green disabled batch-button">
+                                    <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                    失效
+                                </a>
+                            }*@
+                        </div>
+                    </div>
+                </div>
+                <div class="table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" class="group-checkable" />
+                                </th>
+                                <th>序号</th>
+                                <th>床位编码</th>
+                                <th>床位名称</th>
+                                <th>床位状态</th>
+                                <th>是否启用</th>
+                                <th>说明</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{int index = 1; }
+                            @foreach (var bed in Model.Beds)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="checkboxes" value="@bed.Id" />
+                                    </td>
+                                    <td>@index</td>
+                                    <td>@bed.BedNo</td>
+                                    <td>@bed.Name</td>
+                                    <td>@bed.Status</td>
+                                    <td>@(bed.IsEnabled?"启用":"不启用")</td>
+                                    <td>@bed.Remark</td>
+                                    <td>
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.床位管理, Permission.编辑))
+                                        {
+                                            <a href="javascript:;" onclick="editBed(@bed.Id)" class="btn default btn-xs yellow-stripe">编辑</a>
+                                        }
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.床位管理, Permission.删除))
+                                        {
+                                            <a href="javascript:;" data-command="@Model.DeleteCommand(bed.Id, bed.Room.Id, Request.Url.ToString()).ToJavascript()" class="btn default btn-xs red-stripe">删除</a>
+                                        }
+                                    </td>
+                                </tr>
+                                index += 1;
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="form-actions">
+                    <div class="text-center">
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal small fade" id="roomInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+        <form data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>新增床位信息
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <input type="hidden" name="RoomId" value="@Model.Query.RoomId"/>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">床位名称</label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="Name" >
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">说明</label>
+                                            <div class="col-md-8">
+                                                <textarea class="form-control" name="Remark" style="resize: none;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            <button class="btn green btn-sm padding-lf-15">生成</button>
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                        </div>
+                                    </p>
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal small fade" id="editBedInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:400px;">
+        <form data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="portlet box green">
+                        <div class="portlet-title">
+                            <div class="caption">
+                                <i class="fa fa-gift"></i>编辑床位信息
+                            </div>
+                        </div>
+                        <div class="portlet-body form">
+                            <!-- BEGIN FORM-->
+                            <div class="form-body">
+                                <div class="row">
+                                    <!--/span-->
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <input type="hidden" name="BedId" />
+                                            <label class="control-label col-md-4">床位编码</label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="BedNo" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">床位名称</label>
+                                            <div class="col-md-8">
+                                                <input type="text" class="form-control" name="Name" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">是否启用</label>
+                                            <div class="col-md-8">
+                                                <select class="form-control input-small" name="IsEnabled">
+                                                    <option value="True">启用</option>
+                                                    <option value="False">不启用</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="form-group">
+                                            <label class="control-label col-md-4">说明</label>
+                                            <div class="col-md-8">
+                                                <textarea class="form-control" name="Remark" style="resize: none;"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                <div class="row">
+                                    <p>
+                                        <div class="text-center">
+                                            <button class="btn green btn-sm padding-lf-15">保存</button>
+                                            <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                        </div>
+                                    </p>
+                                </div>
+                                <!-- END FORM-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+<script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+<script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+<script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+<script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+<script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+<script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+<script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+<script type="text/javascript">
+    var funcs = {
+        getBedIds: function () {
+            var ids = [];
+            var checkboxes = $(".checkboxes");
+            $.each(checkboxes, function (i, item) {
+                var chk = $(item);
+                if (chk.is(":checked")) {
+                    var id = chk.val();
+                    ids.push(id);
+                }
+            });
+
+            return ids;
+        },
+        updateButtons: function () {
+            var checked = $(".checkboxes:checked").length > 0;
+            var buttons = $(".batch-button");
+            buttons.prop("disabled", !checked);
+            if (checked) {
+                buttons.removeClass("disabled");
+            } else {
+                buttons.addClass("disabled");
+            }
+        }
+    };
+
+    $(document).ready(function () {
+        // 打开床位弹出层
+        $("#addBed").click(function () {
+            var roomInfo = $('#roomInfo');
+            roomInfo.modal('show');
+            roomInfo.find("form").attr("action", "@Url.Action("Create", "Bed", new { returnUrl = Request.Url })");
+        });
+
+        $(".group-checkable").change(function () {
+            var checkAll = $(this);
+            var checked = checkAll.is(":checked");
+            checkAll.closest(".table").find(".checkboxes").prop("checked", checked).uniform("refresh");
+            funcs.updateButtons();
+        });
+
+        $(".checkboxes").change(function () {
+            funcs.updateButtons();
+        });
+    });
+
+    // 编辑床位信息
+    function editBed(bedId) {
+        var editBedInfo = $('#editBedInfo');
+        $.get("@Url.Action("Edit", "Bed")" + "/" + bedId, function (result) {
+            editBedInfo.modal('show');
+            editBedInfo.find("form").attr("action", "@Url.Action("Edit", "Bed", new { returnUrl = Request.Url })");
+            setFormValues(result);
+        });
+    }
+</script>
+}
+

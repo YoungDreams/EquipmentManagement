@@ -1,0 +1,1056 @@
+﻿@using Foundation.Web.Mvc
+@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Sales.Consulting.CreateViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css"/>
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css"/>
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css"/>
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css"/>
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css"/>
+
+    <link href=@Url.Content("~/assets/global/plugins/jquery-city-picker/css/city-picker.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+    <style>
+        .form-horizontal .has-feedback .form-control-feedback {
+            right: 15px;
+            top: 6px;
+        }
+    </style>
+}
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","Consulting")">咨询接待管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>@Model.HeaderText</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<div class="full-height-content full-height-content-scrollable">
+    <form id="consulting-form" data-ajax="true" action="@Request.Url" method="POST" class="form-horizontal">
+            <input type="hidden" name="@nameof(Model.ConsultingId)" value="@Model.ConsultingId" />
+            <input type="hidden" name="@nameof(Model.ConsultingFamilyId)" value="@Model.ConsultingFamilyId" />
+            @Html.HiddenFor(m => m.Consulting.ConsultingNo)
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <div class="form-body">
+                    <table style="width: 100%; border: 1px solid red;">
+                    <tbody>
+                    <tr>
+                        <td class="tgl" colspan="6">
+                            <i class="fa fa-gift"></i>
+                            <span class="caption-subject  sbold">客户基础信息</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tl" style="">
+                            <label class="control-label">咨询类型</label>
+                        </td>
+                        <td class="tt">
+                            @Html.EnumTextDropDownListFor(m => m.Consulting.ConsultingCategory, typeof(ConsultingCategory), true)
+                        </td>
+                        <td class="tl">
+                            <label class="control-label">客户类型</label>
+                        </td>
+                        <td class="tt">
+                            @Html.EnumTextDropDownListFor(m => m.Consulting.Type, typeof(ConsultingType), true)
+                        </td>
+                        <td class="tl">
+                            <label class="control-label">客户级别</label>
+                        </td>
+                        <td class="tt">
+                            @if (Model.HeaderText == "编辑" && Model.Consulting.Level == ConsultingLevel.已入住.ToString())
+                            {
+                                <label class="control-label">@Model.Consulting.Level</label>
+                                @Html.HiddenFor(m => m.Consulting.Level)
+                            }
+                            else
+                            {
+                                @Html.EnumTextDropDownListFor(m => m.Consulting.Level, typeof(ConsultingLevel), true, x => x != ConsultingLevel.已入住.ToString() && x != ConsultingLevel.新转交.ToString() && x != ConsultingLevel.退住.ToString())
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tl" style="">
+                            <label class="control-label">获知渠道</label>
+                        </td>
+                        <td class="tt">
+                            @Html.DropDownListFor(m => m.Consulting.Channel, SettingType.获知渠道, true)
+                        </td>
+                        <td class="tl">
+                            <label class="control-label">客户来源</label>
+                        </td>
+                        <td class="tt">
+                            @Html.DropDownListFor(m => m.Consulting.SourceType, SettingType.客户来源, true)
+                        </td>
+                        <td class="tl">
+                            <label class="control-label ">未成交原因</label>                            
+                        </td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.Reason, SettingType.未成交原因, true)</td>
+                    </tr>
+                    <tr>
+                        <td class="tl" style="">
+                            <label class="control-label">意向项目</label>
+                        </td>
+                        <td class="tt">
+                            @Html.DropDownListFor(x => x.Consulting.ProjectIds, Model.ProjectList, true)
+                        </td>
+                        <td class="tl">
+                            <label class="control-label ">意向户型</label>
+                        </td>
+                        <td class="tt">
+                            @Html.DropDownListFor(x => x.Consulting.HouseTypes, Model.HouseTypeList, new { multiple = "", @class = "selectpicker" })
+                        </td>
+                        <td class="tl" style="">
+                            <label class="control-label">入住需求</label>
+                        </td>
+                        <td class="tt">
+                            @Html.DropDownListFor(x => x.Consulting.MoveInRequirements, Model.MoveInRequirementList, new { multiple = "", @class = "selectpicker" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tl">
+                            <label class="control-label">关注点</label>
+                        </td>
+                        <td class="tt">
+                            @Html.DropDownListFor(x => x.Consulting.FocusOns, Model.FocusOnList, new { multiple = "", @class = "selectpicker" })
+                        </td>
+                        <td class="tl">
+                            <label class="control-label ">咨询过其他养老机构</label>
+                        </td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.IsContractNursingHome, true)</td>
+                        <td class="tl">
+                            <label class="control-label">工作行业</label>
+                        </td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.WorkIndustry, SettingType.子女工作行业, true)</td>
+                    </tr>
+                    <tr>
+                        <td class="tl">
+                            <label class="control-label ">客户性别</label>
+                        </td>
+                        <td class="tt">
+                            @Html.EnumTextDropDownListFor(m => m.Consulting.Sex, typeof(Sex), true)
+                        </td>
+                        <td class="tl">
+                            <label class="control-label ">年龄</label>
+                        </td>
+                        <td class="tt">@Html.InputText(m => m.Consulting.Age)</td>
+                        <td class="tl">
+                            <label class="control-label ">身体状况</label>
+                        </td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.HealthStatus, SettingType.身体状况, true)</td>
+                    </tr>
+                    <tr>
+                        <td class="tgl" colspan="6">
+                            <i class="fa fa-gift"></i>
+                            <span class="caption-subject  sbold">客户其他信息</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="tl" style="">
+                            <label class="control-label">客户姓名</label>
+                        </td>
+                        <td class="tt">
+                            @Html.InputText(m => m.Consulting.ConsultingName)
+                        </td>
+                        <td class="tl">
+                            <label class="control-label ">联系电话</label>
+                            <div class="col-md-9"></div>
+                        </td>
+                        <td class="tt">@Html.InputText(m => m.Consulting.Phone)</td>
+                        <td class="tl">
+                            <label class="control-label">居住区域</label>
+                        </td>
+                        <td class="tt" colspan="3">
+                            <div style="position: relative;">
+                                <!-- container -->
+                                <input readonly type="text" data-area-name="Consulting.AreaId" data-toggle="city-picker" class="form-control" value="@Model.ConsultingAreaText">
+                            </div>
+                            @Html.HiddenFor(x => x.Consulting.AreaId)
+                        </td>
+                    </tr>
+                    <tr>
+                        
+                        <td class="tl">
+                            <label class="control-label ">其他联系方式</label>
+                        </td>
+                        <td class="tt">@Html.InputText(m => m.Consulting.OtherPhone)</td>
+                        <td class="tl">
+                            <label class="control-label">电子邮件</label>
+                        </td>
+                        <td class="tt">@Html.InputText(m => m.Consulting.Email)</td>
+                        <td class="tl">
+                            <label class="control-label">联系地址</label>
+                        </td>
+                        <td class="tt" colspan="1">@Html.InputText(m => m.Consulting.Address)</td>
+                    </tr>
+                    <tr>
+                        <td class="tl">
+                            <label class="control-label">@Html.EnumTextDropDownListFor(m => m.Consulting.CredentialType, typeof(CredentialType))</label>
+                        </td>
+                        <td class="tt">@Html.InputText(m => m.Consulting.IDCard)</td>
+                        <td class="tl">
+                            <label class="control-label ">生活能力类型</label>
+                        </td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.NusingType, SettingType.咨询护理类型, true)</td>
+                        <td class="tl"><label class="control-label"> 教育背景 </label></td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.EducationalBackground, SettingType.教育背景, true)</td>
+                    </tr>
+                    <tr>
+                        <td class="tl"><label class="control-label">退休金</label></td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.Pension, SettingType.退休金, true)</td>
+                        <td class="tl"><label class="control-label ">子女情况</label></td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.ChildrenInfo, SettingType.是否有子女, true)</td>
+                        <td class="tl"><label class="control-label "> 子女工作行业 </label></td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.WorkIndustryOfChildren, SettingType.子女工作行业, true)</td>
+                    </tr>
+
+                    <tr>
+                        <td class="tl"><label class="control-label">与子女同住</label></td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.LivingWithChildren, SettingType.子女同住, true)</td>
+                        <td class="tl"><label class="control-label "> 费用支出人 </label></td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.Payer, SettingType.费用支出人, true)</td>
+                        <td class="tl"><label class="control-label ">配偶情况</label></td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.SpouseInfo, SettingType.配偶情况, true)</td>
+                    </tr>
+
+                    <tr>
+                        <td class="tl"><label class="control-label ">雇佣保姆</label></td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.HasNanny, true)</td>
+                        <td class="tl"><label class="control-label ">自有住房</label></td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.House, SettingType.自有住房, true)</td>
+                        <td class="tl"><label class="control-label ">住房出租</label></td>
+                        <td class="tt">@Html.DropDownListFor(m => m.Consulting.IsRentOutHouse, true)</td>
+                    </tr>
+                    <tr>
+                        
+                        <td class="tl"><label class="control-label ">创建时间</label></td>
+                        <td class="tt">
+                            @if (Model.HeaderText == "编辑" || Model.HeaderText == "入住")
+                            {
+                                <input type="text" class="form-control form-control-inline date-picker" name="Consulting.CreatedOn" data-date-format="yyyy-mm-dd" value="@(Model.Consulting.CreatedOn.HasValue ? Model.Consulting.CreatedOn.Value.DateString() : DateTime.Now.DateString())">
+                            }
+                            else
+                            {
+                                <input type="text" class="form-control form-control-inline date-picker" name="Consulting.CreatedOn" data-date-format="yyyy-mm-dd" value="@DateTime.Now.DateString()">
+                            }
+                        </td>
+                        <td class="tl"><label class="control-label ">兴趣爱好</label></td>
+                        <td class="tt">@Html.InputText(m => m.Consulting.ConsultingHobby)</td>
+                        <td class="tl"><label class="control-label ">客户概述</label></td>
+                        <td class="tt">@Html.InputText(m => m.Consulting.ConsultingDescription)</td>
+                    </tr>
+                    <tr>
+                        <td class="tl"><label class="control-label ">客户经营计划</label></td>
+                        <td class="tt">@Html.InputText(m => m.Consulting.ConsultingSalePlan)</td>
+                    </tr>
+                    <tr>
+                        <td class="tl"><label class="control-label">备注</label></td>
+                        <td class="tt" colspan="5">
+                            @if (Model.HeaderText == "编辑" || Model.HeaderText == "入住")
+                            {
+                                <textarea class="form-control" name="Consulting.Description" style="resize: none;">@Model.Consulting.Description</textarea>
+                            }
+                            else
+                            {
+                                <textarea class="form-control" name="Consulting.Description" style="resize: none;"></textarea>
+                            }
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+
+                        <tbody>
+                           <tr>
+                                <td class="tgl" colspan="6">
+                                    <i class="fa fa-gift"></i>
+                                    <span class="caption-subject  sbold">推荐人信息</span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="tl"><label class="control-label "> 推荐人类型 </label></td>
+                                <td class="tt">@Html.DropDownListFor(m => m.Consulting.ReferenceType, SettingType.推荐人类型, true)</td>
+                                <td class="tl"><label class="control-label "> 推荐人 </label></td>
+                                <td class="tt">@Html.InputText(m => m.Consulting.ReferenceName)</td>
+                                <td class="tl"><label class="control-label ">推荐人联系方式</label></td>
+                                <td class="tt">@Html.InputText(m => m.Consulting.ReferenceContactInfo)</td>
+                            </tr>
+                        </tbody>
+
+                        <tbody>
+                            <tr>
+                                <td class="tgl" colspan="6">
+                                    <i class="fa fa-gift"></i>
+                                    <span class="caption-subject  sbold">咨询人信息</span>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="tl"><label class="control-label ">咨询人姓名</label></td>
+                                <td class="tt">@Html.InputText(m => m.ConsultingFamily.Name)</td>
+                                <td class="tl"><label class="control-label "> 联系电话 </label></td>
+                                <td class="tt">@Html.InputText(m => m.ConsultingFamily.Phone)</td>
+                                <td class="tl">
+                                    <label class="control-label">居住区域</label>
+                                </td>
+                                <td class="tt">
+                                    <div style="position: relative;">
+                                        <!-- container -->
+                                        <input readonly type="text" data-area-name="ConsultingFamily.AreaId" data-toggle="city-picker" class="form-control" value="@Model.ConsultingFamilyAreaText">
+                                    </div>
+                                    @Html.HiddenFor(x => x.ConsultingFamily.AreaId)
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td class="tl">
+                                    <label class="control-label "> 与客户的关系 </label>
+                                </td>
+                                <td class="tt">
+                                    @Html.DropDownListFor(m => m.ConsultingFamily.RelationWithConsulting, SettingType.咨询人与客户关系, true)
+                                </td>
+                                <td class="tl"><label class="control-label ">其他联系方式</label></td>
+                                <td class="tt">@Html.InputText(m => m.ConsultingFamily.Phone2)</td>
+                                <td class="tl"><label class="control-label ">电子邮箱</label></td>
+                                <td class="tt">@Html.InputText(m => m.ConsultingFamily.Email)</td>
+                            </tr>
+                            <tr>
+                                <td class="tl">
+                                    <label class="control-label">联系地址</label>
+                                </td>
+                                <td class="tt" colspan="3">
+                                    @Html.InputText(m => m.ConsultingFamily.Address)
+                                </td>    
+                            </tr>
+                            <tr>
+                                <td class="tl">
+                                    <label class="control-label">备注</label>
+                                </td>
+                                <td class="tt" colspan="5">
+                                    @if (Model.HeaderText == "编辑" || Model.HeaderText == "入住")
+                                    {
+                                        <textarea class="form-control" name="ConsultingFamily.Description" style="resize: none;">@Model.ConsultingFamily.Description</textarea>
+                                    }
+                                    else
+                                    {
+                                        <textarea class="form-control" name="ConsultingFamily.Description" style="resize: none;"></textarea>
+                                    }
+                                </td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+                    @if (Model.Consulting != null)
+                    {
+                        <input type="hidden" value="@Model.Consulting.Reason" id="selectedReason" />
+                    }
+                </div>
+            </div>
+
+            <div class="errors alert alert-danger fade in" style="display: none;"></div>
+            <div class="form-actions text-center">
+                <div class="text-center">
+                    @if (Model.HeaderText == "入住")
+                    {
+                        <a id="checkInstart" class="btn btn-sm green padding-lf-15">入住</a>
+                    }
+                    else
+                    {
+                        <button type="submit" class="btn btn-sm green padding-lf-15">保存</button>
+                        if (Model.NextConsultingId.HasValue)
+                        {
+                            <a href="@Url.ReplaceCurrentUrl(new {id = Model.NextConsultingId, page = Model.Page + 1})" class="btn yellow btn-sm padding-lf-15">下一页</a>
+                        }
+                    }
+
+                    <a href="@Url.Action("Index")" class="btn yellow btn-sm padding-lf-15">返回</a>
+                </div>
+            </div>
+        </form>
+
+    @if (Model.HeaderText == "编辑")
+    {
+        <div class="row">
+            <div class="col-md-12">
+                <div class="portlet light bordered">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="icon-social-dribbble font-green"></i>
+                            <span class="caption-subject font-green bold uppercase">客户跟踪列表</span>
+
+                        </div>
+                        <div class="actions">
+                            <a id="addTrack" href="javascript:;" onclick="addTrack();" class="btn green" role="button">
+                                <i class="fa fa-plus"></i>新增
+                            </a>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="table">
+                            <table id="items" class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>序号</th>
+                                        <th>所属项目</th>
+                                        <th>沟通类型</th>
+                                        <th>开始日期</th>
+                                        <th>结束日期</th>
+                                        <th>销售人员</th>
+                                        <th>沟通记录</th>
+                                        <th>是否完成</th>
+                                        <th>操作</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.Items)
+                                    {
+                                        <tr>
+                                            <td>@Model.Items.RowNumberOf(item)</td>
+                                            <td>@(item.Project?.Name)</td>
+                                            <td>@item.TrackingType</td>
+                                            <td>@item.StartTime.DateString()</td>
+                                            <td>@(item.EndTime?.DateString())</td>
+                                            <td>@item.User.RealName</td>
+                                            <td class="tooltips" data-container="body" data-placement="top" data-original-title="@item.Description">@item.Description.SubString(20, "...")</td>
+                                            <td>@item.Status</td>
+                                            <td>
+                                                <div class="btn-group">
+                                                    @if ("客户转交" != item.TrackingType && item.User == PensionInsurance.Shared.WebAppContext.Current.User)
+                                                    {
+                                                        <a href="javascript:;" onclick="editTracking(@item.Id)" class="btn default btn-xs yellow-stripe">
+                                                            编辑
+                                                        </a>
+                                                        <a href="javascript:;" data-refresh="#items" data-command="@Model.DeleteCommand(item.Id).ToJavascript()" class="btn default btn-xs red-stripe">
+                                                            删除
+                                                        </a>
+                                                    }
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal small fade" id="trackInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog" style="width:400px;">
+                <form data-ajax="true" action="#" method="POST" class="form-horizontal" data-refresh="#items">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <div class="portlet box green">
+                                <div class="portlet-title">
+                                    <div class="caption">
+                                        <i class="fa fa-gift"></i>跟踪信息
+                                    </div>
+                                </div>
+                                <div class="portlet-body form">
+                                    <!-- BEGIN FORM-->
+                                    <div class="form-body">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">跟踪方式</label>
+                                                    <div class="col-md-9">
+                                                        @Html.DropDownList("TrackingType", SettingType.跟踪方式)
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">所属项目</label>
+                                                    <div class="col-md-9">
+                                                        <select name="Pid" class="form-control input-xs">
+                                                            @foreach (var project in Model.ProjectList)
+                                                            {
+                                                                <option value="@project.Value">@project.Text</option>
+                                                            }
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <!--/span-->
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">开始日期</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control form-control-inline date-picker" name="StartTime" data-date-format="yyyy-mm-dd">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <!--/span-->
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">完成日期</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control form-control-inline date-picker" name="EndTime" data-date-format="yyyy-mm-dd">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">跟踪记录</label>
+                                                    <div class="col-md-9">
+                                                        <textarea class="form-control" name="Description" style="resize: none;"></textarea>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                                        <div class="row">
+                                            <p>
+                                                <div class="text-center">
+                                                    @Html.HiddenFor(m => m.ConsultingId)
+                                                    <input type="hidden" name="ConsultingTrackingId" />
+
+                                                    <button class="btn green btn-sm padding-lf-15">保存</button>
+                                                    <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                                </div>
+                                            </p>
+                                        </div>
+                                        <!-- END FORM-->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/jquery-city-picker/city-picker.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/jquery-validation/js/jquery.validate.min.js") type="text/javascript"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.selectpicker').selectpicker({
+                style: 'btn-xs',
+                iconBase: 'fa',
+                tickIcon: 'fa-check',
+                noneSelectedText: "--未选择--"
+            });
+
+            $("select[name='Consulting.FocusOns']").val(@Html.Raw(Json.Encode(Model.Consulting.FocusOns)));
+            $("select[name='Consulting.ProjectIds']").val(@Html.Raw(Json.Encode(Model.Consulting.ProjectIds)));
+            $("select[name='Consulting.HouseTypes']").val(@Html.Raw(Json.Encode(Model.Consulting.HouseTypes)));
+            $("select[name='Consulting.MoveInRequirements']")
+                .val(@Html.Raw(Json.Encode(Model.Consulting.MoveInRequirements)));
+            $('.selectpicker').selectpicker('refresh');
+        });
+
+        $(document).on(
+            "change",
+            "select[name='Consulting.FocusOns'],select[name='Consulting.HouseTypes'],select[name='Consulting.MoveInRequirements'],input[name='Consulting.AreaId'],input[name='ConsultingFamily.AreaId']",
+            function() {
+                var $this = $(this);
+                if ($this.val()) {
+                    $this.parents(".tt").addClass("has-success").removeClass("has-error");
+                } else {
+                    $this.parents(".tt").addClass("has-error").removeClass("has-success");
+                }
+            });
+
+        $(document).ready(function() {
+            $("#consulting-form").submit(function() {
+                if (customValidate() && $(this).valid()) {
+                    return true;
+                }
+                return false;
+            });
+
+            $("#checkInstart").on("click",
+                function() {
+                    var form = $("#consulting-form");
+                    var customerName = $("[name='Consulting.ConsultingName']").val();
+                    var customerIdCard = $("[name='Consulting.IDCard']").val();
+                    App.confirm(function() {
+                            form.submit();
+                        },
+                        function() {
+                            App.unblockUI();
+                        },
+                        "客户姓名：" + customerName + "<br/>证件号码：" + customerIdCard + "<br/>确认后不可修改",
+                        "col-md-7 col-md-offset-3");
+                    return false;
+                });
+        });
+
+        function customValidate() {
+            if ($("select[name='Consulting.Level']").val() == '@ConsultingLevel.无效.ToString()') {
+                return true;
+            }
+            var focusOns = $("select[name='Consulting.FocusOns']");
+            var houseTypes = $("select[name='Consulting.HouseTypes']");
+            var moveInRequirements = $("select[name='Consulting.MoveInRequirements']");
+            var areaId = $("input[name='Consulting.AreaId']");
+            var familyAreaId = $("input[name='ConsultingFamily.AreaId']");
+            var isRequiredArea = false;
+
+            if (!focusOns.val()) {
+                focusOns.parents(".tt").addClass("has-error").removeClass("has-success");
+            } else {
+                focusOns.parents(".tt").addClass("has-success").removeClass("has-error");
+            }
+            if (!houseTypes.val()) {
+                houseTypes.parents(".tt").addClass("has-error").removeClass("has-success");
+            } else {
+                houseTypes.parents(".tt").addClass("has-success").removeClass("has-error");
+            }
+            if (!moveInRequirements.val()) {
+                moveInRequirements.parents(".tt").addClass("has-error").removeClass("has-success");
+            } else {
+                moveInRequirements.parents(".tt").addClass("has-success").removeClass("has-error");
+            }
+
+            if ($("select[name='Consulting.ConsultingCategory']").val() == '@ConsultingCategory.为长辈咨询.ToString()') {
+                if (!familyAreaId.val()) {
+                    familyAreaId.parents(".tt").addClass("has-error").removeClass("has-success");
+                    isRequiredArea = false;
+                } else {
+                    familyAreaId.parents(".tt").addClass("has-success").removeClass("has-error");
+                    isRequiredArea = true;
+                }
+            } else if ($("select[name='Consulting.ConsultingCategory']").val() == '@ConsultingCategory.本人咨询.ToString()') {
+                if (!areaId.val()) {
+                    areaId.parents(".tt").addClass("has-error").removeClass("has-success");
+                    isRequiredArea = false;
+                } else {
+                    areaId.parents(".tt").addClass("has-success").removeClass("has-error");
+                    isRequiredArea = true;
+                }
+            } else {
+                familyAreaId.parents(".tt").removeClass("has-error").removeClass("has-success");
+                areaId.parents(".tt").removeClass("has-error").removeClass("has-success");
+            }
+
+            if (focusOns.val() && houseTypes.val() && moveInRequirements.val() && isRequiredArea) {
+                return true;
+            }
+            return false;
+        }
+
+        $(document).ready(function() {
+            var level = $("[name='Consulting.Level']");
+            var reason = $("[name='Consulting.Reason'");
+            if (level && reason) {
+
+                reason.find("option").each(function(idx, option) {
+                    if (idx === 0) {
+                        reasonData.None.push(option.value);
+                    } else if (idx > 0 && idx <= 4) {
+                        reasonData.D.push(option.value);
+                    } else {
+                        reasonData.Invalid.push(option.value);
+                    }
+                });
+
+                setReasonVal(level, reason);
+                level.change(function() {
+                    setReasonVal(level, reason);
+
+                    if (level.val() == '@ConsultingLevel.无效.ToString()') {
+                        removeConsultingLevelRules();
+                    } else {
+                        addConsultingLevelRules();
+                    }
+                });
+            }
+        });
+
+        function addTrack() {
+            var trackInfo = $('#trackInfo');
+            trackInfo.modal('show');
+            trackInfo.find("form").attr("action",
+                "@Url.Action("CreateConsultingTracking", "Consulting", new {returnUrl = Request.Url})");
+            clearFormValues("trackInfo");
+        }
+
+        $(document).ready(function() {
+            $('#trackInfo').submit(function() {
+                if ($(this).find("select[name='TrackingType']").val() == '@ConsultingTrackingType.现场参观') {
+                    addConsultingTypeRules();
+                    if ($("#consulting-form").valid() && customValidate()) {
+                        return true;
+                    } else {
+                        $(this).modal('hide');
+                        App.alert({ content: "<h3>来访客户，请先补全咨询信息</h3>" });
+                        return false;
+                    }
+                }
+                return true;
+            });
+        });
+
+        function editTracking(id) {
+            var contact = $('#trackInfo');
+            $.get("@Url.Action("EditConsultingTracking", "Consulting")" + "/" + id,
+                function(result) {
+                    contact.modal('show');
+                    contact.find("form").attr("action", "@Url.Action("EditConsultingTracking", "Consulting")");
+                    result.StartTime = jsonDateFormat(result.StartTime);
+                    result.EndTime = jsonDateFormat(result.EndTime);
+
+                    setFormValues(result);
+                });
+        }
+
+        function setReasonVal(level, reason) {
+            reason.empty();
+            if (level.val() === "D") {
+                reason.append("<option value=''>--未选择--</option>");
+                $.each(reasonData.D,
+                    function(idx, val) {
+                        reason.append("<option value='" + val + "'>" + val + "</option>");
+                    });
+            } else if (level.val() === "无效") {
+                reason.append("<option value=''>--未选择--</option>");
+                $.each(reasonData.Invalid,
+                    function(idx, val) {
+                        reason.append("<option value='" + val + "'>" + val + "</option>");
+                    });
+            } else {
+                $.each(reasonData.None,
+                    function(idx, val) {
+                        reason.append("<option value='" + val + "'>--未选择--</option>");
+                    });
+            }
+
+            var selectedReason = $("#selectedReason");
+            if (selectedReason && selectedReason.val()) {
+                reason.val(selectedReason.val());
+            }
+        }
+
+        var reasonData = {
+            D: [],
+            Invalid: [],
+            None: []
+        };
+
+        $(document).ready(function() {
+            $("#consulting-form").validate({
+                rules: {
+                    "Consulting.ConsultingCategory": "required",
+                    "Consulting.Type": "required",
+                    "Consulting.Level": "required",
+                    "Consulting.Channel": "required",
+                    "Consulting.SourceType": "required",
+                    "Consulting.ProjectIds": "required",
+                    "Consulting.Sex": "required",
+                    "Consulting.Age": {
+                        required: true,
+                        number: true,
+                        minlength: 1,
+                        maxlength: 120
+                    },
+                    "Consulting.HealthStatus": "required",
+                    "Consulting.WorkIndustry": "required",
+                    "Consulting.IsContractNursingHome": "required"
+                },
+
+                errorElement: "em",
+                errorPlacement: function(error, element) {
+                    error.addClass("help-block");
+
+                    element.parents(".tt").addClass("has-feedback");
+
+                    if (!element.next("span")[0]) {
+                        $("<span class='glyphicon glyphicon-remove form-control-feedback'></span>")
+                            .insertAfter(element);
+                    }
+                },
+                highlight: function(element, errorClass, validClass) {
+                    $(element).parents(".tt").addClass("has-error").removeClass("has-success");
+                    $(element).next("span").addClass("glyphicon-remove").removeClass("glyphicon-ok");
+
+                },
+                unhighlight: function(element, errorClass, validClass) {
+                    $(element).parents(".tt").addClass("has-success").removeClass("has-error");
+                    $(element).next("span").addClass("glyphicon-ok").removeClass("glyphicon-remove");
+                }
+            });
+
+            if ($("select[name='Consulting.ConsultingCategory']").val() == '@ConsultingCategory.为长辈咨询.ToString()' &&
+                $("select[name='Consulting.Level']").val() != '@ConsultingLevel.无效.ToString()') {
+                addConsultingCategoryRules();
+            } else {
+                removeConsultingCategoryRules();
+            }
+
+            if ($("select[name='Consulting.Level']").val() == '@ConsultingLevel.无效.ToString()') {
+                removeConsultingLevelRules();
+            } else {
+                addConsultingLevelRules();
+            }
+
+            $("select[name='Consulting.ConsultingCategory']").on("change",
+                function() {
+                    var $select = $(this);
+                    var areaId = $("input[name='Consulting.AreaId']");
+                    var level = $("select[name='Consulting.Level']");
+                    var familyAreaId = $("input[name='ConsultingFamily.AreaId']");
+                    if ($select.val() == '@ConsultingCategory.为长辈咨询.ToString()' &&
+                        level.val() != '@ConsultingLevel.无效.ToString()') {
+                        addConsultingCategoryRules();
+                        if (!familyAreaId.val()) {
+                            familyAreaId.parents(".tt").addClass("has-error").removeClass("has-success");
+                        } else {
+                            familyAreaId.parents(".tt").addClass("has-success").removeClass("has-error");
+                        }
+                        areaId.parents(".tt").removeClass("has-error");
+                    } else if ($select.val() == '@ConsultingCategory.本人咨询.ToString()' &&
+                        level.val() != '@ConsultingLevel.无效.ToString()') {
+                        removeConsultingCategoryRules();
+                        if (!areaId.val()) {
+                            areaId.parents(".tt").addClass("has-error").removeClass("has-success");
+                        } else {
+                            areaId.parents(".tt").addClass("has-success").removeClass("has-error");
+                        }
+                        familyAreaId.parents(".tt").removeClass("has-error");
+                    } else {
+                        familyAreaId.parents(".tt").removeClass("has-error");
+                        areaId.parents(".tt").removeClass("has-error");
+                    }
+                    $("#consulting-form").valid();
+                });
+
+            $("select[name='Consulting.ProjectIds']").on("change",
+                function() {
+                    var $select = $(this);
+                    var $houseTypes = $("select[name='Consulting.HouseTypes']");
+                    if ($select.val()) {
+                        $.get("/Consulting/GetHouseTypes?projectId=" + $select.val(),
+                            function(result) {
+                                $houseTypes.find("option").remove();
+                                $(result).each(function(idx, data) {
+                                    $houseTypes.append("<option value='" +
+                                        data.HouseType +
+                                        "'>" +
+                                        data.HouseType +
+                                        "</option>");
+                                });
+                                $houseTypes.selectpicker('refresh');
+                            });
+                    } else {
+                        $houseTypes.find("option").remove();
+                        $houseTypes.selectpicker('refresh');
+                    }
+                });
+        });
+
+        function addConsultingLevelRules() {
+            $("select[name='Consulting.ConsultingCategory']").rules("add", "required");
+            $("select[name='Consulting.Type']").rules("add", "required");
+            $("select[name='Consulting.Channel']").rules("add", "required");
+            $("select[name='Consulting.SourceType']").rules("add", "required");
+            $("select[name='Consulting.Sex']").rules("add", "required");
+            $("input[name='Consulting.Age']").rules("add", "required");
+            $("select[name='Consulting.HealthStatus']").rules("add", "required");
+            $("select[name='Consulting.WorkIndustry']").rules("add", "required");
+            $("select[name='Consulting.IsContractNursingHome']").rules("add", "required");
+        }
+
+        function removeConsultingLevelRules() {
+            $("select[name='Consulting.ConsultingCategory']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.ConsultingCategory']").next("span").remove();
+            $("select[name='Consulting.ConsultingCategory']").rules("remove");
+
+            $("select[name='Consulting.Type']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.Type']").next("span").remove();
+            $("select[name='Consulting.Type']").rules("remove");
+
+            $("select[name='Consulting.Channel']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.Channel']").next("span").remove();
+            $("select[name='Consulting.Channel']").rules("remove");
+
+            $("select[name='Consulting.SourceType']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.SourceType']").next("span").remove();
+            $("select[name='Consulting.SourceType']").rules("remove");
+
+            $("select[name='Consulting.Sex']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.Sex']").next("span").remove();
+            $("select[name='Consulting.Sex']").rules("remove");
+
+            $("input[name='Consulting.Age']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("input[name='Consulting.Age']").next("span").remove();
+            $("input[name='Consulting.Age']").rules("remove");
+
+            $("select[name='Consulting.HealthStatus']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.HealthStatus']").next("span").remove();
+            $("select[name='Consulting.HealthStatus']").rules("remove");
+
+            $("select[name='Consulting.WorkIndustry']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.WorkIndustry']").next("span").remove();
+            $("select[name='Consulting.WorkIndustry']").rules("remove");
+
+            $("select[name='Consulting.IsContractNursingHome']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.IsContractNursingHome']").next("span").remove();
+            $("select[name='Consulting.IsContractNursingHome']").rules("remove");
+
+            $("input[name='ConsultingFamily.Name']").parents(".tt").removeClass("has-error").removeClass("has-success");
+            $("input[name='ConsultingFamily.Name']").next("span").remove();
+            $("input[name='ConsultingFamily.Name']").rules("remove");
+
+            $("input[name='ConsultingFamily.Phone']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("input[name='ConsultingFamily.Phone']").next("span").remove();
+            $("input[name='ConsultingFamily.Phone']").rules("remove");
+
+            $("select[name='ConsultingFamily.RelationWithConsulting']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='ConsultingFamily.RelationWithConsulting']").next("span").remove();
+            $("select[name='ConsultingFamily.RelationWithConsulting']").rules("remove");
+
+            $("input[name='Consulting.ConsultingName']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("input[name='Consulting.ConsultingName']").next("span").remove();
+            $("input[name='Consulting.ConsultingName']").rules("remove");
+
+            $("input[name='Consulting.Phone']").parents(".tt").removeClass("has-error").removeClass("has-success");
+            $("input[name='Consulting.Phone']").next("span").remove();
+            $("input[name='Consulting.Phone']").rules("remove");
+        }
+
+        function addConsultingTypeRules() {
+            $("select[name='Consulting.NusingType']").rules("add", "required");
+            $("select[name='Consulting.Pension']").rules("add", "required");
+            $("select[name='Consulting.ChildrenInfo']").rules("add", "required");
+            $("select[name='Consulting.WorkIndustryOfChildren']").rules("add", "required");
+            $("select[name='Consulting.LivingWithChildren']").rules("add", "required");
+            $("select[name='Consulting.Payer']").rules("add", "required");
+            $("select[name='Consulting.SpouseInfo']").rules("add", "required");
+            $("select[name='Consulting.HasNanny']").rules("add", "required");
+            $("select[name='Consulting.House']").rules("add", "required");
+            $("select[name='Consulting.IsRentOutHouse']").rules("add", "required");
+        }
+
+        function removeConsultingTypeRules() {
+            $("select[name='Consulting.NusingType']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.NusingType']").next("span").remove();
+            $("select[name='Consulting.NusingType']").rules("remove");
+
+            $("select[name='Consulting.Pension']").parents(".tt").removeClass("has-error").removeClass("has-success");
+            $("select[name='Consulting.Pension']").next("span").remove();
+            $("select[name='Consulting.Pension']").rules("remove");
+
+            $("select[name='Consulting.ChildrenInfo']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.ChildrenInfo']").next("span").remove();
+            $("select[name='Consulting.ChildrenInfo']").rules("remove");
+
+            $("select[name='Consulting.WorkIndustryOfChildren']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.WorkIndustryOfChildren']").next("span").remove();
+            $("select[name='Consulting.WorkIndustryOfChildren']").rules("remove");
+
+            $("select[name='Consulting.LivingWithChildren']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.LivingWithChildren']").next("span").remove();
+            $("select[name='Consulting.LivingWithChildren']").rules("remove");
+
+            $("select[name='Consulting.Payer']").parents(".tt").removeClass("has-error").removeClass("has-success");
+            $("select[name='Consulting.Payer']").next("span").remove();
+            $("select[name='Consulting.Payer']").rules("remove");
+
+            $("select[name='Consulting.SpouseInfo']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.SpouseInfo']").next("span").remove();
+            $("select[name='Consulting.SpouseInfo']").rules("remove");
+
+            $("select[name='Consulting.HasNanny']").parents(".tt").removeClass("has-error").removeClass("has-success");
+            $("select[name='Consulting.HasNanny']").next("span").remove();
+            $("select[name='Consulting.HasNanny']").rules("remove");
+
+            $("select[name='Consulting.House']").parents(".tt").removeClass("has-error").removeClass("has-success");
+            $("select[name='Consulting.House']").next("span").remove();
+            $("select[name='Consulting.House']").rules("remove");
+
+            $("select[name='Consulting.IsRentOutHouse']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='Consulting.IsRentOutHouse']").next("span").remove();
+            $("select[name='Consulting.IsRentOutHouse']").rules("remove");
+        }
+
+        function addConsultingCategoryRules() {
+            $("input[name='ConsultingFamily.Name']").rules("add", "required");
+            $("input[name='ConsultingFamily.Phone']").rules("add", "required");
+            $("select[name='ConsultingFamily.RelationWithConsulting']").rules("add", "required");
+
+            $("input[name='Consulting.ConsultingName']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("input[name='Consulting.ConsultingName']").next("span").remove();
+            $("input[name='Consulting.ConsultingName']").rules("remove");
+
+            $("input[name='Consulting.Phone']").parents(".tt").removeClass("has-error").removeClass("has-success");
+            $("input[name='Consulting.Phone']").next("span").remove();
+            $("input[name='Consulting.Phone']").rules("remove");
+        }
+
+        function removeConsultingCategoryRules() {
+            $("input[name='Consulting.ConsultingName']").rules("add", "required");
+            $("input[name='Consulting.Phone']").rules("add", "required");
+
+            $("input[name='ConsultingFamily.Name']").parents(".tt").removeClass("has-error").removeClass("has-success");
+            $("input[name='ConsultingFamily.Name']").next("span").remove();
+            $("input[name='ConsultingFamily.Name']").rules("remove");
+
+            $("input[name='ConsultingFamily.Phone']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("input[name='ConsultingFamily.Phone']").next("span").remove();
+            $("input[name='ConsultingFamily.Phone']").rules("remove");
+
+            $("select[name='ConsultingFamily.RelationWithConsulting']").parents(".tt").removeClass("has-error")
+                .removeClass("has-success");
+            $("select[name='ConsultingFamily.RelationWithConsulting']").next("span").remove();
+            $("select[name='ConsultingFamily.RelationWithConsulting']").rules("remove");
+        }
+    </script>
+}

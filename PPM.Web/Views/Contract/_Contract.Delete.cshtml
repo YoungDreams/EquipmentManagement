@@ -1,0 +1,84 @@
+﻿@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Contract.DeleteContractViewModel
+
+<form id="contract-delete-form" data-ajax="true" action="@Url.Action("Delete", "Contract")" method="POST" class="form-horizontal">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">删除合同</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="form-body">
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-6">
+                        <div class="form-group" style="white-space: nowrap;">
+                            <label class="control-label col-md-4">合同编号</label>
+                            <div class="col-md-8">
+                                <span>@Model.ContractNo</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" style="white-space: nowrap;">
+                            <label class="control-label col-md-4">客户名称</label>
+                            <div class="col-md-8">
+                                <span>@Model.CustomerName</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group" style="white-space: nowrap;">
+                            <label class="control-label col-md-4">开始时间</label>
+                            <div class="col-md-8">
+                                <span>@Model.StartTime.DateString()</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group" style="white-space: nowrap;">
+                            <label class="control-label col-md-4">结束时间</label>
+                            <div class="col-md-8">
+                                <span>@Model.EndTime.DateString()</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="note note-warning">
+        <h5 class="block">提示! 合同删除后，相关的附加协议，账单，审批流程等信息会一并删除，请确认无误后输入登陆密码后确认删除操作！</h5>
+    </div>
+
+    <div class="portlet light bordered">
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+                <div class="row">
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">登陆密码</label>
+                            <div class="col-md-8">
+                                <input type="password" name="Password"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END FORM-->
+            </div>
+            <div class="form-actions text-center">
+                @Html.Hidden("ContractId", Model.ContractId)
+                @Html.Hidden("CustomerAccountId", Model.CustomerAccountId)
+            </div>
+        </div>
+    </div>
+    <div class="errors alert alert-danger fade in" style="display: none;"></div>
+</form>

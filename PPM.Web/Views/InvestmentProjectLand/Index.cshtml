@@ -1,0 +1,132 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common;
+@model PensionInsurance.Web.Views.InvestmentProjectLand.IndexViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="@Url.Action("Index","InvestmentProject")">项目信息</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>地块信息</span>
+            </li>
+        </ul>
+    </div>
+}
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>地块查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","InvestmentProjectLand")" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">地块名称</label>
+                                    <div class="col-md-9">
+                                        @Html.InputText(m => m.Query.Name)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <div class="col-md-9">
+                                        <input type="hidden" name="Query.InvestmentProjectId" value="@Model.Query.InvestmentProjectId" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-actions">
+                        <div class="text-center">
+                            <button type="submit" class="btn green btn-sm padding-lf-15 ">查询</button>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row" style="margin-top: 10px;">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">地块列表</span>
+                </div>
+                <div class="actions">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.地块管理, Permission.新增))
+                    {
+                        <a href="@Url.Action("Create", "InvestmentProjectLand",new {InvestmentProjectId = Model.Query.InvestmentProjectId })" class="btn green">
+                            <i class="fa fa-plus" aria-hidden="true"></i>
+                            新增
+                        </a>
+                    }
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>地块名称</th>
+                                <th>分期</th>
+                                <th>用地性质</th>
+                                <th>建设用地面积</th>
+                                <th>建筑面积</th>
+                                <th>地上建筑面积</th>
+                                <th>地下建筑面积</th>
+                                <th>容积率</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.InvestmentProjectLands)
+                            {
+                                <tr>
+                                    <td>@Model.InvestmentProjectLands.RowNumberOf(item)</td>
+                                    <td>@item.LandName</td>
+                                    <td>@item.Period</td>
+                                    <td>@item.LandCharacteristics.ToString()</td>
+                                    <td>@item.BuildingLandAcreage.FormatString()</td>
+                                    <td>@item.BuildingAcreage.FormatString()</td>
+                                    <td>@item.BuildingAcreageGround.FormatString()</td>
+                                    <td>@item.BuildingAcreageUnderGround.FormatString()</td>
+                                    <td>@item.Plotratio.FormatString()</td>
+                                    <td>
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.房型管理, Permission.编辑))
+                                        {
+                                            <a href="@Url.Action("Edit", "InvestmentProjectLand", new {id = item.Id})" class="btn default btn-xs yellow-stripe">编辑</a>
+                                        }
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.房型管理, Permission.删除))
+                                        {
+                                            <a href="javascript:;" data-command="@Model.DeleteCommand(item.Id,Request.Url.ToString()).ToJavascript()" class="btn default btn-xs red-stripe">删除</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.Partial("_Pagination", Model.InvestmentProjectLands)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

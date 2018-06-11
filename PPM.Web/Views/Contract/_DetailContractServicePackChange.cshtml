@@ -1,0 +1,69 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Contract.EditViewModel
+
+<div class="row">
+    <div class="col-md-12">
+        <div id="service-change-items" class="portlet protlet-border">
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">服务包补充协议列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>客户姓名</th>
+                                <th>变更日期</th>
+                                <th>评估级别</th>
+                                <th>服务包等级</th>
+                                <th>服务包月费</th>
+                                <th>失智照护费</th>
+                                <th>附件</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ContractServicePackChangeList)
+                            {
+                                <tr>
+                                    <td>@Model.ContractServicePackChangeList.RowNumberOf(item)</td>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.ChangeDate.ToString("yyyy/MM/dd")</td>
+                                    <td>@item.ConcernType</td>
+                                    <td>@item.ServiceLevel</td>
+                                    <td>@item.LongServiceMonthlyAmount.FormatString()</td>
+                                    <td>@item.LongConcernAmount.FormatString()</td>
+                                    <td>@(item.IsLockedAttachment ? "已确认" : "未确认" )</td>
+                                    <td>@item.Status</td>
+                                    <td>
+                                        @if (item.Status == ContractAddtionalStatus.新建)
+                                        {
+                                            if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.服务包补充协议, Permission.编辑))
+                                            {
+                                                <a href="@Url.Action("Edit", "ContractServicePackChange", new { id = item.Id })" class="btn default btn-xs yellow-stripe">编辑</a>
+                                            }
+                                        }
+                                        @if (item.Status == ContractAddtionalStatus.已提交 || item.Status == ContractAddtionalStatus.生效 || item.Status == ContractAddtionalStatus.已审批)
+                                        {
+                                            if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户合同管理, Permission.查看))
+                                            {
+                                                <a href="@Url.Action("Detail", "ContractServicePackChange", new { id = item.Id })" class="btn default btn-xs yellow-stripe">查看</a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

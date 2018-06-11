@@ -1,0 +1,86 @@
+﻿@using Foundation.Core
+@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Contract.EditViewModel
+    
+<div class="row">
+    <div class="col-md-12">
+        <div id="room-changes" class="portlet protlet-border">
+            <div class="portlet-title title-style">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">换房补充协议列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-scrollable">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>序号</th>
+                                <th>客户姓名</th>
+                                <th>换房日期</th>
+                                <th>所属项目</th>
+                                <th>楼栋</th>
+                                <th>单元</th>
+                                <th>楼层</th>
+                                <th>房间号</th>
+                                <th>房型</th>
+                                <th>是否包房</th>
+                                <th>独立月费</th>
+                                <th>附件</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.ContractRoomChangeList)
+                            {
+                                <tr>
+                                    <td>@Model.ContractRoomChangeList.RowNumberOf(item)</td>
+                                    <td>@item.CustomerName</td>
+                                    <td>@item.ChangeDate.ToString("yyyy/MM/dd")</td>
+                                    <td>@item.ProjectName</td>
+                                    <td>@item.NewBuildingName</td>
+                                    <td style="white-space:nowrap;">@item.NewUnitName</td>
+                                    <td>@item.NewFloorName</td>
+                                    <td>@item.NewRoomName</td>
+                                    <td style="white-space:nowrap;">@item.NewRoomType</td>
+                                    @if (item.NewIsCompartment)
+                                    {
+                                        <td>包房</td>
+                                    }
+                                    else
+                                    {
+                                        <td>单床</td>
+                                    }
+                                    <td>@item.LongMonthlyAmount.FormatString()</td>
+                                    <td>@(item.IsLockedAttachment ? "已确认" : "未确认" )</td>
+                                    <td>@item.Status</td>
+                                    <td>
+                                        @if (item.Status == ContractAddtionalStatus.新建)
+                                        {
+                                            if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.换房补充协议, Permission.编辑))
+                                            {
+                                                <a href="@Url.Action("Edit", "ContractRoomChange", new { id = item.Id })" class="btn default btn-xs yellow-stripe">编辑</a>
+                                            }
+                                        }
+                                        @if (item.Status == ContractAddtionalStatus.已提交 || item.Status == ContractAddtionalStatus.生效 || item.Status == ContractAddtionalStatus.已审批)
+                                        {
+                                            if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.客户合同管理, Permission.查看))
+                                            {
+                                                <a href="@Url.Action("Detail", "ContractRoomChange", new { id = item.Id })" class="btn default btn-xs yellow-stripe">查看</a>
+                                            }
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

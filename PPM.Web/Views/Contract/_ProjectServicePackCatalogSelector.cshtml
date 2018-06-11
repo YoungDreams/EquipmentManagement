@@ -1,0 +1,213 @@
+﻿
+<div class="modal small fade" id="projectServicePackCatalogSelector" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:1000px;height:auto;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <form data-ajax="true" action="#" method="POST" class="form-horizontal">
+                    <div class="row" style="margin-top: 10px;">
+                        <div class="col-md-12">
+                            <div class="portlet-body form">
+                                <!-- BEGIN FORM-->
+                                <div class="form-body">
+                                    <div class="portlet light bordered">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="icon-social-dribbble font-green"></i>
+                                                <span class="caption-subject font-green bold uppercase">服务项目信息</span>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body">
+                                            <div class="tabbable-custom nav-justified">
+                                                <ul class="nav nav-tabs nav-justified">
+                                                    <li class="active">
+                                                        <a data-toggle="tab" href="#tab_1" aria-expanded="true">生活照料</a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#tab_2" aria-expanded="false">日常生活</a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#tab_3" aria-expanded="false">医护服务</a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#tab_4" aria-expanded="false">康复服务</a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#tab_5" aria-expanded="false">点餐服务</a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#tab_6" aria-expanded="false">电话服务</a>
+                                                    </li>
+                                                    <li class="">
+                                                        <a data-toggle="tab" href="#tab_7" aria-expanded="false">其他服务</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content">
+                                                    <div id="tab_1" class="tab-pane active">
+                                                        <div class="table">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                            <input type="checkbox" class="group-checkable" />
+                                                                        </th>
+                                                                        <th>服务项目名称</th>
+                                                                        <th>单次价格</th>
+                                                                        <th>包月价格</th>
+                                                                        <th>频次</th>
+                                                                        <th>耗材</th>
+                                                                        <th>耗材价格</th>
+                                                                        <th>服务说明</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tabInfo_1"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tab_2" class="tab-pane">
+                                                        <div class="table">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                            <input type="checkbox" class="group-checkable" />
+                                                                        </th>
+                                                                        <th>服务项目名称</th>
+                                                                        <th>单次价格</th>
+                                                                        <th>包月价格</th>
+                                                                        <th>频次</th>
+                                                                        <th>耗材</th>
+                                                                        <th>耗材价格</th>
+                                                                        <th>服务说明</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tabInfo_2"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tab_3" class="tab-pane">
+                                                        <div class="table">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                            <input type="checkbox" class="group-checkable" />
+                                                                        </th>
+                                                                        <th>服务项目名称</th>
+                                                                        <th>单次价格</th>
+                                                                        <th>包月价格</th>
+                                                                        <th>频次</th>
+                                                                        <th>耗材</th>
+                                                                        <th>耗材价格</th>
+                                                                        <th>服务说明</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tabInfo_3"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tab_4" class="tab-pane">
+                                                        <div class="table">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                            <input type="checkbox" class="group-checkable" />
+                                                                        </th>
+                                                                        <th>服务项目名称</th>
+                                                                        <th>单次价格</th>
+                                                                        <th>包月价格</th>
+                                                                        <th>频次</th>
+                                                                        <th>耗材</th>
+                                                                        <th>耗材价格</th>
+                                                                        <th>服务说明</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tabInfo_4"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tab_5" class="tab-pane">
+                                                        <div class="table">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                            <input type="checkbox" class="group-checkable" />
+                                                                        </th>
+                                                                        <th>服务项目名称</th>
+                                                                        <th>单次价格</th>
+                                                                        <th>包月价格</th>
+                                                                        <th>频次</th>
+                                                                        <th>耗材</th>
+                                                                        <th>耗材价格</th>
+                                                                        <th>服务说明</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tabInfo_5"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tab_6" class="tab-pane">
+                                                        <div class="table">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                            <input type="checkbox" class="group-checkable" />
+                                                                        </th>
+                                                                        <th>服务项目名称</th>
+                                                                        <th>单次价格</th>
+                                                                        <th>包月价格</th>
+                                                                        <th>频次</th>
+                                                                        <th>耗材</th>
+                                                                        <th>耗材价格</th>
+                                                                        <th>服务说明</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tabInfo_6"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                    <div id="tab_7" class="tab-pane">
+                                                        <div class="table">
+                                                            <table class="table table-hover">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>
+                                                                            <input type="checkbox" class="group-checkable" />
+                                                                        </th>
+                                                                        <th>服务项目名称</th>
+                                                                        <th>单次价格</th>
+                                                                        <th>包月价格</th>
+                                                                        <th>频次</th>
+                                                                        <th>耗材</th>
+                                                                        <th>耗材价格</th>
+                                                                        <th>服务说明</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody id="tabInfo_7"></tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <p>
+                                            <div class="text-center">
+                                                <button type="button" class="btn green btn-sm padding-lf-15" onclick="addOptionItem();">添加</button>
+                                                <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                            </div>
+                                        </p>
+                                    </div>
+                                    <!-- END FORM-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

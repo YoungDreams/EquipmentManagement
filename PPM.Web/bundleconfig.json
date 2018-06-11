@@ -1,0 +1,20 @@
+[
+  {
+    "outputFileName": "assets/layouts/layout/scripts/layout.min.js",
+    "inputFiles": [
+      "assets/layouts/layout/scripts/layout.js"
+    ]
+  },
+  {
+    "outputFileName": "assets/global/scripts/app.min.js",
+    "inputFiles": [
+      "assets/global/scripts/app.js"
+    ]
+  },
+  {
+    "outputFileName": "assets/global/scripts/datatable.min.js",
+    "inputFiles": [
+      "assets/global/scripts/datatable.js"
+    ]
+  }
+]

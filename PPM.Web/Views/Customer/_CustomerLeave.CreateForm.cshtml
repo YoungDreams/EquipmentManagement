@@ -1,0 +1,72 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Customer.CreateCustomerLeaveViewModel
+
+<form id="customer-leave-create-form" data-ajax="true" action="@Url.Action("CreateCustomerLeave", "Customer")" method="POST" class="form-horizontal">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">新增请假信息</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <!-- BEGIN FORM-->
+            <div class="form-body">
+                <div class="row">
+                    @Html.HiddenFor(m => m.CustomerAccountId)
+                    <!--/span-->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">开始时间</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control form-control-inline" id="CustomerLeaveStartTime" name="StartTime" data-date-format="yyyy-mm-dd hh:ii">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <!--/span-->
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">结束时间</label>
+                            <div class="col-md-9">
+                                <input type="text" class="form-control form-control-inline" id="CustomerLeaveEndTime" name="EndTime" data-date-format="yyyy-mm-dd hh:ii">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-3">请假原因</label>
+                            <div class="col-md-9">
+                                @Html.EnumTextDropDownListFor(x => x.Reason, typeof(CustomerLeaveReason), true)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="alert alert-info">
+                    <strong><i class="fa fa-info-circle"></i></strong> 请假时间在12点以后，当天不退费。
+                </div>
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+            </div>
+        </div>
+    </div>
+</form>
+
+<script>
+    $(document).ready(function () {
+        $('#CustomerLeaveStartTime').datetimepicker({
+            autoclose: true,
+            todayBtn: true,
+            language: "zh-CN"
+        });
+        $('#CustomerLeaveEndTime').datetimepicker({
+            autoclose: true,
+            todayBtn: true,
+            language: "zh-CN"
+        });
+    });
+</script>

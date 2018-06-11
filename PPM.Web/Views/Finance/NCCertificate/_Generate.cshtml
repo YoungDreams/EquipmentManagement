@@ -1,0 +1,74 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Finance.NCCertificate.GenerateViewModel
+
+<form id="nc-certificate-generate-form" data-ajax="true" action="@Url.Action("Generate", "NCCertificate")" method="POST" class="form-horizontal">
+    <div class="portlet light bordered">
+        <div class="portlet-title">
+            <div class="caption">
+                <i class="icon-bubble font-green-sharp"></i>
+                <span class="caption-subject font-green-sharp sbold">@Model.Title</span>
+            </div>
+        </div>
+        <div class="portlet-body form">
+            <div class="form-body">
+                <div class="row" style="margin-top: 5px;">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">项目</label>
+                            <div class="col-md-8">
+                                @Html.InputDropDown(x => x.ProjectId, Model.ProjectList, true)
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">账单月份</label>
+                            <div class="col-md-8">
+                                <input name="NCCertificateMonth" class="input-sm month-picker" data-date-format="yyyy-mm-dd" data-opts='{"endDate":"@DateTime.Now.AddMonths(-2).ToShortDateString()"}' />
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="col-md-12">
+                        <div class="form-group">
+                            <label class="control-label col-md-4">制单日期</label>
+                            <div class="col-md-8">
+                                <input name="PreparedDate" class="input-sm date-picker" data-date-format="yyyy-mm-dd" />
+                            </div>
+                        </div>
+                    </div>*@
+                    @Html.HiddenFor(x => x.NCCertificateType)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="errors alert alert-danger fade in" style="display: none;"></div>
+</form>
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('.month-picker').each(function () {
+            var datepicker = $(this);
+            var defaults = {
+                orientation: "left",
+                autoclose: true,
+                startView: "months",
+                minViewMode: "months",
+                format: "yyyy-mm"
+            };
+            var opts = datepicker.data("opts");
+            var settings = $.extend({}, defaults, opts);
+            datepicker.datepicker(settings);
+        });
+        $('.date-picker').each(function () {
+            var datepicker = $(this);
+            var defaults = {
+                orientation: "left",
+                autoclose: true
+            };
+            var opts = datepicker.data("opts");
+            var settings = $.extend({}, defaults, opts);
+            datepicker.datepicker(settings);
+        });
+    });
+</script>

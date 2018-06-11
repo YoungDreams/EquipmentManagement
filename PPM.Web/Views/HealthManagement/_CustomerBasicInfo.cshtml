@@ -1,0 +1,84 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using Foundation.Core
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.HealthManagement.HealthMonitoringViewModel
+<div class="row margin-bottom-10" style="padding-bottom:10px;">
+    <div class="form-body" style="margin-left:80px; margin-right:60px;">
+        <div class="row margin-top-10">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-md-5" style="text-align:right;padding-right:0px;">客户姓名：</div>
+                    <div class="col-md-7">
+                        @Model.CustomerInfo.CustomerName
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-md-5" style="text-align:right;padding-right:0px;">所属项目：</div>
+                        <div class="col-md-7">
+                            @Model.CustomerInfo.ProjectName
+                        </div>
+                    </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-md-6" style="text-align:right;padding-right:0px;">入住状态：</div>
+                        <div class="col-md-6">
+                            @if (Model.CustomerInfo.CheckStatus == 4)
+        {
+                    <span>入住</span>
+}
+else
+{
+                    <span>退住</span>
+}
+                        </div>
+                    </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-md-5" style="text-align:right;padding-right:0px;">房间号：</div>
+                        <div class="col-md-7" style="margin-top:2px;">
+                            @Model.CustomerInfo.RoomName
+                        </div>
+                    </div>
+            </div>
+        </div>
+        <div class="row margin-top-15">
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-md-5" style="text-align:right;padding-right:0px;">性别：</div>
+                        <div class="col-md-7">
+                            @Model.CustomerInfo.Sex
+                        </div>
+                    </div>
+            </div>
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-md-5" style="text-align:right;padding-right:0px;">年龄：</div>
+                        <div class="col-md-7" style="margin-top:2px;">
+                            @Model.CustomerInfo.Birthday.ToAge()
+                        </div>
+                    </div>
+            </div>
+            @*<div class="col-md-3">
+                <div class="form-group">
+                    <label class="control-label col-md-5">护理等级：</label>
+                    <div class="col-md-7">
+                        @Model.CustomerInfo.ServiceLevel
+                    </div>
+                </div>
+            </div>*@
+            <div class="col-md-3">
+                <div class="form-group">
+                    <div class="col-md-6" style="text-align:right;padding-right:0px;">生活照料等级：</div>
+                        <div class="col-md-6">
+                            @Model.CustomerInfo.ConcernType
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>

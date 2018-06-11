@@ -1,0 +1,274 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.ContractRoomChange.CreateViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+}
+<div>
+    <div class="full-height-content-body">
+        <form id="contractRoomChangeForm" data-ajax="true" action="@Url.Action("CreateAndSubmit", "ContractRoomChange")" method="POST" class="form-horizontal">
+            <div class="portlet light portlet-fit portlet-form protlet-border">
+                <div class="portlet-title title-style">
+                    <div class="caption">
+                        <i class="icon-bubble font-green-sharp"></i>
+                        <span class="caption-subject font-green-sharp sbold">协议信息</span>
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div class="row" style="margin-top: 2px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">变更日期</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control form-control-inline date-picker" name="ChangeDate" data-date-format="yyyy-mm-dd" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">是否包房</label>
+                                    <div class="col-md-8">
+                                        <input type="hidden" id="ProjectId" name="ProjectId" value="@Model.ProjectId" />
+                                        @Html.HiddenFor(m => m.ContractId)
+                                        @Html.HiddenFor(m => m.CustomerName)
+                                        @Html.HiddenFor(m=>m.Contract.ContractTemplate)
+                                        <select id="NewIsCompartment" name="NewIsCompartment" class="form-control input-small">
+                                            <option value="">--未选择--</option>
+                                            <option value="True">包房</option>
+                                            <option value="False">单床</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">楼栋</label>
+                                    <div class="col-md-8">
+                                        <select id="NewBuildingId" name="NewBuildingId" class="form-control input-small">
+                                            <option value="">--未选择--</option>
+                                            @foreach (var building in Model.BuildingList)
+                                            {
+                                                if (Model.NewBuildingId == building.Id)
+                                                {
+                                                    <option value="@building.Id" selected>@building.Name</option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@building.Id">@building.Name</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">所属单元</label>
+                                    <div class="col-md-8">
+                                        <select id="NewUnitId" name="NewUnitId" class="form-control input-small">
+                                            <option value="">--未选择--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">所属楼层</label>
+                                    <div class="col-md-8">
+                                        <select id="NewFloorId" name="NewFloorId" class="form-control input-small">
+                                            <option value="">--未选择--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">房间号</label>
+                                    <div class="col-md-8">
+                                        <select id="NewRoomId" name="NewRoomId" class="form-control input-small">
+                                            <option value="">--未选择--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">床位号</label>
+                                    <div class="col-md-8">
+                                        <select id="NewBedId" name="NewBedId" class="form-control input-small">
+                                            <option value="">--未选择--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">房型</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control" name="NewRoomType" value="@Model.NewRoomType" readonly />
+                                    </div>
+                                </div>
+                            </div>
+                            @if (Model.Contract.ContractTemplate == ContractTemplate.养老机构服务合同20170301)
+                            {
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">收费类型</label>
+                                        <div class="col-md-8">
+                                            @*@Html.EnumTextDropDownListFor(m => m.ChargeType, typeof(ChargeType), new { @class = "form-control" })*@
+                                            @Html.InputText(m => m.ChargeType, new { @class = "form-control", @readonly = true })
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    @if (Model.Contract.ContractTemplate == ContractTemplate.养老机构服务合同20160101)
+                    {
+                        <label class="caption-subject font-green-sharp sbold">短期</label>
+                        <div class="form-body">
+                            <div class="row" style="margin-top: 5px;">
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">床位费</label>
+                                        <div class="col-md-8">
+                                            @Html.InputText(m => m.ShortRoomRate)
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">餐费</label>
+                                        <div class="col-md-8">
+                                            @Html.InputText(m => m.ShortMeals, new { @class = "form-control", @readonly = true })
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-group">
+                                        <label class="control-label col-md-4">基础服务费</label>
+                                        <div class="col-md-8">
+                                            @Html.InputText(m => m.ShortServiceFee, new { @class = "form-control", @readonly = true })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <label class="caption-subject font-green-sharp sbold">长期</label>
+                    }
+                    <div class="form-body">
+                        <div class="row" style="margin-top: 5px;">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">床位费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.LongRoomRate)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">餐费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.LongMeals, new {@class = "form-control", @readonly = true})
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">基础服务费</label>
+                                    <div class="col-md-8">
+                                        @Html.InputText(m => m.LongServiceFee, new {@class = "form-control", @readonly = true})
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 5px;" id="Chargedec">
+                        <div class="col-md-8">
+                            <div class="form-group">
+                                <label class="control-label col-md-2">非标准收费说明</label>
+                                <div class="col-md-10">
+                                    @Html.InputText(m => m.ChargeDescription )
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class="errors alert alert-danger fade in" style="display: none;"></div>
+            <div class="form-actions">
+                <div class="text-center">
+                    @if (WebAppContext.Current.User.HasPermission(ModuleType.换房补充协议, Permission.新增))
+                    {
+                        <button type="submit" class="btn green btn-sm padding-lf-15">提交</button>
+                    }
+                    <a href="javascript:;" class="btn yellow btn-sm padding-lf-15" onclick="javascript: history.back(-1);">返回</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js") type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/initRoomSelect.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            cascadeDropdown();
+            var temp = $("#Contract_ContractTemplate").val();
+            if (temp =='@ContractTemplate.养老机构服务合同20170301') {
+                $("#LongRoomRate").attr("readonly", "readonly");
+            }
+
+            if ($("#ChargeType").val() == '@ChargeType.标准收费.ToString()') {
+                $("#Chargedec").hide();
+                $("#LongRoomRate").attr("readonly", "readonly");
+            }
+
+            @*$("#ChargeType").on("change", function (e) {
+                var $this = $(this);
+                if ($this.val() == '@ChargeType.标准收费.ToString()') {
+                    $("#ChargeDescription").val("");
+                    $("#LongRoomRate").attr("readonly", "readonly");
+                } else if ($this.val() == '@ChargeType.非标准收费.ToString()') {
+                    $("#LongRoomRate").removeAttr("readonly");
+                }
+            });*@
+        });
+        function cascadeDropdown() {
+            var myBoolean = new Boolean("true");
+            initRoomSelect('@Model.ContractId', "#NewIsCompartment", "#NewBuildingId", "#NewUnitId", "#NewFloorId", "#NewRoomId", "#NewBedId", "", myBoolean);
+        }
+
+
+    </script>
+}

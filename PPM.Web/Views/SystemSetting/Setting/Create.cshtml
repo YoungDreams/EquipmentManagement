@@ -1,0 +1,99 @@
+﻿@using PensionInsurance.Entities
+@model PensionInsurance.Web.Views.SystemSetting.Setting.CreateViewModel
+
+
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">系统设置</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <a href="javascript:;">数据字典管理</a>
+            </li>
+            <li>
+                <span>新增</span>
+            </li>
+        </ul>
+    </div>
+}
+
+<!-- END PAGE BAR -->
+<div class="full-height-content full-height-content-scrollable">
+    <div class="full-height-content-body">
+        <form data-ajax="true" action="@Url.Action("Create", "Setting")" method="POST" class="form-horizontal">
+            <div class="portlet box green" style="margin-top: 10px;">
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="fa fa-gift"></i>数据字典信息
+                    </div>
+                </div>
+                <div class="portlet-body form">
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-2">
+                                <div class="form-group">
+                                    <label class="text-right col-md-3">类型</label>
+                                    <div class="col-md-9">
+                                        <select name="Type" class="form-control input-small">
+                                            @foreach (var item in Enum.GetValues(typeof(SettingType)))
+                                            {
+                                                if ((SettingType)item == Model.Type)
+                                                {
+                                                    <option selected="selected">@item.ToString()</option>
+                                                }
+                                                else
+                                                {
+                                                    <option>@item.ToString()</option>
+                                                }
+                                            }
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-2">
+                                <div class="form-group">
+                                    <label class="text-right col-md-3">名称</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Name"/>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 col-md-offset-2">
+                                <div class="form-group">
+                                    <label class="text-right col-md-3">描述</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Description"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="errors alert alert-danger fade in" style="display: none;"></div>
+
+                        <!--/row-->
+                        <div class="row text-center">
+                            <div class="col-md-12">
+                                <button type="submit" class="btn btn-sm green">保存</button>
+                                <button type="button" class="btn yellow btn-sm padding-lf-15" onclick="javascript: history.back(-1);">返回上一页</button>
+                            </div>
+                        </div>
+                        <!-- END FORM-->
+
+                    </div>
+                    <!-- END FORM-->
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

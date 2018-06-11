@@ -1,0 +1,291 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Reports.DailyReport.IndexViewModel
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">首页</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>销售日报</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<!-- BEGIN PAGE TITLE-->
+<h3 class="page-title"></h3>
+<!-- END PAGE TITLE-->
+<!-- END PAGE HEADER-->
+<div class="portlet light bordered">
+    <div class="portlet-body form">
+        <!-- BEGIN FORM-->
+        <form id="report-search-form" action="@Url.Action("Index", "DailyReport")" class="form-inline">
+            <div class="form-group">
+                <label class="control-label" style="margin-right: 5px;">日期范围</label>
+                <div class="input-group input-large date-picker input-daterange" data-date="2012-07-01" data-date-format="yyyy-mm-dd">
+                    @Html.InputDate(x => x.Query.StartDate)
+                    <span class="input-group-addon"> 至 </span>
+                    @Html.InputDate(x => x.Query.EndDate)
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn green btn-xs padding-lf-15 " data-showloading="true">查询</button>
+                @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.统计报表, Permission.导出销售日报))
+                {
+                    <a href="javascript:;" class="btn green btn-xs padding-lf-15 export-report"><i class="fa fa-repeat"></i>导出</a>
+                }
+            </div>
+        </form>
+        <!-- END FORM-->
+    </div>
+</div>
+@for (var current = Model.Query.StartDate.Value.Date; current <= Model.Query.EndDate.Value; current = current.AddDays(1))
+{
+    <table class="table-report table table-bordered" style="margin-bottom: 20px;">
+        <thead>
+            <tr>
+                <th class="nowrap">@current.DateString()</th>
+                <th colspan="6">Change 变动</th>
+                <th colspan="2"> Budget total units<br />预算入住房间数</th>
+                <th colspan="3">UNITS房间</th>
+                <th colspan="11">My Census入住人数</th>
+            </tr>
+            <tr>
+                <th rowspan="2">Project 项目</th>
+                <th class="highlight" colspan="2">Changes from<br /> yesterday* <br />今日入住变化</th>
+                <th class="highlight" colspan="2">Moved in <br />current month*<br /> 本月入住</th>
+                <th class="highlight" colspan="2">Moved out<br /> current month*<br /> 本月退住</th>
+                <th rowspan="2">Monthy<br />月度</th>
+                <th rowspan="2">Year<br /> 年度</th>
+                <th rowspan="2">Units Capacity <br />总房间数</th>
+                <th rowspan="2">Units Occupied*<br /> 入住房间数</th>
+                <th rowspan="2">Occupancy<br /> 入住率</th>
+                <th rowspan="2">总数</th>
+                <th rowspan="2">请假人数</th>
+                <th rowspan="2">IL <br />独立</th>
+                <th colspan="2">I <br />1级</th>
+                <th colspan="2">
+                    II <br />2级
+                </th>
+                <th colspan="2">
+                    III<br /> 3级
+                </th>
+                <th colspan="2">
+                    IV <br />4级
+                </th>
+            </tr>
+            <tr>
+                <th class="highlight">
+                    UNITS<br />
+                    房间
+                </th>
+                <th class="highlight">
+                    My <br />Census<br />
+                    人数
+                </th>
+                <th class="highlight">
+                    UNITS<br />
+                    房间
+                </th>
+                <th class="highlight">
+                    My <br />Census<br />
+                    人数
+                </th>
+                <th class="highlight">
+                    UNITS<br />
+                    房间
+                </th>
+                <th class="highlight">
+                    My<br /> Census<br />
+                    人数
+                </th>
+                <th>AL</th>
+                <th>MC</th>
+                <th>AL</th>
+                <th>MC</th>
+                <th>AL</th>
+                <th>MC</th>
+                <th>AL</th>
+                <th>MC</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var project in Model.Projects)
+            {
+                var report = Model.GetDaily(project.Id, current);
+                if (report != null)
+                {
+                    <tr>
+                        <td><a href="javaScript:;" class="showDialog" data-name="@project.Name" data-id="@project.Id" data-time="@current.DateString()">@report.Project.Name</a></td>
+                        <td>@report.AllDailyMovedInRoomCount</td>
+                        <td>@report.AllDailyMovedInPersonCount</td>
+                        <td>@report.AllMonthlyMovedInRoomCount</td>
+                        <td>@report.AllMonthlyMovedInPersonCount</td>
+                        <td>@report.AllMonthlMovedOutRoomCount</td>
+                        <td>@report.AllMonthlyMovedOutPersonCount</td>
+                        <td>@Model.GetMonthlyTotal(project.Id,current) </td>
+                        <td>@Model.GetYearTotal(project.Id, current)</td>
+                        <td>@report.RoomCount</td>
+                        <td>@report.AllMovedInRoomCount</td>
+                        <td>@((report.AllMovedInRoomCountPercent * 100).ToString("f2") + "%")</td>
+                        <td>@report.AllCensusCount</td>
+                        <td>@report.LeaveCount</td>
+                        <td>@report.All_IL</td>
+                        <td>@report.All_AL_I</td>
+                        <td>@report.All_MC_I</td>
+                        <td>@report.All_AL_II</td>
+                        <td>@report.All_MC_II</td>
+                        <td>@report.All_AL_III</td>
+                        <td>@report.All_MC_III</td>
+                        <td>@report.All_AL_IV</td>
+                        <td>@report.All_MC_IV</td>
+                    </tr>
+                }
+            }
+            @{ var totalDaily = Model.GetTotalDaily(current); }
+            @if (totalDaily != null)
+            {
+                    <tr>
+                        <td>合计</td>
+                        <td>@totalDaily.Sum(x => x.AllDailyMovedInRoomCount)</td>
+                        <td>@totalDaily.Sum(x => x.AllDailyMovedInPersonCount)</td>
+                        <td>@totalDaily.Sum(x => x.AllMonthlyMovedInRoomCount)</td>
+                        <td>@totalDaily.Sum(x => x.AllMonthlyMovedInPersonCount)</td>
+                        <td>@totalDaily.Sum(x => x.AllMonthlMovedOutRoomCount)</td>
+                        <td>@totalDaily.Sum(x => x.AllMonthlyMovedOutPersonCount)</td>
+                        <td></td>
+                        <td></td>
+                        <td>@totalDaily.Sum(x => x.RoomCount)</td>
+                        <td>@totalDaily.Sum(x => x.AllMovedInRoomCount)</td>
+                        <td></td>
+                        <td>@totalDaily.Sum(x => x.AllCensusCount)</td>
+                        <td>@totalDaily.Sum(x => x.LeaveCount)</td>
+                        <td>@totalDaily.Sum(x => x.All_IL)</td>
+                        <td>@totalDaily.Sum(x => x.All_AL_I)</td>
+                        <td>@totalDaily.Sum(x => x.All_MC_I)</td>
+                        <td>@totalDaily.Sum(x => x.All_AL_II)</td>
+                        <td>@totalDaily.Sum(x => x.All_MC_II)</td>
+                        <td>@totalDaily.Sum(x => x.All_AL_III)</td>
+                        <td>@totalDaily.Sum(x => x.All_MC_III)</td>
+                        <td>@totalDaily.Sum(x => x.All_AL_IV)</td>
+                        <td>@totalDaily.Sum(x => x.All_MC_IV)</td>
+                    </tr>
+            }
+        </tbody>
+    </table>
+}
+<div id="dlgModelInfo" class="modal fade">
+    <div class="modal-dialog bottom">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">房间信息</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-report table table-bordered">
+                    <tbody>
+                        <tr>
+                            <td>入住</td>
+                            <td colspan="3" id="MovedIn"></td>
+                        </tr>
+                        <tr>
+                            <td>退住</td>
+                            <td colspan="3" id="MovedOut"></td>
+                        </tr>
+                        <tr>
+                            <td>请/销假</td>
+                            <td colspan="3" id="Leave"></td>
+                        </tr>
+                        <tr>
+                            <td>换房</td>
+                            <td colspan="3" id="RoomChange"></td>
+                        </tr>
+                        <tr>
+                            <td>换服务包</td>
+                            <td colspan="3" id="ServiceChange"></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+@section Scripts{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-fileinput/bootstrap-fileinput.js") type="text/javascript"></script>
+    <!-- END PAGE LEVEL PLUGINS -->
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/initRoomSelect.js") type="text/javascript"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $(document).on("click", ".showDialog", function () {
+
+                var currentTime = $(this).attr("data-time");
+                var projectId = $(this).attr("data-id");
+                var projectName = $(this).attr("data-name");
+
+                $.get("@Url.Action("GetProjectChangeByTime", "DailyReport")" + "?projectId=" + projectId + "&time=" + currentTime,
+               function (e) {
+                   if (e.Result) {
+                       $('#dlgModelInfo').modal('show');
+                       $('#dlgModelInfo .modal-title').html(projectName + "-" + currentTime);
+                       $('#dlgModelInfo #MovedIn').html(e.MovedIn);
+                       $('#dlgModelInfo #MovedOut').html(e.MovedOut);
+                       $('#dlgModelInfo #Leave').html(e.Leave);
+                       $('#dlgModelInfo #RoomChange').html(e.RoomChange);
+                       $('#dlgModelInfo #ServiceChange').html(e.ServiceChange);
+                   }
+               });
+
+            });
+
+            $(document).on("click", ".export-report", function () {
+                var form = $("#report-search-form");
+                var st = $("#Query_StartDate").val();
+                var et = $("#Query_EndDate").val();
+                var command = {
+                    StartDate: st,
+                    EndDate: et
+                };
+                App.confirm(function () {
+                    form.postCommand('@Url.Action("Export", "DailyReport")', command, {
+                        onSuccess: function (result) {
+                            window.location = "../" + result.redirect;
+                        }
+                    });
+                });
+            });
+
+        });
+    </script>
+}

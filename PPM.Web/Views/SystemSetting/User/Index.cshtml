@@ -1,0 +1,249 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.SystemSetting.User.IndexViewModel
+<!-- BEGIN PAGE BAR -->
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index","Home")">系统设置</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>用户管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<!-- END PAGE BAR -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-gift"></i>用户查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","User",new {page = Model.Items.Page,pageSize = Model.Items.PageSize})" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <!--/span-->
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">项目</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(x => x.Query.ProjectId, Model.Projects,true)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">角色</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(m => m.Query.RoleId, Model.Roles, true)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">用户姓名</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Query.RealName" value="@Model.Query.RealName" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">是否启用</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(m => m.Query.IsEnabled)
+                                    </div>
+                                </div>
+                            </div>
+                            
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <div class="col-md-offset-5">
+                                        <button type="submit" class="btn green">查询</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"> </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">用户列表</span>
+                </div>
+            </div>
+            <div class="portlet-body">
+                <div class="table-toolbar">
+                    <div class="row">
+                        <div class="col-md-6">
+                            @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.用户管理, Permission.新增))
+                            {
+
+                                <a href="@Url.Action("Create", "User")" class="btn green">
+                                    <i class="fa fa-plus" aria-hidden="true"></i>
+                                    新增
+                                </a>
+                            }
+                            @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.用户管理, Permission.启用))
+                            {
+                                <a id="valid" href="javascript:;" class="btn green disabled batch-button">
+                                    <i class="fa fa-unlock" aria-hidden="true"></i>
+                                    启用
+                                </a>
+                            }
+                            @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.用户管理, Permission.失效))
+                            {
+                                <a id="invalid" href="javascript:;" class="btn green disabled batch-button">
+                                    <i class="fa fa-unlock-alt" aria-hidden="true"></i>
+                                    失效
+                                </a>
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div class="table">
+                    <table class="table table-hover table-scrollable">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" class="group-checkable" />
+                                </th>
+                                <th>用户名</th>
+                                <th>邮箱</th>
+                                <th>电话</th>
+                                <th>真实姓名</th>
+                                <th>角色名称</th>
+                                <th>所属项目</th>
+                                <th>所属部门</th>
+                                <th>状态</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>
+                                        <input type="checkbox" class="checkboxes" value="@item.Id" />
+                                    </td>
+                                    <td> @item.Username </td>
+                                    <td> @item.Email </td>
+                                    <td> @item.Phone </td>
+                                    <td style="white-space:nowrap;"> @item.RealName </td>
+                                    <td> @string.Join(",", item.Roles.Select(x => x.Name)) </td>
+                                    <td> @string.Join(",",item.Projects.Select(x=>x.Name)) </td>
+                                    <td>@(item.Department?.Name)</td>
+                                    <td> @(item.IsEnabled ? "有效" : "失效") </td>
+                                    <td>
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.用户管理, Permission.编辑))
+                                        {
+                                            <a href="@Url.Action("Edit", "User", new { id = item.Id })" class="btn default btn-xs yellow-stripe">编辑</a>
+                                        }
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.用户管理, Permission.删除))
+                                        {
+                                                	<a href="javascript:;" data-command="@Model.DeleteCommand(item.Id).ToJavascript()" class="btn default btn-xs red-stripe">
+                                            删除
+                                        </a>
+                                        }
+                                        @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.用户管理, Permission.编辑))
+                                        {
+                                            <a href="javascript:;" data-command="@Model.ResetPasswordCommand(item.Id).ToJavascript()" class="btn default btn-xs green-stripe">重置密码</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    @Html.Partial("_Pagination", Model.Items)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        var funcs = {
+            getUserIds: function () {
+                var ids = [];
+                var checkboxes = $(".checkboxes");
+                $.each(checkboxes, function (i, item) {
+                    var chk = $(item);
+                    if (chk.is(":checked")) {
+                        var id = chk.val();
+
+                        ids.push(id);
+                    }
+                });
+
+                return ids;
+            },
+            updateButtons: function () {
+                var checked = $(".checkboxes:checked").length > 0;
+                var buttons = $(".batch-button");
+                buttons.prop("disabled", !checked);
+                if (checked) {
+                    buttons.removeClass("disabled");
+                } else {
+                    buttons.addClass("disabled");
+                }
+            }
+        };
+
+        $(document).ready(function () {
+            $(".group-checkable").change(function () {
+                var checkAll = $(this);
+                var checked = checkAll.is(":checked");
+                checkAll.closest(".table").find(".checkboxes").prop("checked", checked).uniform("refresh");
+                funcs.updateButtons();
+            });
+
+            $(".checkboxes").change(function () {
+                funcs.updateButtons();
+            });
+
+            $("#valid").click(function () {
+                var ids = funcs.getUserIds();
+
+                var url = '@Url.Action("ValidUsers", "User")';
+                var command = {
+                    UserIds: ids
+                };
+                postCommand(url, command);
+                return false;
+            });
+
+            $("#invalid").click(function () {
+                var ids = funcs.getUserIds();
+
+                var url = '@Url.Action("InvalidUsers", "User")';
+                var command = {
+                    UserIds: ids
+                };
+                postCommand(url, command);
+                return false;
+            });
+        });
+    </script>
+}

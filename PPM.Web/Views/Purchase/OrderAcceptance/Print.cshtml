@@ -1,0 +1,498 @@
+﻿@using PensionInsurance.Entities
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Purchase.OrderAcceptance.DetailViewModel
+
+@{ Layout = null;}
+<!-- BEGIN PAGE BAR -->
+<style>
+    body {
+        font-family: "Arial",sans-serif;
+        font-size: 12px;
+    }
+
+    table {
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    .col-md-12 {
+        width: 100%;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .margin-top-10 {
+        margin-top: 10px !important;
+    }
+
+    .row {
+        width: 100%;
+        margin-left: -15px;
+        margin-right: -15px;
+    }
+
+    .portlet {
+        margin-top: 0;
+        margin-bottom: 25px;
+        padding: 0;
+        border-radius: 4px;
+    }
+
+        .portlet.light.bordered {
+            border: 1px solid #e7ecf1 !important;
+        }
+
+        .portlet.light {
+            padding: 12px 20px 5px;
+            background-color: #fff;
+        }
+
+    #productlist td {
+        text-align: center;
+        padding-top: 4px;
+    }
+
+    #productlist th {
+        text-align: center;
+        padding-top: 4px;
+    }
+
+    .portlet.light.bordered .portlet-title {
+        background-color: #fff;
+    }
+
+    .portlet.light.bordered .portlet-title {
+        border-bottom: 1px solid #eef1f5;
+    }
+
+    .portlet.light .portlet-title {
+        min-height: 32px;
+    }
+
+    .portlet.light .portlet-title {
+        padding: 0;
+        min-height: 48px;
+    }
+
+    .portlet.bordered .portlet-title {
+        border-bottom: 0;
+    }
+
+    .portlet .portlet-title {
+        min-height: 25px;
+    }
+
+    .portlet .portlet-title {
+        border-bottom: 1px solid #eee;
+        padding: 0;
+        margin-bottom: 10px;
+        min-height: 41px;
+        -webkit-border-radius: 4px 4px 0 0;
+        -moz-border-radius: 4px 4px 0 0;
+        -ms-border-radius: 4px 4px 0 0;
+        -o-border-radius: 4px 4px 0 0;
+        border-radius: 4px 4px 0 0;
+    }
+
+    a, button, code, div, img, input, label, li, p, pre, select, span, svg, table, td, textarea, th, ul {
+        -webkit-border-radius: 0 !important;
+        -moz-border-radius: 0 !important;
+        border-radius: 0 !important;
+    }
+
+    *, :after, :before {
+        -webkit-box-sizing: border-box;
+        -moz-box-sizing: border-box;
+        box-sizing: border-box;
+    }
+
+    .portlet.light .portlet-title.caption {
+        padding: 5px 0;
+    }
+
+    .portlet.light .portlet-title.caption {
+        color: #666;
+        padding: 10px 0;
+    }
+
+    .portlet .portlet-title .caption {
+        font-size: 14px;
+        color: #fff;
+        padding: 6px 0;
+    }
+
+    .portlet .portlet-title .caption {
+        float: left;
+        display: inline-block;
+        font-size: 14px;
+        line-height: 18px;
+        padding: 10px 0;
+    }
+
+    .margin-top-20 {
+        margin-top: 20px !important;
+    }
+
+    .col-md-4 {
+        width: 33.33333%;
+    }
+
+    .col-md-3 {
+        width: 25%;
+    }
+
+    .col-md-8 {
+        width: 66.66667%;
+    }
+
+    .col-md-9 {
+        width: 75%;
+    }
+
+    .font-green {
+        color: #fdb363 !important;
+    }
+
+    .table {
+        background-color: #fff;
+    }
+
+    .table {
+        margin-bottom: 1px;
+    }
+
+    .table-bordered, .table-bordered tbody tr td, .table-bordered tbody tr th, .table-bordered tfoot tr td, .table-bordered tfoot tr th, .table-bordered thead tr td, .table-bordered thead tr th {
+        border: 1px solid #e7ecf1;
+    }
+
+    .table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 20px;
+    }
+
+    thead {
+        display: table-header-group;
+        vertical-align: middle;
+        border-color: inherit;
+    }
+
+    tbody {
+        display: table-row-group;
+        vertical-align: middle;
+        border-color: inherit;
+    }
+
+    .table td, .table th {
+        font-size: 12px;
+    }
+
+    .control-label {
+        margin-top: 1px;
+        font-weight: 400;
+    }
+
+    .portlet.light.bordered.portlet-title {
+        background-color: #fff;
+    }
+
+    .portlet.light.bordered.portlet-title {
+        border-bottom: 1px solid #eef1f5;
+    }
+
+    .portlet.light.portlet-title {
+        min-height: 32px;
+    }
+
+    .font-green-sharp {
+        color: #fdb363 !important;
+    }
+
+    .portlet.light .form .form-body, .portlet.light .portlet-form .form-body {
+        padding-left: 0;
+        padding-right: 0;
+    }
+
+    .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9 {
+        float: left;
+    }
+
+    .form-group {
+        margin-bottom: 5px;
+        display: block;
+    }
+
+    .col-lg-1, .col-lg-10, .col-lg-11, .col-lg-12, .col-lg-2, .col-lg-3, .col-lg-4, .col-lg-5, .col-lg-6, .col-lg-7, .col-lg-8, .col-lg-9, .col-md-1, .col-md-10, .col-md-11, .col-md-12, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-sm-1, .col-sm-10, .col-sm-11, .col-sm-12, .col-sm-2, .col-sm-3, .col-sm-4, .col-sm-5, .col-sm-6, .col-sm-7, .col-sm-8, .col-sm-9, .col-xs-1, .col-xs-10, .col-xs-11, .col-xs-12, .col-xs-2, .col-xs-3, .col-xs-4, .col-xs-5, .col-xs-6, .col-xs-7, .col-xs-8, .col-xs-9 {
+        position: relative;
+        min-height: 1px;
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+</style>
+
+<html>
+<body>
+    <!-- END PAGE BAR -->
+    <div class="row margin-top-10">
+        <div class="col-md-12">
+            <div id="div_print" class="portlet light bordered" style="height: auto;">
+                <div id="printTitle" class="row text-center">
+                    <h1>采购验收单</h1>
+                </div>
+                <div class="portlet-title">
+                    <div class="caption">
+                        <i class="icon-social-dribbble font-green"></i>
+                        <span class="caption-subject font-green bold uppercase">采购信息</span>
+                    </div>
+                </div>
+                <div class="form-body margin-top-20">
+                    <table class="table">
+                        <tr>
+                            <td width="30%">项目：</td>
+                            <td width="70%">@Model.PurchaseOrder.Project.Name</td>
+                            <td width="30%">采购类型：</td>
+                            <td width="70%">@Model.PurchaseOrder.OrderType</td>
+                            <td width="30%">申请人：</td>
+                            <td width="70%">@Model.PurchaseOrder.User.RealName</td>
+                        </tr>
+                        <tr>
+                            <td width="30%">申请部门：</td>
+                            <td width="70%">@Model.PurchaseOrder.Department.Name</td>
+                            <td width="30%">申请时间：</td>
+                            <td width="70%">@Model.PurchaseOrder.OrderDate.ToString("yyyy-MM-dd")</td>
+                            @if (Model.PurchaseOrder.OrderType != OrderType.固定资产采购 && Model.PurchaseOrder.OrderType != OrderType.食材采购单)
+                            {
+                                <td width="30%">到货时间：</td>
+                                <td width="70%">@Model.PurchaseOrder.ArrivalTime</td>
+                            }
+                            @if (Model.PurchaseOrder.OrderType == OrderType.食材采购单)
+                            {
+                                <td width="30%">采购类别：</td>
+                                <td width="70%"> @Model.PurchaseOrder.FoodOrderType</td>
+                            }
+                        </tr>
+                        @if (Model.PurchaseOrder.OrderType == OrderType.营销类计划性采购 || Model.PurchaseOrder.OrderType == OrderType.计划采购单 || Model.PurchaseOrder.OrderType == OrderType.餐饮部计划采购)
+                        {
+                            <tr>
+                                <td width="30%">采购月份：</td>
+                                <td width="70%">@Model.PurchaseOrder.PurchaseMonth.Value.ToString("yyyy-MM")</td>
+                            </tr>
+                        }
+                    </table>
+                </div>
+                @if (Model.PurchaseOrder.Status == OrderStatus.已审批 || Model.PurchaseOrderAcceptance.Status == AcceptanceStatus.已验收)
+                {
+                    <div class="portlet-title margin-top-20">
+                        <div class="caption">
+                            <i class="icon-social-dribbble font-green"></i>
+                            <span class="caption-subject font-green bold uppercase">验收信息</span>
+                        </div>
+                    </div>
+                    <table class="table">
+                        <tr>
+                            <td width="30%">验收时间：</td>
+                            <td width="70%">@Model.PurchaseOrderAcceptance.CheckTime</td>
+                            @if (Model.PurchaseOrder.OrderType != OrderType.食材采购单)
+                            {
+                                <td width="30%">验收描述：</td>
+                                <td width="70%">@Model.PurchaseOrderAcceptance.CheckRemarks</td>
+                            }
+                            @if (Model.PurchaseOrder.OrderType != OrderType.食材采购单 && Model.PurchaseOrder.OrderType != OrderType.固定资产采购)
+                            {
+                                <td width="30%">验收附件：</td>
+                                <td width="70%">
+                                    @if (!string.IsNullOrWhiteSpace(Model.PurchaseOrderAcceptance.FileName))
+                                    {
+                                        <a href="@Url.Content(Model.PurchaseOrderAcceptance.FilePath)" target="_blank">@Model.PurchaseOrderAcceptance.FileName</a>
+                                    }
+                                    else
+                                    {
+                                        <div>暂无上传验收附件</div>
+                                    }
+                                </td>
+                            }
+                        </tr>
+                    </table>
+                }
+                @if (Model.PurchaseOrderItems.Any())
+                {
+                    <div class="portlet-title margin-top-10">
+                        <div class="caption">
+                            <i class="icon-social-dribbble font-green"></i>
+                            <span class="caption-subject font-green bold uppercase">采购列表</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="table">
+                            <div>供应商：@(Model.PurchaseOrderAcceptance.PurchaseSupplier?.Name) <span></span> </div>
+                            <table id="productlist" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th> 序号 </th>
+                                        <th> 物品编码 </th>
+                                        <th> 物品名称 </th>
+                                        <th> 品牌 </th>
+                                        <th> 规格 </th>
+                                        <th> 单位 </th>
+                                        <th> 数量 </th>
+                                        <th> 实际数量 </th>
+                                        <th> 单价 </th>
+                                        <th> 实际单价 </th>
+                                        <th> 金额 </th>
+                                        <th> 库存 </th>
+                                        <th> 描述 </th>
+                                        <th> 资产类别 </th>
+                                        <th> 备注及用途 </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.PurchaseOrderItems)
+                                    {
+                                        <tr>
+                                            <td> @Model.PurchaseOrderItems.RowNumberOf(item)</td>
+                                            <td> @item.PurchaseProductSupplier.PurchaseProduct.Code</td>
+                                            <td> @item.PurchaseProductSupplier.PurchaseProduct.Name</td>
+                                            <td> @item.PurchaseProductSupplier.PurchaseProduct.Brand</td>
+                                            <td> @item.PurchaseProductSupplier.PurchaseProduct.Specification</td>
+                                            <td> @item.PurchaseProductSupplier.PurchaseProduct.Unit</td>
+                                            <td>@item.Quantity</td>
+                                            <td>@item.ActualQuantity</td>
+                                            <td> @item.Price</td>
+                                            <td> @item.ActualPrice</td>
+                                            <td> @((item.ActualQuantity * item.ActualPrice).FormatString()) </td>
+                                            <td>@Model.GetStock(item.PurchaseProductSupplier.Id, Model.PurchaseOrder.Project.Id)</td>
+                                            <td class="tooltips" data-container="body" data-placement="top" data-original-title="@item.PurchaseProductSupplier.PurchaseProduct.Description">@item.PurchaseProductSupplier.PurchaseProduct.Description.SubString(20, "...")</td>
+                                            <td>@item.PurchaseProduct.AssetClass</td>
+                                            <td>
+                                                @item.Remarks
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+
+                        </div>
+                    </div>
+
+                }
+
+                @if (Model.PurchaseOrderOtherItems.Any())
+                {
+                    <div class="portlet-title margin-top-10">
+                        <div class="caption">
+                            <i class="icon-social-dribbble font-green"></i>
+                            <span class="caption-subject font-green bold uppercase">其他物品</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <div class="table">
+                            <table id="productlist" class="table table-bordered">
+                                <thead>
+                                    <tr>
+                                        <th> 序号 </th>
+                                        <th> 采购物品名称 </th>
+                                        <th> 供应商名称 </th>
+                                        <th> 品牌 </th>
+                                        <th> 规格 </th>
+                                        <th> 单位 </th>
+                                        <th> 数量 </th>
+                                        <th> 实际数量 </th>
+                                        <th> 单价 </th>
+                                        <th> 实际单价 </th>
+                                        <th> 实际金额 </th>
+                                        <th> 资产类别 </th>
+                                        <th> 备注及用途 </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.PurchaseOrderOtherItems.Count > 0)
+                                    {
+                                        foreach (var item in Model.PurchaseOrderOtherItems)
+                                        {
+                                            <tr>
+                                                <td> @Model.PurchaseOrderOtherItems.RowNumberOf(item)</td>
+                                                <td> @item.ProductName</td>
+                                                <td> @item.SupplierName</td>
+                                                <td> @item.ProductBrand</td>
+                                                <td> @item.ProductSpecification</td>
+                                                <td> @item.ProductUnit</td>
+                                                <td>@item.PurchaseQuantity</td>
+                                                <td>@item.ActualPurchaseQuantity</td>
+                                                <td> @item.PurchasePrice</td>
+                                                <td> @item.ActualPurchasePrice</td>
+                                                <td> @((item.ActualPurchaseQuantity * item.ActualPurchasePrice).FormatString()) </td>
+                                                <td>@item.ProductAssetClass</td>
+                                                <td>
+                                                    @item.Remarks
+                                                </td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr><td colspan="13" style="text-align: center;">暂无商品</td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }
+                <div class="clearfix" style="text-align: right; margin-top: 10px;">
+                    <span style="width: 100%; float: right; margin-bottom: 10px;">
+                        采购单商品 <span id="totalQuantity">@Model.TotalProductQuantity</span> 件, 采购总金额：￥ <span id="totalAmount">@Model.TotalProductPrice.FormatString()</span> 元.
+                    </span>
+                </div>
+                @if (Model.PurchaseOrder.OrderType == OrderType.运营紧急采购)
+                {
+                    <div class="clearfix" style="text-align: right;">
+                        <span style="width: 100%; color: #ff0000; float: right; margin-bottom: 10px;">
+                            运营紧急采购:总金额在500元以内（含）时，不会通过运营采购负责人审批
+                        </span>
+                    </div>
+                }
+                @if (Model.PurchaseOrder.OrderType == OrderType.食材紧急采购)
+                {
+                    <div class="clearfix" style="text-align: right;">
+                        <span style="width: 100%; color: #ff0000; float: right; margin-bottom: 10px;">
+                            食材紧急采购:总金额在500元以内（含）时，不会通过食材采购负责人审批
+                        </span>
+                    </div>
+                }
+
+                @if (Model.TrackingResult.WorkflowHistoryTrackingResults.Any())
+                {
+                    <div class="portlet-title title-style">
+                        <div class="caption">
+                            <i class="icon-bubble font-green-sharp"></i>
+                            <span class="caption-subject font-green-sharp sbold">审批流程</span>
+                        </div>
+                    </div>
+                    <div class="portlet-body form">
+                        <div class="form-body">
+                            @foreach (var item in Model.TrackingResult.WorkflowHistoryTrackingResults)
+                            {
+                                <div class="row margin-top-10" style="border-bottom: 1px solid #eef1f5;">
+                                    <table class="table" style="margin-left: 20px;">
+                                        <tr>
+                                            <td width="200px;">@item.GetTitle()</td>
+                                            <td width="15%">@item.User.RealName</td>
+                                            <td width="20%">
+                                                结果：@item.Result
+                                            </td>
+
+                                            <td width="20%">完成时间：@item.CreatedOn</td>
+                                            <td width="30%">备注：@item.Description</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</body>
+</html>

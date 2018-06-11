@@ -1,0 +1,232 @@
+﻿---清空数据
+Delete From Setting
+
+---自增长列初始化
+TRUNCATE TABLE Setting
+
+---客户类型
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('400来电',1,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('新开发',1,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('直接来访',1,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('已入住客户介绍',1,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('渠道客户',1,50,'',GETDATE(),GETDATE());
+
+---客户级别
+--INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('A',2,10,'',GETDATE(),GETDATE());
+--INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('B',2,20,'',GETDATE(),GETDATE());
+--INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('C',2,30,'',GETDATE(),GETDATE());
+--INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('D',2,40,'',GETDATE(),GETDATE());
+--INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('E',2,50,'',GETDATE(),GETDATE());
+--INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('无效',2,60,'',GETDATE(),GETDATE());
+--INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('已入住',2,70,'',GETDATE(),GETDATE());
+--INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('退住',2,80,'',GETDATE(),GETDATE());
+--INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('新转交',2,90,'',GETDATE(),GETDATE());
+
+---客户来源
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('家中',3,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('医院',3,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('养老院',3,30,'',GETDATE(),GETDATE());
+
+---房间户型
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('标准间',4,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('套间',4,20,'',GETDATE(),GETDATE());
+
+---护理类型
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('独立型',5,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('生活照料1级',5,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('生活照料2级',5,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('生活照料3级',5,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('生活照料4级',5,50,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('失智照护1级',5,60,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('失智照护2级',5,70,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('失智照护3级',5,80,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('失智照护4级',5,90,'',GETDATE(),GETDATE());
+
+---获知渠道
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('平面媒体',6,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('网络',6,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('开发',6,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('推荐',6,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('老带新（已入住客户推荐）',6,50,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('附近居住及路过',6,50,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('其它',6,70,'',GETDATE(),GETDATE());
+
+---护理级别
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('0级',7,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('1级',7,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('2级',7,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('3级',7,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('4级',7,50,'',GETDATE(),GETDATE());
+
+---身体状况
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('健康',8,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('慢性病',8,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('严重疾病',8,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('失智(健康)',8,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('失智(慢性病)',8,50,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('失智(严重疾病)',8,60,'',GETDATE(),GETDATE());
+
+---教育背景
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('高中及以下',9,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('大专',9,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('本科及以上',9,30,'',GETDATE(),GETDATE());
+
+---费用支出人
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('自己',10,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('子女',10,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('共同负担',10,30,'',GETDATE(),GETDATE());
+
+---配偶情况
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('夫妻双方健在',11,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('丧偶独身',11,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('独身',11,30,'',GETDATE(),GETDATE());
+
+---是否有子女
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('独生子女',12,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('两个子女',12,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('两个以上子女',12,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('否',12,40,'',GETDATE(),GETDATE());
+
+---子女工作行业
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('政府',13,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('金融',13,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('医药',13,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('科研',13,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('教育',13,50,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('其他',13,60,'',GETDATE(),GETDATE());
+
+---退休金
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('4000以下',14,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('4000-6000',14,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('6000-8000',14,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('8000-10000',14,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('10000以上',14,50,'',GETDATE(),GETDATE());
+
+---推荐人类型
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('个人',15,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('单位',15,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('社会团体',15,30,'',GETDATE(),GETDATE());
+
+---咨询人与客户关系
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('直系亲属',16,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('非直系亲属',16,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('朋友',16,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('其它',16,40,'',GETDATE(),GETDATE());
+
+---跟踪方式
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('电话沟通',17,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('现场参观',17,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('邮件沟通',17,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('上门拜访',17,40,'',GETDATE(),GETDATE());
+
+---渠道类型
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('个人',18,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('单位',18,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('社会团体',18,30,'',GETDATE(),GETDATE());
+
+---合同签署状况
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES(' ',19,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES(' ',19,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES(' ',19,30,'',GETDATE(),GETDATE());
+
+---与被送养人关系
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('直系亲属',20,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('非直系亲属',20,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('朋友',20,30,'',GETDATE(),GETDATE());
+
+---服务包级别
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('0',21,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('1',21,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('2',21,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('3',21,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('4',21,50,'',GETDATE(),GETDATE());
+
+---生活能力评估级别
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES(' ',22,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES(' ',22,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES(' ',22,30,'',GETDATE(),GETDATE());
+
+--状态
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('有效',23,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('无效',23,20,'',GETDATE(),GETDATE());
+
+--城市
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('北京',24,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('上海',24,20,'',GETDATE(),GETDATE());
+
+--所属公司
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('北京远洋',25,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('上海远洋',25,20,'',GETDATE(),GETDATE());
+
+--项目所属类别
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('生活照料',26,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('日常生活',26,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('医护服务',26,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('康复服务',26,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('点餐服务',26,50,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('电话服务',26,60,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('其他服务',26,70,'',GETDATE(),GETDATE());
+
+--未成交原因
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('短期无需求',27,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('无支付能力',27,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('入住其它养老机构',27,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('无法联系',27,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('寻求合作（广告、媒体、产品推销、养老合作）',27,50,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('找人',27,60,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('打错电话',27,70,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('参观学习',27,80,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('应聘',27,90,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('社工志愿者',27,100,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('市调',27,110,'',GETDATE(),GETDATE());
+
+--关注点
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('价格',28,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('环境',28,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('硬件',28,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('设施',28,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('交通',28,50,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('服务',28,60,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('医疗',28,70,'',GETDATE(),GETDATE());
+
+--合同模板
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('20160614模板',30,10,'',GETDATE(),GETDATE());
+
+--签署类型
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('新签',31,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('续签',31,20,'',GETDATE(),GETDATE());
+
+--合同状态
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('新建',32,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('已审批',32,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('生效',32,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('失效',32,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('作废',32,50,'',GETDATE(),GETDATE());
+
+--包房类型
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('包房',33,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('单床',33,20,'',GETDATE(),GETDATE());
+
+--费用变更原因
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('公寓经理优惠',34,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('大区经理优惠',34,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('其他优惠',34,30,'',GETDATE(),GETDATE());
+
+--子女同住
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('同住',37,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('不同住（同城）',37,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('不同住（非同城）',37,30,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('不同住（国外）',37,40,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('无子女',37,50,'',GETDATE(),GETDATE());
+
+--自有住房
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('一套',38,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('两套及以上',38,20,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('否',38,30,'',GETDATE(),GETDATE());
+
+--点单现结方式
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('现金',39,10,'',GETDATE(),GETDATE());
+INSERT Setting (Name,[Type],Sort,[Description],CreatedOn,LastModifiedOn) VALUES('刷卡',39,20,'',GETDATE(),GETDATE());
+
+---查询结果
+SELECT * FROM Setting

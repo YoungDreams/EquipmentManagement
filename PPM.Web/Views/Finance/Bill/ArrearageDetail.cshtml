@@ -1,0 +1,109 @@
+﻿@using System.Web.Mvc.Html
+@using PensionInsurance.Entities
+@using PensionInsurance.Query
+@using PensionInsurance.Web.Common
+@model PensionInsurance.Web.Views.Finance.Bill.ArrearageDetailViewModel
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index", "CustomerAccount")">客户账户管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>欠费管理</span>
+            </li>
+        </ul>
+    </div>
+}
+<style>
+    .table th, .table td {
+        text-align: center;
+        height: 38px;
+    }
+</style>
+
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/css/bootstrap-timepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/select2/css/select2-bootstrap.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+
+<style>
+
+</style>
+    <div class="portlet-body form">
+        @if (Model.Items.Any())
+        {
+            <div class="table-scrollable">
+                <table class="table table-striped table-bordered table-hover  table-report">
+                    <thead>
+                    <tr>
+                        <th colspan="13">
+                            未结清账单列表
+                        </th>
+                    </tr>
+                    <tr>
+                        <th>账单类型</th>
+                        <th>账单日期</th>
+                        <th>客户编号</th>
+                        <th>客户姓名</th>
+                        <th>合同编号</th>
+                        <th>项目</th>
+                        <th>楼号</th>
+                        <th>单元</th>
+                        <th>房间号</th>
+                        <th>账单状态</th>
+                        <th>账单金额</th>
+                        <th>已缴金额</th>
+                        <th>未缴金额</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        <tr>
+                            <td>@item.BillType.ToString()</td>
+                            <td style="white-space: nowrap;"><a class="btn-link" href="@Url.Action("Detail", "Bill", new {id = item.Id})">@item.BillDate </a> </td>
+                            <td style="white-space: nowrap;">@item.Contract.CustomerAccount.Customer.CustomerNo</td>
+                            <td style="white-space: nowrap;">@item.Contract.CustomerAccount.Customer.Name</td>
+                            <td style="white-space: nowrap;">@item.Contract.ContractNo</td>
+                            <td>@item.Contract.Project.Name</td>
+                            <td>@item.Contract.ActualRoom.Floor.Unit.Building.Name</td>
+                            <td style="white-space: nowrap;">@item.Contract.ActualRoom.Floor.Unit.Name</td>
+                            <td>@item.Contract.ActualRoom.Name</td>
+                            <td>@item.Status</td>
+                            <td>@item.ActualPaymentCost.FormatString()</td>
+                            <td>@item.PaidCost.FormatString()</td>
+                            <td>@((item.ActualPaymentCost - item.PaidCost).FormatString())</td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+        <div class="form-actions text-center">
+            <a href="@Url.Action("Index","CustomerAccount")" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回上一页</a>
+        </div>
+    </div>
+
+
+
+
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/select2/js/select2.full.min.js") type="text/javascript"></script>
+}

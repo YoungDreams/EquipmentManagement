@@ -1,0 +1,773 @@
+﻿<!-- BEGIN PAGE BAR -->
+@using PensionInsurance.Entities
+@using PensionInsurance.Shared
+@using PensionInsurance.Web.Common
+@using PensionInsurance.Query
+@model PensionInsurance.Web.Views.Finance.Bill.IndexViewModel
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Breadcrumb{
+    <div class="page-bar">
+        <ul class="page-breadcrumb">
+            <li>
+                <a href="@Url.Action("Index", "Bill")">财务管理</a>
+                <i class="fa fa-circle"></i>
+            </li>
+            <li>
+                <span>客户账单管理</span>
+            </li>
+        </ul>
+    </div>
+}
+
+@section Styles{
+    <!-- BEGIN PAGE LEVEL PLUGINS -->
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/css/bootstrap-datepicker3.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/clockface/css/clockface.css") rel="stylesheet" type="text/css" />
+    <link href=@Url.Content("~/assets/global/plugins/bootstrap-select/css/bootstrap-select.min.css") rel="stylesheet" type="text/css" />
+    <!-- END PAGE LEVEL PLUGINS -->
+}
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-search"></i>账单信息查询
+                </div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form action="@Url.Action("Index","Bill")" id="customerbillSercher" class="form-horizontal">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">项目</label>
+                                    <div class="col-md-9">
+                                        @Html.DropDownListFor(x => x.Query.ProjectIds, Model.ProjectList, new { multiple = "", @class = "selectpicker" })
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">客户姓名</label>
+                                    <div class="col-md-9" title="客户姓名之间使用/分隔，可查询多个客户">
+                                        @Html.InputText(x => x.Query.CustomerName)
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">账单月份</label>
+                                    <div class="col-md-9">
+                                        <input name="Query.BillStartDate" value="@(Model.Query.BillStartDate?.ToString("yyyy-MM") ?? string.Empty)" class="input-xs month-picker col-md-12" data-opts='{"endDate":"@DateTime.Now.AddMonths(-1).ToString("yyyy-MM")"}' />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">状态</label>
+                                    <div class="col-md-9">
+                                        @Html.EnumTextDropDownListFor(x => x.Query.Status, typeof(BillStatus), new { multiple = "", @class = "selectpicker" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">账单类型</label>
+                                    <div class="col-md-9">
+                                        @Html.EnumTextDropDownListFor(x => x.Query.BillTypes, typeof(BillType), new { multiple = "", @class = "selectpicker" })
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="form-actions">
+                        <div class="text-center"><button type="submit" class="btn green btn-sm padding-lf-15 " data-showloading="true">查询</button></div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="portlet light bordered">
+
+            <div class="portlet-title" style="margin-bottom: 0px;">
+                <div class="caption">
+                    <i class="icon-social-dribbble font-green"></i>
+                    <span class="caption-subject font-green bold uppercase">账单信息列表</span>
+                </div>
+
+                <div class="actions">
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.月账单管理, Permission.账单生成))
+                    {
+                        <a data-toggle="modal" href="#calculateBillModal" class="btn green">
+                            <i class="fa fa-dollar"></i> 生成账单
+                        </a>
+                    }
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.月账单管理, Permission.账单确认))
+                    {
+                        <a id="confirm" class="btn green btn-sm batch-button disabled">
+                            <i class="fa fa-check"></i> 确认
+                        </a>
+                    }
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.月账单管理, Permission.重新生成账单))
+                    {
+                        <a id="RecalculateCustomerBill" class="btn green btn-sm batch-button disabled">
+                            <i class="fa fa-retweet"></i> 重新计算
+                        </a>
+                    }
+                    @if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.月账单管理, Permission.导出))
+                    {
+                        <a href="javascript:;" class="btn green export-customer-bill"><i class="fa fa-repeat"></i>导出</a>
+                    }
+                </div>
+            </div>
+
+            <div class="portlet-body">
+                <div class="table table-scrollable">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" class="group-checkable" value="" />
+                                </th>
+                                <th>账单类型</th>
+                                <th>账单日期</th>
+                                <th>客户编号</th>
+                                <th>客户姓名</th>
+                                <th>合同编号</th>
+                                <th>账单状态</th>
+                                <th>账单金额</th>
+                                <th>已缴金额</th>
+                                <th>未缴金额</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model.Items)
+                            {
+                                <tr>
+                                    <td>
+                                        @if (item.BillType == BillType.正式账单 || item.BillType == BillType.调整账单)
+                                        {
+                                            <input type="checkbox" class="checkboxes" value="@item.Id" />
+                                        }
+                                    </td>
+                                    <td>@item.BillType.ToString()</td>
+                                    <td style="white-space: nowrap;">
+                                        @if (WebAppContext.Current.User.HasPermission(ModuleType.月账单管理, Permission.查看) && (item.BillType == BillType.正式账单 || item.BillType == BillType.调整账单 || item.BillType == BillType.减免账单))
+                                        {
+                                            <a target="_blank" href="@Url.Action("Detail", "Bill", new {id = item.Id})">@item.BillDate </a>
+
+                                        }
+                                        else
+                                        {
+                                            @item.BillDate
+                                        }
+                                    </td>
+                                    <td>@item.CustomerNo</td>
+                                    <td><a href="@Url.Action("Detail", "Customer", new {customerAccountId = item.CustomerAccountId})">@item.CustomerName</a></td>
+                                    <td><a target="_blank" href="@Url.Action("Detail", "Contract", new {id = item.ContractId})">@item.ContractNo</a></td>
+                                    <td>@item.Status</td>
+                                    <td>@item.ActualPaymentCost</td>
+                                    <td>@item.PaidCost</td>
+                                    <td>@item.Arrears</td>
+                                    <td>
+                                        @if (item.Status == BillStatus.待确认 && item.BillType == BillType.正式账单)
+                                        {
+                                            if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.月账单管理, Permission.费用特别变更))
+                                            {
+                                                <a data-id="@item.Id" class="btn default blue-stripe btn-xs relief" data-special="@((new {item.IncrementSpecialDiscount, item.MealsSpecialDiscount, item.PackageServiceSpecialDiscount, item.RoomSpecialDiscount, item.SpecialDiscountDescription}).ToJavascript())">费用特别变更</a>
+                                            }
+                                        }
+                                        @if ((item.Status == BillStatus.未结清 || item.Status == BillStatus.已结清) && item.BillType == BillType.正式账单 && item.AdjustedCustomerBillStatus == BillStatus.待确认)
+                                        {
+                                            if (PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.月账单管理, Permission.生成调整账单))
+                                            {
+                                                <a data-id="@item.Id" class="btn default red-stripe btn-xs adjust">生成调整账单</a>
+                                            }
+                                        }
+
+                                        @if (item.BillType == BillType.调整账单 && PensionInsurance.Shared.WebAppContext.Current.User.HasPermission(ModuleType.月账单管理, Permission.生成调整账单))
+                                        {
+                                            <a data-id="@item.Id" class="btn default yellow-stripe btn-xs description" data-description="@item.SpecialDiscountDescription">备注</a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+
+                            <tr class="highlight">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>合计</td>
+                                <td>@Model.Items.Sum(x => x.ActualPaymentCost)</td>
+                                <td>@Model.Items.Sum(x => x.PaidCost)</td>
+                                <td>@Model.Items.Sum(x => x.Arrears)</td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Partial("_Pagination", Model.Items)
+
+<div class="modal small fade" id="calculateBillModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 400px;">
+        <form id="calculate-bill-form" data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">选择账单月份</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">账单月份</label>
+                                    <div class="col-md-9">
+                                        <input name="BillMonth" class="input-sm month-picker" data-opts='{"endDate":"@DateTime.Now.AddMonths(-2).ToShortDateString()"}' />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                        <div class="row">
+                            <p>
+                                <div class="text-center">
+                                    <a href="javascript:;" id="calculate-bill" class="btn green btn-sm padding-lf-15">生成</a>
+                                    <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                </div>
+                            </p>
+                        </div>
+                        <!-- END FORM-->
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal small fade" id="relief-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:480px;">
+        <form id="relief-form" action="@Url.Action("Relief","Bill")" method="POST" class="form-horizontal">
+
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">费用特别变更</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">床位费变更</label>
+                                    <div class="col-md-9">
+                                        <input name="RoomSpecialDiscount" class="input-sm" type="text" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">餐费变更</label>
+                                    <div class="col-md-9">
+                                        <input name="MealsSpecialDiscount" class="input-sm" type="text" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">打包服务费变更</label>
+                                    <div class="col-md-9">
+                                        <input name="PackageServiceSpecialDiscount" class="input-sm" type="text" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">增值服务费变更</label>
+                                    <div class="col-md-9">
+                                        <input name="IncrementSpecialDiscount" class="input-sm" type="text" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">备注</label>
+                                    <div class="col-md-9">
+                                        <textarea name="Description" type="text" class="input-sm col-lg-12"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                        <div class="row">
+                            <p>
+                                <div class="text-center">
+                                    <input type="hidden" name="BillId" />
+
+                                    <button class="btn green btn-sm padding-lf-15">确定</button>
+                                    <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">取消</button>
+                                </div>
+                            </p>
+                        </div>
+                        <!-- END FORM-->
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal small fade" id="adjust-bill-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 400px;">
+        <form id="adjust-bill-form" data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">选择账单调整月份</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">调整月份</label>
+                                    <div class="col-md-9">
+                                        <input name="AdjustBillMonth" class="input-sm month-picker" data-opts='{"startDate":"@DateTime.Now.AddMonths(-2).ToShortDateString()"}' />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                        <div class="row">
+                            <p>
+                                <div class="text-center">
+                                    <input type="hidden" name="AdjustBillId" />
+
+                                    <a href="javascript:;" id="adjust-bill" class="btn green btn-sm padding-lf-15">生成</a>
+                                    <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">返回</button>
+                                </div>
+                            </p>
+                        </div>
+                        <!-- END FORM-->
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal small fade" id="description-bill-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width: 400px;">
+        <form id="description-bill-form" data-ajax="true" action="#" method="POST" class="form-horizontal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">备注调整账单</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <!-- BEGIN FORM-->
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">备注</label>
+                                    <div class="col-md-9">
+                                        <textarea class="form-control" name="AdjustDescription" style="resize: none;"></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                        <div class="row">
+                            <p>
+                                <div class="text-center">
+                                    <input type="hidden" name="AdjustBillId" />
+
+                                    <a href="javascript:;" id="description-bill" class="btn green btn-sm padding-lf-15">保存</a>
+                                    <button type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">取消</button>
+                                </div>
+                            </p>
+                        </div>
+                        <!-- END FORM-->
+                    </div>
+                </div>
+
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts{
+    <script src=@Url.Content("~/assets/global/plugins/moment.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-select/js/bootstrap-select.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-daterangepicker/daterangepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datepicker/js/bootstrap-datepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-timepicker/js/bootstrap-timepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js") type="text/javascript"></script>
+    <script src=@Url.Content("~/assets/global/plugins/clockface/js/clockface.js") type="text/javascript"></script>
+
+    <script src=@Url.Content("~/assets/global/scripts/app.min.js") type="text/javascript"></script>
+
+    <script type="text/javascript">
+        var page = {
+            getSelectedIds: function () {
+                var ids = [];
+                var checkboxes = $(".checkboxes");
+                $.each(checkboxes, function (i, item) {
+                    var chk = $(item);
+                    if (chk.is(":checked")) {
+                        var id = chk.val();
+
+                        ids.push(id);
+                    }
+                });
+
+                return ids;
+            },
+
+            updateButtons: function () {
+                var checked = $(".checkboxes:checked").length > 0;
+                var buttons = $(".batch-button");
+                buttons.prop("disabled", !checked);
+                if (checked) {
+                    buttons.removeClass("disabled");
+                } else {
+                    buttons.addClass("disabled");
+                }
+            }
+        }
+
+        $(document).ready(function () {
+
+            $('.selectpicker').selectpicker({
+                style: 'btn-xs',
+                iconBase: 'fa',
+                tickIcon: 'fa-check',
+                noneSelectedText: "--未选择--"
+            });
+
+            $("select[name='Query.ProjectIds']").val(@Html.Raw(Json.Encode(Model.Query.ProjectIds)));
+            $("select[name='Query.BillTypes']").val(@Html.Raw(Json.Encode(Model.Query.BillTypes?.Select(x => x.ToString()))));
+            $("select[name='Query.Status']").val(@Html.Raw(Json.Encode(Model.Query.Status?.Select(x=>x.ToString()))));
+            $('.selectpicker').selectpicker('refresh');
+
+
+            $(document).on("change", ".group-checkable", function () {
+                var checkAll = $(this);
+                var checked = checkAll.is(":checked");
+                checkAll.closest(".table").find(".checkboxes").prop("checked", checked).uniform("refresh");
+                page.updateButtons();
+            });
+
+            $(document).on("change", ".checkboxes", function () {
+                page.updateButtons();
+            });
+
+            //重现计算账单
+            $(document).on("click", "#RecalculateCustomerBill", function () {
+                var command = {
+                    BillIds: page.getSelectedIds()
+                };
+                $(this).postCommand('@Url.Action("Recalculate", "Bill")', command);
+
+            });
+
+
+            $(document).on("click", "#confirm", function () {
+                var command = {
+                    BillIds: page.getSelectedIds()
+                };
+
+                $(this).postCommand('@Url.Action("Confirm", "Bill")', command);
+            });
+
+            $(document).on("click", ".relief", function () {
+                var $this = $(this);
+                var form = $("#relief-form");
+
+                var roomSpecialDiscount = form.find("input[name='RoomSpecialDiscount']");
+                var mealsSpecialDiscount = form.find("input[name='MealsSpecialDiscount']");
+                var packageServiceSpecialDiscount = form.find("input[name='PackageServiceSpecialDiscount']");
+                var incrementSpecialDiscount = form.find("input[name='IncrementSpecialDiscount']");
+                var description = form.find("textarea[name='Description']");
+                var billId = form.find("input[name='BillId']");
+
+                var specialInfo = $this.attr("data-special");
+                if (specialInfo) {
+                    var specialJson = JSON.parse(specialInfo);
+                    if (specialJson.RoomSpecialDiscount) {
+                        roomSpecialDiscount.val(specialJson.RoomSpecialDiscount);
+                    } else {
+                        roomSpecialDiscount.val("");
+                    }
+                    if (specialJson.MealsSpecialDiscount) {
+                        mealsSpecialDiscount.val(specialJson.MealsSpecialDiscount);
+                    } else {
+                        mealsSpecialDiscount.val("");
+                    }
+                    if (specialJson.PackageServiceSpecialDiscount) {
+                        packageServiceSpecialDiscount.val(specialJson.PackageServiceSpecialDiscount);
+                    } else {
+                        packageServiceSpecialDiscount.val("");
+                    }
+                    if (specialJson.IncrementSpecialDiscount) {
+                        incrementSpecialDiscount.val(specialJson.IncrementSpecialDiscount);
+                    } else {
+                        incrementSpecialDiscount.val("");
+                    }
+                    if (specialJson.SpecialDiscountDescription) {
+                        description.val(specialJson.SpecialDiscountDescription);
+                    } else {
+                        description.val("");
+                    }
+                } else {
+                    roomSpecialDiscount.val("");
+                    mealsSpecialDiscount.val("");
+                    packageServiceSpecialDiscount.val("");
+                    incrementSpecialDiscount.val("");
+                    description.val("");
+                }
+
+
+                billId.val($this.attr("data-id"));
+
+                $("#relief-modal").modal("show");
+            });
+
+            $(document).on("submit", "#relief-form", function () {
+                var form = $(this);
+
+                var roomSpecialDiscount = form.find("input[name='RoomSpecialDiscount']");
+                var mealsSpecialDiscount = form.find("input[name='MealsSpecialDiscount']");
+                var packageServiceSpecialDiscount = form.find("input[name='PackageServiceSpecialDiscount']");
+                var incrementSpecialDiscount = form.find("input[name='IncrementSpecialDiscount']");
+                var description = form.find("textarea[name='Description']");
+                var billId = form.find("input[name='BillId']");
+
+                var command = {
+                    RoomSpecialDiscount: roomSpecialDiscount.val(),
+                    MealsSpecialDiscount: mealsSpecialDiscount.val(),
+                    packageServiceSpecialDiscount: packageServiceSpecialDiscount.val(),
+                    incrementSpecialDiscount: incrementSpecialDiscount.val(),
+                    Description: description.val(),
+                    BillId: billId.val(),
+                    IsForce: true //暂时不弹出超出减免金额提示
+                };
+
+                form.postCommand('@Url.Action("Relief", "Bill")', command, {
+                    onFail: function (result) {
+                        if (result.errorCode && result.errorCode === 1) {
+                            App.confirm(function () {
+                                command.IsForce = true;
+                                form.postCommand('@Url.Action("Relief", "Bill")', command, {
+                                    onSuccess: function () {
+                                        $("#relief-modal").modal("hide");
+                                        return true;
+                                    }
+                                });
+                            }, function () {
+
+                            }, "减免金额已达到或超出项目减免金额限制，是否继续?");
+                            return false;
+                        }
+
+                        return true;
+                    },
+
+                    onSuccess: function () {
+                        $("#relief-modal").modal("hide");
+                        return true;
+                    }
+                });
+
+                return false;
+            });
+
+            $(document).on("click", "#calculate-bill", function () {
+                var form = $("#calculate-bill-form");
+
+                var billMonth = form.find("input[name='BillMonth']");
+
+                var command = {
+                    BillMonth: billMonth.val()
+                };
+
+                $("#calculateBillModal").modal("hide");
+
+                form.postCommand('@Url.Action("CalculateCustomerBill", "Bill")', command, {
+                    onSuccess: function () {
+                        return true;
+                    },
+                    onFail: function (result) {
+                        $.bootstrapGrowl(result.errors, {
+                            type: "warning",
+                            offset: {
+                                from: "top",
+                                amount: 150
+                            },
+                            align: "center"
+                        });
+                    }
+                });
+            });
+
+            $(document).on("click", ".adjust", function () {
+                var $this = $(this);
+                var form = $("#adjust-bill-form");
+                var adjustBillId = form.find("input[name='AdjustBillId']");
+
+                adjustBillId.val($this.attr("data-id"));
+
+                $("#adjust-bill-modal").modal("show");
+            });
+
+            $(document).on("click", "#adjust-bill", function () {
+                var form = $("#adjust-bill-form");
+
+                var adjustBillId = form.find("input[name='AdjustBillId']");
+                var adjustBillMonth = form.find("input[name='AdjustBillMonth']");
+
+                var command = {
+                    AdjustBillId: adjustBillId.val(),
+                    AdjustBillMonth: adjustBillMonth.val()
+                };
+
+                form.postCommand('@Url.Action("Adjust", "Bill")', command, {
+                    onSuccess: function () {
+                        $("#adjust-bill-modal").modal("hide");
+                        return true;
+                    },
+                    onFail: function (result) {
+                        $.bootstrapGrowl(result.errors, {
+                            type: "warning",
+                            offset: {
+                                from: "top",
+                                amount: 150
+                            },
+                            align: "center"
+                        });
+                    }
+                });
+
+                return false;
+            });
+
+            $(document).on("click", ".description", function () {
+                var $this = $(this);
+                var form = $("#description-bill-form");
+                var billId = $this.attr("data-id");
+                var description = $this.attr("data-description");
+
+                var adjustBillId = form.find("input[name='AdjustBillId']");
+                var adjustDescription = form.find("textarea[name=AdjustDescription]");
+                adjustDescription.val(description);
+                adjustBillId.val(billId);
+
+                $("#description-bill-modal").modal("show");
+            });
+
+            $(document).on("click", "#description-bill", function () {
+                var form = $("#description-bill-form");
+
+                var adjustBillId = form.find("input[name='AdjustBillId']");
+                var adjustDescription = form.find("textarea[name='AdjustDescription']");
+
+                var command = {
+                    AdjustBillId: adjustBillId.val(),
+                    AdjustDescription: adjustDescription.val()
+                };
+
+                form.postCommand('@Url.Action("AdjustDescription", "Bill")', command, {
+                    onSuccess: function () {
+                        $("#description-bill-modal").modal("hide");
+                        return true;
+                    },
+                    onFail: function (result) {
+                        $.bootstrapGrowl(result.errors, {
+                            type: "warning",
+                            offset: {
+                                from: "top",
+                                amount: 150
+                            },
+                            align: "center"
+                        });
+                    }
+                });
+
+                return false;
+            });
+        });
+
+        $(document).on("click", ".export-customer-bill", function () {
+            var form = $("#customerbillSercher");
+            var projectIds = form.find("select[name='Query.ProjectIds']").val();
+            var customerName = form.find("input[name='Query.CustomerName']").val();
+            var month = form.find("input[name='Query.BillStartDate']").val();
+            var status = form.find("select[name='Query.Status']").val();
+            var billTypes = form.find("select[name='Query.BillTypes']").val();
+            var command = {
+                ProjectIds: projectIds,
+                CustomerName: customerName,
+                Month: month,
+                Status: status,
+                BillTypes: billTypes
+            };
+            App.confirm(function () {
+                form.postCommand('@Url.Action("Export", "Bill")', command, {
+                    onSuccess: function (result) {
+                        window.location = "../" + result.redirect;
+                    }
+                });
+            });
+        });
+
+    </script>
+}
