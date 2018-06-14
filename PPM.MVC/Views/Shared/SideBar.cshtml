@@ -48,10 +48,13 @@
             </li>
             <!-- DOC: To remove the search box from the sidebar you just need to completely remove the below "sidebar-search-wrapper" LI element -->
             <li class="nav-item ">
-                <a data-href="@Url.Action("Index", "User")" data-id="1" data-title="用户管理" onclick="addPageTab(this)" class="nav-link nav-toggle">
+                @*<a data-href="@Url.Action("Index", "User")" data-id="1" data-title="用户管理" onclick="addPageTab(this)" class="nav-link nav-toggle">
                     <i class="icon-user"></i>
                     <span class="title">用户管理</span>
-                    @*<span class="arrow"></span>*@
+                </a>*@
+                <a href="@Url.Action("Index", "User")" data-id="1" data-title="用户管理" class="nav-link nav-toggle">
+                    <i class="icon-user"></i>
+                    <span class="title">用户管理</span>
                 </a>
                 @*<ul class="sub-menu">
                         <li class="nav-item start ">
@@ -84,13 +87,21 @@
                 </a>
                 <ul class="sub-menu">
                     <li class="nav-item start ">
-                        <a data-href="@Url.Action("Index", "EquipmentCategory")" data-id="2" data-title="设备分类" onclick="addPageTab(this)" class="nav-link ">
+                        @*<a data-href="@Url.Action("Index", "EquipmentCategory")" data-id="2" data-title="设备分类" onclick="addPageTab(this)" class="nav-link ">
+                            <i class="icon-bar-chart"></i>
+                            <span class="title">设备分类</span>
+                        </a>*@
+                        <a href="@Url.Action("Index", "EquipmentCategory")" data-id="2" data-title="设备分类" class="nav-link ">
                             <i class="icon-bar-chart"></i>
                             <span class="title">设备分类</span>
                         </a>
                     </li>
                     <li class="nav-item start ">
-                        <a data-href="@Url.Action("Index", "EquipmentInfo")" data-id="3" data-title="设备信息" onclick="addPageTab(this)" class="nav-link ">
+                        @*<a data-href="@Url.Action("Index", "EquipmentInfo")" data-id="3" data-title="设备信息" onclick="addPageTab(this)" class="nav-link ">
+                            <i class="icon-bulb"></i>
+                            <span class="title">设备信息</span>
+                        </a>*@
+                        <a href="@Url.Action("Index", "EquipmentInfo")" data-id="3" data-title="设备信息" class="nav-link ">
                             <i class="icon-bulb"></i>
                             <span class="title">设备信息</span>
                         </a>

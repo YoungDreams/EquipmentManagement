@@ -129,7 +129,7 @@ namespace PPM.MVC.Views.Equipment.Category
         }
 
         [HttpPost]
-        public ActionResult Delete(DeleteUserCommand command)
+        public ActionResult Delete(DeleteEquipmentCategoryCommand command)
         {
             _commandService.Execute(command);
             return RedirectToAction("Index");

@@ -17,7 +17,7 @@ namespace PPM.CommandHandlers
         public void Handle(ResetPasswordCommand command)
         {
             var user = _repository.Get<User>(command.UserId);
-            SaltedHash saltedHash = SaltedHash.Create("Aa12345");
+            SaltedHash saltedHash = SaltedHash.Create("123456");
 
             user.Salt = saltedHash.Salt;
             user.HashedPassword = saltedHash.Hash;

@@ -90,11 +90,11 @@ namespace PPM.CommandHandlers
                         throw new DomainValidationException($"{value}不是整数类型。");
                     }
                     break;
-                case EquipmentCategoryColumnType.浮点数:
+                case EquipmentCategoryColumnType.小数:
                     double result1 = 0.00;
                     if (!double.TryParse(value, out result1))
                     {
-                        throw new DomainValidationException($"{value}不是浮点数类型。");
+                        throw new DomainValidationException($"{value}不是小数类型。");
                     }
                     break;
                 case EquipmentCategoryColumnType.日期:

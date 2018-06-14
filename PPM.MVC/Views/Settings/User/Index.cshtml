@@ -31,7 +31,23 @@
                     <div class="form-body">
                         <div class="row">
                             <!--/span-->
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">用户名</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Query.Username" value="@Model.Query.Username" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">真实姓名</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Query.RealName" value="@Model.Query.RealName" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label col-md-3">角色</label>
                                     <div class="col-md-9">
@@ -39,15 +55,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <div class="form-group">
-                                    <label class="control-label col-md-3">用户姓名</label>
-                                    <div class="col-md-9">
-                                        <input type="text" class="form-control" name="Query.RealName" value="@Model.Query.RealName" />
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <label class="control-label col-md-3">是否启用</label>
                                     <div class="col-md-9">
@@ -55,7 +63,6 @@
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
                         <!--/row-->
                     </div>
@@ -122,11 +129,12 @@
                                 <th>
                                     <input type="checkbox" class="group-checkable" />
                                 </th>
-                                <th>用户名</th>
-                                <th>邮箱</th>
-                                <th>电话</th>
-                                <th>真实姓名</th>
                                 <th>角色名称</th>
+                                <th>用户名</th>
+                                <th>真实姓名</th>
+                                <th>电话</th>
+                                <th>邮箱</th>
+                                <th>真实姓名</th>
                                 <th>状态</th>
                                 <th>操作</th>
                             </tr>
@@ -138,19 +146,20 @@
                                     <td>
                                         <input type="checkbox" class="checkboxes" value="@item.Id" />
                                     </td>
+                                    <td> @item.RoleType.ToString() </td>
                                     <td> @item.Username </td>
-                                    <td> @item.Email </td>
+                                    <td> @item.RealName </td>
                                     <td> @item.Phone </td>
+                                    <td> @item.Email </td>
                                     <td style="white-space:nowrap;"> @item.RealName </td>
-                                    <td> @item.RoleType </td>
                                     <td> @(item.IsEnabled ? "有效" : "失效") </td>
                                     <td>
                                         <a href="@Url.Action("Edit", "User", new { id = item.Id })" class="btn default btn-xs yellow-stripe">编辑</a>
                                         <a href="javascript:;" data-command="@Model.DeleteCommand(item.Id).ToJavascript()" class="btn default btn-xs red-stripe">
                                             删除
                                         </a>
-                                        <a href="javascript:;" data-command="@Model.ResetPasswordCommand(item.Id).ToJavascript()" class="btn default btn-xs green-stripe">重置密码</a>
-                                        
+                                        <a href="javascript:;" data-command="@Model.ResetPasswordCommand(item.Id).ToJavascript()" data-ajax='true' class="btn default btn-xs green-stripe">重置密码</a>
+
                                     </td>
                                 </tr>
                             }

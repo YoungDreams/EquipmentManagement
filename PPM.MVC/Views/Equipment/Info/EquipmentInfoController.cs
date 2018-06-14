@@ -77,11 +77,22 @@ namespace PPM.MVC.Views.Equipment.Info
                 command.Files = new List<FileInfo>();
                 for (int i = 0; i < Request.Files.Count; i++)
                 {
-                    command.Files.Add(new FileInfo
+                    if (i == 0)
                     {
-                        FileBytes = Request.Files[i].ReadBytes(),
-                        FileName = Request.Files[i].FileName
-                    });
+                        command.File = new FileInfo
+                        {
+                            FileBytes = Request.Files[i].ReadBytes(),
+                            FileName = Request.Files[i].FileName
+                        };
+                    }
+                    else
+                    {
+                        command.Files.Add(new FileInfo
+                        {
+                            FileBytes = Request.Files[i].ReadBytes(),
+                            FileName = Request.Files[i].FileName
+                        });
+                    }
                 }
             }
             _commandService.Execute(command);

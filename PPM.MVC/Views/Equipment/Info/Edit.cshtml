@@ -23,6 +23,190 @@
                                     if (Model.EquipmentInfo.EquipmentCategory != null)
                                     {
                                         <input type="hidden" name="EquipmentInfoId" value="@Model.EquipmentInfo.Id" />
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">生产厂商</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="Manufacturer" value="@Model.EquipmentInfo.Manufacturer" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">批次</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="BatchNum" value="@Model.EquipmentInfo.BatchNum"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">产品大类</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="CategoryId" value="@Model.EquipmentInfo.EquipmentCategory.Name"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">产品小类</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="CategoryId1" value="@Model.EquipmentInfo.EquipmentCategory1.Name"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">产品名称</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="Name" value="@Model.EquipmentInfo.Name"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">产品编码</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="IdentifierNo" value="@Model.EquipmentInfo.IdentifierNo"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">规格型号</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="Specification" value="@Model.EquipmentInfo.Specification"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">材质</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="Meterial" value="@Model.EquipmentInfo.Meterial"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">技术人员</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="Technician" value="@Model.EquipmentInfo.Technician"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">物资人员</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="Supplier" value="@Model.EquipmentInfo.Supplier"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">领料人</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="Picker" value="@Model.EquipmentInfo.Picker"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">出厂日期</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control dateTypeField" name="OutDateTime" value="@Model.EquipmentInfo.OutDateTime"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">检测人员</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="Checker" value="@Model.EquipmentInfo.Checker"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">检测结果</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="CheckResult" value="@Model.EquipmentInfo.CheckResult"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">产品执行标准</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="ExecuteStandard" value="@Model.EquipmentInfo.ExecuteStandard"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="control-label col-md-3">安装位置</label>
+                                                    <div class="col-md-9">
+                                                        <input type="text" class="form-control" name="SetupLocation" value="@Model.EquipmentInfo.SetupLocation"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row margin-top-10">
+                                            <div class="col-md-6 col-md-offset-2">
+                                                <div class="form-group">
+                                                    <label class="text-right col-md-3">产品图片</label>
+                                                    <div class="col-md-9">
+                                                        <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                            <div class="input-group input-large">
+                                                                <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                                                    <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                                    @*<span class="fileinput-filename">@Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value</span>*@
+                                                                    <img src="@(string.IsNullOrEmpty(Model.EquipmentInfo.ImageUrl) ? "" : Url.Content(Model.EquipmentInfo.ImageUrl))" alt="产品图片" />
+                                                                </div>
+                                                                <span class="input-group-addon btn default btn-file">
+                                                                    <span class="fileinput-new">选择图片</span>
+                                                                    <span class="fileinput-exists">替换</span>
+                                                                    <input type="file" name="file">
+                                                                </span>
+                                                                <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
                                         var index = 0;
                                         foreach (var equipmentCategoryColumn in Model.EquipmentInfo.EquipmentCategory.Columns)
                                         {

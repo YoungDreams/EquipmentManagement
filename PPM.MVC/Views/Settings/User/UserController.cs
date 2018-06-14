@@ -146,7 +146,6 @@ namespace PPM.MVC.Views.Settings.User
         public ActionResult Delete(DeleteUserCommand command)
         {
             _commandService.Execute(command);
-
             return RedirectToAction("Index");
         }
 

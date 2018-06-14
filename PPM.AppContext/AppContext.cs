@@ -102,7 +102,7 @@ namespace PPM.Shared
     {
         public static bool HasPermission(this User user, ModuleType module, Permission permission)
         {
-            if (user.Roles.Count > 0 && user.RoleTypeIs(RoleType.超级管理员))
+            if (user.Roles.Count > 0 && user.RoleTypeIs(RoleType.管理员))
             {
                 return true;
             }
@@ -112,7 +112,7 @@ namespace PPM.Shared
 
         public static bool HasPermission(this User user, List<ModuleType> modules, Permission permission)
         {
-            if (user.Roles.Count > 0 && user.RoleTypeIs(RoleType.超级管理员))
+            if (user.Roles.Count > 0 && user.RoleTypeIs(RoleType.管理员))
             {
                 return true;
             }
@@ -122,7 +122,7 @@ namespace PPM.Shared
 
         public static bool HasModule(this User user, ModuleType module)
         {
-            if (user.RoleTypeIs(RoleType.超级管理员))
+            if (user.RoleTypeIs(RoleType.管理员))
             {
                 return true;
             }
@@ -132,7 +132,7 @@ namespace PPM.Shared
 
         public static bool HasModule(this User user, List<ModuleType> modules)
         {
-            if (user.RoleTypeIs(RoleType.超级管理员))
+            if (user.RoleTypeIs(RoleType.管理员))
             {
                 return true;
             }

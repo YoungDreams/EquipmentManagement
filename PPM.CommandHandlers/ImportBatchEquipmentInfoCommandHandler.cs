@@ -128,11 +128,11 @@ namespace PPM.CommandHandlers
                         throw new ApplicationException($"第{rowNum}行{column+1}列的{type}{value}不是{EquipmentCategoryColumnType.整数}类型。");
                     }
                     break;
-                case EquipmentCategoryColumnType.浮点数:
+                case EquipmentCategoryColumnType.小数:
                     double result1 = 0.00;
                     if (!double.TryParse(value, out result1))
                     {
-                        throw new ApplicationException($"第{rowNum}行{column+1}列的{type}{value}不是{EquipmentCategoryColumnType.浮点数}类型。");
+                        throw new ApplicationException($"第{rowNum}行{column+1}列的{type}{value}不是{EquipmentCategoryColumnType.小数}类型。");
                     }
                     break;
                 case EquipmentCategoryColumnType.日期:

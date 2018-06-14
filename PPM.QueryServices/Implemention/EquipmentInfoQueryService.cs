@@ -21,10 +21,10 @@ namespace PPM.Query.Implemention
             {
                 equipmentInfos = equipmentInfos.Where(x => x.EquipmentCategory.Id == query.CategoryId);
             }
-            else
-            {
-                return equipmentInfos.Take(0).ToList().ToPagedData(page, pageSize);
-            }
+            //else
+            //{
+            //    return equipmentInfos.Take(0).ToList().ToPagedData(page, pageSize);
+            //}
             return equipmentInfos.ToPagedData(page, pageSize);
         }
         public IEnumerable<EquipmentInfo> Query(EquipmentInfoQuery query)

@@ -8,6 +8,7 @@ namespace PPM.Entities.Mappings
         public void Override(AutoMapping<User> mapping)
         {
             mapping.Map(x => x.Username).Not.Nullable().Unique();
+            mapping.Map(x => x.RoleType).CustomType<int>().Default("1").Not.Nullable();
 
             mapping.HasManyToMany(x => x.Roles).Not.LazyLoad().Cascade.All()
                 .ParentKeyColumn("UserId")

@@ -103,15 +103,15 @@ namespace PPM.MVC.Views.Equipment.Category
             var layerLength = _productCategories.Select(x => x.Layer).Distinct().Count();
             var rootLayerTrees = RetrieveRootTreeNodesByParentId(minLayer, _productCategories);
 
-            if (!LastLayerOnly)
-            {
-                categoryTreeView.Trees.Add(new TreeNode
-                {
-                    HasSubTreeNodes = false,
-                    Text = "全部",
-                    Value = "",
-                });
-            }
+            //if (!LastLayerOnly)
+            //{
+            //    categoryTreeView.Trees.Add(new TreeNode
+            //    {
+            //        HasSubTreeNodes = false,
+            //        Text = "全部",
+            //        Value = "",
+            //    });
+            //}
             foreach (var category in rootLayerTrees)
             {
                 category.SubTreeNodes = new List<TreeNode>();
@@ -136,15 +136,15 @@ namespace PPM.MVC.Views.Equipment.Category
             var minLayer = purchaseProductCategories.Min(x => x.Layer);
             var layerLength = purchaseProductCategories.Select(x => x.Layer).Distinct().Count();
             var rootLayerTrees = RetrieveRootTreeNodesByParentId(minLayer, purchaseProductCategories);
-            if (!LastLayerOnly)
-            {
-                categoryTreeView.Trees.Add(new TreeNode
-                {
-                    HasSubTreeNodes = false,
-                    Text = "全部",
-                    Value = "",
-                });
-            }
+            //if (!LastLayerOnly)
+            //{
+            //    categoryTreeView.Trees.Add(new TreeNode
+            //    {
+            //        HasSubTreeNodes = false,
+            //        Text = "全部",
+            //        Value = "",
+            //    });
+            //}
             foreach (var category in rootLayerTrees)
             {
                 category.SubTreeNodes = new List<TreeNode>();

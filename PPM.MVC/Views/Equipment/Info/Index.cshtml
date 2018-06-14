@@ -22,11 +22,11 @@
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="control-label col-md-3">分类名称</label>
-                                    <div class="input-group col-md-8">
+                                    <div class="input-group col-md-8" id="getCategories">
                                         <input type="text" class="form-control" disabled id="productCategoryText" value="@Model.CategoryText" placeholder="选择分类">
                                         <input id="productCategoryId" type="hidden" name="Query.CategoryId" value="@Model.Query.CategoryId" />
-                                        <span id="getCategories" class="input-group-addon" style="padding: 3px 12px;">
-                                            <i class="fa fa-bars font-red"></i>
+                                        <span class="input-group-addon" style="padding: 3px 12px;">
+                                            <i class="fa fa-chevron-down font-red"></i>
                                         </span>
                                     </div>
                                 </div>
@@ -81,7 +81,23 @@
                     <thead>
                         <tr>
                             <th>设备ID</th>
-                            @{
+                            <th>生产厂商</th>
+                            <th>批次</th>
+                            <th>产品大类</th>
+                            <th>产品小类</th>
+                            <th>产品名称</th>
+                            <th>产品编码</th>
+                            <th>规格型号</th>
+                            <th>材质</th>
+                            <th>技术人员</th>
+                            <th>物资人员</th>
+                            <th>领料人</th>
+                            <th>出厂日期</th>
+                            <th>检测人员</th>
+                            <th>检测结果</th>
+                            <th>产品执行标准</th>
+                            <th>安装位置</th>
+                            @*@{
                                 var equipmentCategoryColumns = Model.Items.FirstOrDefault()?.EquipmentCategory?.Columns.Where(x => x.ColumnType != EquipmentCategoryColumnType.文件.ToString());
                             }
                             @if (equipmentCategoryColumns != null)
@@ -90,7 +106,8 @@
                                 {
                                     <th>@header.ColumnName</th>
                                 }
-                            }
+                            }*@
+                            <th>产品图片</th>
                             <th>二维码</th>
                             <th>操作</th>
                         </tr>
@@ -100,7 +117,7 @@
                         {
                             <tr>
                                 <td>@item.Id</td>
-                                @{ var index = 0; }
+                                @*@{ var index = 0; }
                                 @foreach (var cell in item.EquipmentInfoColumnValues)
                                 {
                                     if (item.EquipmentCategory.Columns[index].ColumnType != EquipmentCategoryColumnType.文件.ToString())
@@ -108,7 +125,24 @@
                                         <td>@cell.Value</td>
                                     }
                                     index++;
-                                }
+                                }*@
+                                <td>@item.Manufacturer</td>
+                                <td>@item.BatchNum</td>
+                                <td>@(item.EquipmentCategory?.Name)</td>
+                                <td>@(item.EquipmentCategory1?.Name)</td>
+                                <td>@item.Name</td>
+                                <td>@item.IdentifierNo</td>
+                                <td>@item.Specification</td>
+                                <td>@item.Meterial</td>
+                                <td>@item.Technician</td>
+                                <td>@item.Supplier</td>
+                                <td>@item.Picker</td>
+                                <td>@item.OutDateTime</td>
+                                <td>@item.Checker</td>
+                                <td>@item.CheckResult</td>
+                                <td>@item.ExecuteStandard</td>
+                                <td>@item.SetupLocation</td>
+                                <td><img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "" : Url.Content(item.ImageUrl))" style="width: 100px; height: 100px;" alt="产品图片" /></td>
                                 <td><img src="@Url.Content(item.QrCodeImage)" style="width: 100px; height: 100px;" alt="设备二维码" /></td>
                                 <td>
                                     <a href="@Url.Action("Edit", "EquipmentInfo", new {id = item.Id})" class="btn default btn-xs yellow-stripe">编辑</a>
@@ -121,7 +155,6 @@
                     </tbody>
                 }
             </table>
-
             @Html.Partial("_Pagination", Model.Items)
         </div>
     </div>

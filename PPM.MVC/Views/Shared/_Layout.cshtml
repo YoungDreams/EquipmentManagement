@@ -123,14 +123,9 @@
 
     <!-- END THEME LAYOUT SCRIPTS -->
     <script src=@Url.Content("~/assets/app.js") type="text/javascript"></script>
-    <script src=@Url.Content("~/assets/bootstrap-closable-tab.js") type="text/javascript"></script>
+    @*<script src=@Url.Content("~/assets/bootstrap-closable-tab.js") type="text/javascript"></script>*@
     <script src=@Url.Content("~/assets/pages/scripts/ui-tree.js") type="text/javascript"></script>
-    <script>
-        @*$(function () {
-            var item = { 'id': '0', 'name': '首页', 'url': '@Url.Action("Index", "Home")', 'closable': false };
-            closableTab.addTab(item);
-            
-        });*@
+    @*<script>
         function addPageTab(e) {
             var $this = $(e);
             var url = $this.data("href");
@@ -139,7 +134,7 @@
             var item = { 'id': id, 'name': name, 'url': url, 'closable': true };
             closableTab.addTab(item);
         }
-    </script>
+    </script>*@
     @RenderSection("scripts", false)
 </body>
 </html>

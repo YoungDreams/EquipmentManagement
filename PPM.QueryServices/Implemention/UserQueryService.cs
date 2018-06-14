@@ -46,7 +46,7 @@ namespace PPM.Query.Implemention
             {
                 users = users.Where(x => x.IsEnabled == query.IsEnabled);
             }
-            return _fetcher.QueryPaged<User>(users, page, pageSize);
+            return _fetcher.QueryPaged<User>(users.OrderBy(x => x.RoleType).ThenBy(x => x.CreatedOn), page, pageSize);
         }
 
         public User GetUserByUserNameAndPassword(string userName, string password)

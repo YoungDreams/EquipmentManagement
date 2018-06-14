@@ -40,7 +40,7 @@ namespace PPM.Entities
                         Salt = saltedHash.Salt,
                         HashedPassword = saltedHash.Hash
                     };
-                    systemUser.Roles.Add(repository.Query<Role>().FirstOrDefault(x => x.RoleType == RoleType.超级管理员));
+                    systemUser.Roles.Add(repository.Query<Role>().FirstOrDefault(x => x.RoleType == RoleType.管理员));
                     repository.Create(systemUser);
                 }
                 return systemUser;

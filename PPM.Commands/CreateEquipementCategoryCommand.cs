@@ -54,10 +54,10 @@ namespace PPM.Commands
 
     public enum EquipmentCategoryColumnType
     {
-        字符串,
+        字符,
         整数,
-        浮点数,
+        小数,
+        日期,
         文件,
-        日期
     }
 }

@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using Foundation.Messaging;
+using PPM.Entities;
 
 namespace PPM.Commands
 {
@@ -9,9 +11,81 @@ namespace PPM.Commands
         {
             Files = new List<FileInfo>();
         }
+        /// <summary>
+        /// 产品大类
+        /// </summary>
         public int CategoryId { get; set; }
         public List<string> Values { get; set; }
+        /// <summary>
+        /// 产品图片
+        /// </summary>
+        public FileInfo File { get; set; }
         public List<FileInfo> Files { get; set; }
+        public string QrCodeImage { get; set; }
+        /// <summary>
+        /// 生产厂商
+        /// </summary>
+        public string Manufacturer { get; set; }
+        /// <summary>
+        /// 批次，可查询
+        /// </summary>
+        public int BatchNum { get; set; }
+        /// <summary>
+        /// 产品小类，可查询
+        /// </summary>
+        public int CategoryId1 { get; set; }
+        /// <summary>
+        /// 产品名称，可查询
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 产品图片路径
+        /// </summary>
+        public string ImageUrl { get; set; }
+        /// <summary>
+        /// 产品编码，可查询
+        /// </summary>
+        public string IdentifierNo { get; set; }
+        /// <summary>
+        /// 规格型号
+        /// </summary>
+        public string Specification { get; set; }
+        /// <summary>
+        /// 材质
+        /// </summary>
+        public string Meterial { get; set; }
+        /// <summary>
+        /// 技术人员
+        /// </summary>
+        public string Technician { get; set; }
+        /// <summary>
+        /// 物资人员
+        /// </summary>
+        public string Supplier { get; set; }
+        /// <summary>
+        /// 领料人
+        /// </summary>
+        public string Picker { get; set; }
+        /// <summary>
+        /// 出厂日期，可查询
+        /// </summary>
+        public DateTime? OutDateTime { get; set; }
+        /// <summary>
+        /// 检测人员
+        /// </summary>
+        public string Checker { get; set; }
+        /// <summary>
+        /// 检测结果
+        /// </summary>
+        public string CheckResult { get; set; }
+        /// <summary>
+        /// 产品执行标准
+        /// </summary>
+        public string ExecuteStandard { get; set; }
+        /// <summary>
+        /// 安装位置
+        /// </summary>
+        public string SetupLocation { get; set; }
     }
 
     public class FileInfo
@@ -25,6 +99,70 @@ namespace PPM.Commands
         public int EquipmentInfoId { get; set; }
         public List<string> Values { get; set; }
         public List<FileInfo> Files { get; set; }
+        /// <summary>
+        /// 生产厂商
+        /// </summary>
+        public string Manufacturer { get; set; }
+        /// <summary>
+        /// 批次，可查询
+        /// </summary>
+        public int BatchNum { get; set; }
+        /// <summary>
+        /// 产品小类，可查询
+        /// </summary>
+        public EquipmentCategory EquipmentCategory1 { get; set; }
+        /// <summary>
+        /// 产品名称，可查询
+        /// </summary>
+        public string Name { get; set; }
+        /// <summary>
+        /// 产品图片路径
+        /// </summary>
+        public string ImageUrl { get; set; }
+        /// <summary>
+        /// 产品编码，可查询
+        /// </summary>
+        public string IdentifierNo { get; set; }
+        /// <summary>
+        /// 规格型号
+        /// </summary>
+        public string Specification { get; set; }
+        /// <summary>
+        /// 材质
+        /// </summary>
+        public string Meterial { get; set; }
+        /// <summary>
+        /// 技术人员
+        /// </summary>
+        public string Technician { get; set; }
+        /// <summary>
+        /// 物资人员
+        /// </summary>
+        public string Supplier { get; set; }
+        /// <summary>
+        /// 领料人
+        /// </summary>
+        public string Picker { get; set; }
+        /// <summary>
+        /// 出厂日期，可查询
+        /// </summary>
+        public DateTime? OutDateTime { get; set; }
+        /// <summary>
+        /// 检测人员
+        /// </summary>
+        public string Checker { get; set; }
+        /// <summary>
+        /// 检测结果
+        /// </summary>
+        public string CheckResult { get; set; }
+        /// <summary>
+        /// 产品执行标准
+        /// </summary>
+        public string ExcuteStandard { get; set; }
+        /// <summary>
+        /// 安装位置
+        /// </summary>
+        public string SetupLocation { get; set; }
     }
     public class DeleteEquipmentInfoCommand : Command
     {
