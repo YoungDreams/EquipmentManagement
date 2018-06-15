@@ -25,16 +25,24 @@ namespace PPM.CommandHandlers
         public void Handle(EditEquipmentInfoCommand command)
         {
             var equipmentInfo = _repository.Get<EquipmentInfo>(command.EquipmentInfoId);
-            //var index = 0;
-            //foreach (var commandValue in equipmentInfo.EquipmentInfoColumnValues)
-            //{
-            //    var type = equipmentInfo.EquipmentCategory.Columns[index].ColumnType;
-            //    var editedValue = command.Values[index];
-            //    IsValidTypeValue(type, editedValue);
-            //    commandValue.Value = editedValue;
-            //    _repository.Update(commandValue);
-            //    index++;
-            //}
+            equipmentInfo.Manufacturer = command.Manufacturer;
+            equipmentInfo.BatchNum = command.BatchNum;
+            equipmentInfo.CheckResult = command.CheckResult;
+            equipmentInfo.Checker = command.Checker;
+            equipmentInfo.ExecuteStandard = command.ExcuteStandard;
+            equipmentInfo.IdentifierNo = command.IdentifierNo;
+            equipmentInfo.Meterial = command.Meterial;
+            equipmentInfo.Name = command.Name;
+            equipmentInfo.OutDateTime = command.OutDateTime;
+            equipmentInfo.Picker = command.Picker;
+            equipmentInfo.SetupLocation = command.SetupLocation;
+            equipmentInfo.Specification = command.Specification;
+            equipmentInfo.Supplier = command.Supplier;
+            equipmentInfo.Technician = command.Technician;
+            equipmentInfo.ImageUrl =
+                SaveFile(command.File.FileBytes, command.File.FileName);
+            equipmentInfo.EquipmentCategory1 = new EquipmentCategory {Id = command.CategoryId1};
+            _repository.Update(equipmentInfo);
             var category = equipmentInfo.EquipmentCategory;
             var index = 0;
             foreach (var categoryColun in category.Columns)

@@ -32,6 +32,38 @@ var UITree = function () {
         });
     }
 
+    var handleSample12 = function () {
+
+        $('#tree_11').jstree({
+            "core": {
+                "themes": {
+                    "responsive": false
+                }
+            },
+            "types": {
+                "default": {
+                    "icon": "fa fa-folder icon-state-warning icon-lg"
+                },
+                "file": {
+                    "icon": "fa fa-file icon-state-warning icon-lg"
+                }
+            },
+            "plugins": ["types"]
+        });
+
+        // handle link clicks in tree nodes(support target="_blank" as well)
+        $('#tree_11').on('select_node.jstree', function (e, data) {
+            var link = $('#' + data.selected).find('a');
+            if (link.attr("href") != "#" && link.attr("href") != "javascript:;" && link.attr("href") != "") {
+                if (link.attr("target") == "_blank") {
+                    link.attr("href").target = "_blank";
+                }
+                document.location.href = link.attr("href");
+                return false;
+            }
+        });
+    }
+
     var handleSample11 = function () {
 
         $('.tree-demo').jstree({
@@ -192,6 +224,7 @@ var UITree = function () {
         init: function () {
 
             handleSample1();
+            handleSample12();
             handleSample11();
             handleSample2();
             contextualMenuSample();

@@ -8,5 +8,6 @@ namespace PPM.MVC.Views.Equipment.Info
     public class EditViewModel: EditEquipmentInfoCommand
     {
         public EquipmentInfo EquipmentInfo { get; set; }
+        public EquipmentCategoryTreeView ProductCategoryTreeView { get; set; }
     }
 }

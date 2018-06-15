@@ -31,9 +31,15 @@ namespace PPM.CommandHandlers
 
         public void Handle(CreateEquipmentInfoCommand command)
         {
-            var equipmentInfo = new EquipmentInfo();
+            var equipmentInfo = command.MapToEntity<EquipmentInfo>();
             var category = _repository.Get<EquipmentCategory>(command.CategoryId);
-            equipmentInfo.EquipmentCategory = category;
+            equipmentInfo.EquipmentCategory = category ?? throw new DomainValidationException("产品大类未选择！");
+            equipmentInfo.EquipmentCategory1 = new EquipmentCategory
+            {
+                Id = command.CategoryId1
+            };
+            equipmentInfo.ImageUrl =
+                SaveFile(command.File.FileBytes, command.File.FileName);
             _repository.Create(equipmentInfo);
 
             var index = 0;
