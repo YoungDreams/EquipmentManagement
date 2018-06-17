@@ -34,10 +34,13 @@ namespace PPM.CommandHandlers
             var equipmentInfo = command.MapToEntity<EquipmentInfo>();
             var category = _repository.Get<EquipmentCategory>(command.CategoryId);
             equipmentInfo.EquipmentCategory = category ?? throw new DomainValidationException("产品大类未选择！");
-            equipmentInfo.EquipmentCategory1 = new EquipmentCategory
+            if (command.CategoryId1 != 0)
             {
-                Id = command.CategoryId1
-            };
+                equipmentInfo.EquipmentCategory1 = new EquipmentCategory
+                {
+                    Id = command.CategoryId1
+                };
+            }
             equipmentInfo.ImageUrl =
                 SaveFile(command.File.FileBytes, command.File.FileName);
             _repository.Create(equipmentInfo);
@@ -53,7 +56,7 @@ namespace PPM.CommandHandlers
                         var equipmentInfoColumnValue = new EquipmentInfoColumnValue
                         {
                             EquipmentInfo = equipmentInfo,
-                            Value = SaveFile(firstOrDefault.FileBytes, firstOrDefault.FileName)
+                            Value = SaveFile(firstOrDefault.FileBytes, firstOrDefault.FileName, false)
                         };
                         _repository.Create(equipmentInfoColumnValue);
                         command.Files.Remove(firstOrDefault);
@@ -63,6 +66,10 @@ namespace PPM.CommandHandlers
                 {
                     var type = category.Columns[index].ColumnType;
                     IsValidTypeValue(type, command.Values[index]);
+                    if (type == EquipmentCategoryColumnType.小数.ToString()&&string.IsNullOrEmpty(command.Values[index]))
+                    {
+                        command.Values[index] = "0";
+                    }
                     var equipmentInfoColumnValue = new EquipmentInfoColumnValue
                     {
                         EquipmentInfo = equipmentInfo,
@@ -73,39 +80,14 @@ namespace PPM.CommandHandlers
                 }
             }
             
-            //for(var index = 0; index < (command.Values.Count+command.Files.Count); index++)
-            //{
-            //    if (category.Columns[index].ColumnType == EquipmentCategoryColumnType.文件.ToString())
-            //    {
-            //        var equipmentInfoColumnValue = new EquipmentInfoColumnValue
-            //        {
-            //            EquipmentInfo = equipmentInfo,
-            //            Value = SaveFile()
-            //        };
-            //        _repository.Create(equipmentInfoColumnValue);
-            //    }
-            //    else
-            //    {
-            //        var type = category.Columns[index].ColumnType;
-            //        IsValidTypeValue(type, command.Values[index]);
-            //        var equipmentInfoColumnValue = new EquipmentInfoColumnValue
-            //        {
-            //            EquipmentInfo = equipmentInfo,
-            //            Value = command.Values[index]
-            //        };
-            //        _repository.Create(equipmentInfoColumnValue);
-            //        index++;
-            //    }
-                
-            //}
             var fileName = SaveQrCodeImage(equipmentInfo);
             equipmentInfo.QrCodeImage = fileName;
             _repository.Update(equipmentInfo);
         }
 
-        public string SaveFile(byte[] fileBytes, string fileName)
+        public string SaveFile(byte[] fileBytes, string fileName, bool isRequired = true)
         {
-            if (fileBytes == null || string.IsNullOrEmpty(fileName))
+            if (fileBytes == null && string.IsNullOrEmpty(fileName) && isRequired)
             {
                 throw new ApplicationException("请选择附件");
             }
@@ -136,21 +118,21 @@ namespace PPM.CommandHandlers
             {
                 case EquipmentCategoryColumnType.整数:
                     int result = 0;
-                    if (!int.TryParse(value, out result))
+                    if (!int.TryParse(value, out result) && !string.IsNullOrEmpty(value))
                     {
                         throw new DomainValidationException($"{value}不是整数类型。");
                     }
                     break;
                 case EquipmentCategoryColumnType.小数:
                     double result1 = 0.00;
-                    if (!double.TryParse(value, out result1))
+                    if (!double.TryParse(value, out result1) && !string.IsNullOrEmpty(value))
                     {
                         throw new DomainValidationException($"{value}不是小数类型。");
                     }
                     break;
                 case EquipmentCategoryColumnType.日期:
                     DateTime date;
-                    if (!DateTime.TryParse(value, out date))
+                    if (!DateTime.TryParse(value, out date) && !string.IsNullOrEmpty(value))
                     {
                         throw new DomainValidationException($"{value}不是浮点数类型。");
                     }

@@ -65,7 +65,7 @@
         <div class="portlet light bordered">
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
-                <form data-ajax="true" action="@Url.Action("Create", "EquipmentInfo")" method="POST" enctype="multipart/form-data">
+                <form action="@Url.Action("Create", "EquipmentInfo")" method="POST" enctype="multipart/form-data">
                     <div class="portlet" style="margin-top: 10px;">
                         <div class="portlet-title">
                             <div class="caption">
@@ -103,12 +103,9 @@
                                             <div class="col-md-8 col-md-offset-2">
                                                 <div class="form-group">
                                                     <label class="text-right col-md-3">产品大类</label>
-                                                    <div class="input-group col-md-9" id="getCategories">
-                                                        <input type="text" class="form-control" disabled id="productCategoryText" placeholder="选择分类">
-                                                        <input id="productCategoryId" type="hidden" name="CategoryId" />
-                                                        <span class="input-group-addon" style="padding: 3px 12px;">
-                                                            <i class="fa fa-chevron-down font-red"></i>
-                                                        </span>
+                                                    <div class="col-md-9">
+                                                        <label class="form-control">@Model.CategoryText</label>
+                                                        <input type="hidden" name="CategoryId" value="@Model.CategoryId" />
                                                     </div>
                                                 </div>
                                             </div>
@@ -256,12 +253,12 @@
                                                             <div class="input-group input-large">
                                                                 <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
                                                                     <i class="fa fa-file fileinput-exists"></i>&nbsp;
-                                                                    <span class="fileinput-filename"></span>
+                                                                    <span class="fileinput-filename" required></span>
                                                                 </div>
                                                                 <span class="input-group-addon btn default btn-file">
                                                                     <span class="fileinput-new">选择图片</span>
                                                                     <span class="fileinput-exists">替换</span>
-                                                                    <input type="file" name="file">
+                                                                    <input type="file" name="file" required>
                                                                 </span>
                                                                 <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
                                                             </div>

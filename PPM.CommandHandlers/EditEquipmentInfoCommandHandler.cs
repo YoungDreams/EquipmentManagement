@@ -29,7 +29,7 @@ namespace PPM.CommandHandlers
             equipmentInfo.BatchNum = command.BatchNum;
             equipmentInfo.CheckResult = command.CheckResult;
             equipmentInfo.Checker = command.Checker;
-            equipmentInfo.ExecuteStandard = command.ExcuteStandard;
+            equipmentInfo.ExecuteStandard = command.ExecuteStandard;
             equipmentInfo.IdentifierNo = command.IdentifierNo;
             equipmentInfo.Meterial = command.Meterial;
             equipmentInfo.Name = command.Name;
@@ -39,9 +39,18 @@ namespace PPM.CommandHandlers
             equipmentInfo.Specification = command.Specification;
             equipmentInfo.Supplier = command.Supplier;
             equipmentInfo.Technician = command.Technician;
-            equipmentInfo.ImageUrl =
-                SaveFile(command.File.FileBytes, command.File.FileName);
-            equipmentInfo.EquipmentCategory1 = new EquipmentCategory {Id = command.CategoryId1};
+            if (command.File.FileBytes != null && !string.IsNullOrEmpty(command.File.FileName))
+            {
+                equipmentInfo.ImageUrl =
+                    SaveFile(command.File.FileBytes, command.File.FileName);
+            }
+            if (command.CategoryId1 != 0)
+            {
+                equipmentInfo.EquipmentCategory1 = new EquipmentCategory
+                {
+                    Id = command.CategoryId1
+                };
+            }
             _repository.Update(equipmentInfo);
             var category = equipmentInfo.EquipmentCategory;
             var index = 0;
@@ -56,7 +65,7 @@ namespace PPM.CommandHandlers
                         if (firstOrDefault.FileBytes != null && !string.IsNullOrEmpty(firstOrDefault.FileName))
                         {
                             equipmentInfoColumnValue.Value =
-                                SaveFile(firstOrDefault.FileBytes, firstOrDefault.FileName);
+                                SaveFile(firstOrDefault.FileBytes, firstOrDefault.FileName, false);
                             _repository.Update(equipmentInfoColumnValue);
                         }
                         command.Files.Remove(firstOrDefault);
@@ -73,9 +82,9 @@ namespace PPM.CommandHandlers
             }
         }
 
-        public string SaveFile(byte[] fileBytes, string fileName)
+        public string SaveFile(byte[] fileBytes, string fileName, bool isRequired = true)
         {
-            if (fileBytes == null || string.IsNullOrEmpty(fileName))
+            if (fileBytes == null && string.IsNullOrEmpty(fileName) && isRequired)
             {
                 throw new ApplicationException("请选择附件");
             }
@@ -93,21 +102,21 @@ namespace PPM.CommandHandlers
             {
                 case EquipmentCategoryColumnType.整数:
                     int result = 0;
-                    if (!int.TryParse(value, out result))
+                    if (!int.TryParse(value, out result) && !string.IsNullOrEmpty(value))
                     {
                         throw new DomainValidationException($"{value}不是整数类型。");
                     }
                     break;
                 case EquipmentCategoryColumnType.小数:
                     double result1 = 0.00;
-                    if (!double.TryParse(value, out result1))
+                    if (!double.TryParse(value, out result1) && !string.IsNullOrEmpty(value))
                     {
                         throw new DomainValidationException($"{value}不是小数类型。");
                     }
                     break;
                 case EquipmentCategoryColumnType.日期:
                     DateTime date;
-                    if (!DateTime.TryParse(value, out date))
+                    if (!DateTime.TryParse(value, out date) && !string.IsNullOrEmpty(value))
                     {
                         throw new DomainValidationException($"{value}不是浮点数类型。");
                     }
