@@ -64,23 +64,72 @@ namespace PPM.CommandHandlers
                     throw new ApplicationException("此EXCEL文件不是所导出的模板文件！");
                 }
                 var categoryId = sheet.GetRow(1).GetCell(0).GetCellValue();
-                var category = _repository.Get<EquipmentCategory>(int.Parse(categoryId));
+                var categories = _repository.Query<EquipmentCategory>();
+                var category = categories.SingleOrDefault(x => x.Id == int.Parse(categoryId));
                 if (category == null) throw new ApplicationException("设备分类匹配失败！");
 
                 var equipmentInfo = new EquipmentInfo
                 {
                     EquipmentCategory = category
                 };
-                _repository.Create(equipmentInfo);
-                var fileName = SaveQrCodeImage(equipmentInfo);
-                equipmentInfo.QrCodeImage = fileName;
-                _repository.Update(equipmentInfo);
-
                 for (int rowNum = 1; rowNum <= sheet.LastRowNum; rowNum++)
                 {
-                    for (int i = 0; i < category.Columns.Count; i++)
+                    //rowHeader.CreateCell(3).SetCellValue("批次");
+                    //rowHeader.CreateCell(4).SetCellValue("产品小类");
+                    //rowHeader.CreateCell(5).SetCellValue("产品名称");
+                    //rowHeader.CreateCell(6).SetCellValue("产品编码");
+                    //rowHeader.CreateCell(7).SetCellValue("规格型号");
+                    //rowHeader.CreateCell(8).SetCellValue("材质");
+                    //rowHeader.CreateCell(9).SetCellValue("技术人员");
+                    //rowHeader.CreateCell(10).SetCellValue("物资人员");
+                    //rowHeader.CreateCell(11).SetCellValue("领料人");
+                    //rowHeader.CreateCell(12).SetCellValue("出厂日期");
+                    //rowHeader.CreateCell(13).SetCellValue("检测人员");
+                    //rowHeader.CreateCell(14).SetCellValue("检测结果");
+                    //rowHeader.CreateCell(15).SetCellValue("产品执行标准");
+                    //rowHeader.CreateCell(16).SetCellValue("安装位置");
+                    var manufacturer = sheet.GetRow(rowNum).GetCell(2).GetCellValue();
+                    var batchNum = sheet.GetRow(rowNum).GetCell(3).GetCellValue();
+                    var categoryName1 = sheet.GetRow(rowNum).GetCell(4).GetCellValue();
+                    var name = sheet.GetRow(rowNum).GetCell(5).GetCellValue();
+                    var identifierNo = sheet.GetRow(rowNum).GetCell(6).GetCellValue();
+                    var specification = sheet.GetRow(rowNum).GetCell(7).GetCellValue();
+                    var meterial = sheet.GetRow(rowNum).GetCell(8).GetCellValue();
+                    var technician = sheet.GetRow(rowNum).GetCell(9).GetCellValue();
+                    var supplier = sheet.GetRow(rowNum).GetCell(10).GetCellValue();
+                    var picker = sheet.GetRow(rowNum).GetCell(11).GetCellValue();
+                    var outDateTime = sheet.GetRow(rowNum).GetCell(12).GetCellDateTime().ToString();
+                    var checker = sheet.GetRow(rowNum).GetCell(13).GetCellValue();
+                    var checkResult = sheet.GetRow(rowNum).GetCell(14).GetCellValue();
+                    var executeStandard = sheet.GetRow(rowNum).GetCell(15).GetCellValue();
+                    var setupLocation = sheet.GetRow(rowNum).GetCell(16).GetCellValue();
+                    equipmentInfo.Manufacturer = manufacturer;
+                    equipmentInfo.BatchNum = Convert.ToInt32(batchNum);
+                    equipmentInfo.CheckResult = checkResult;
+                    equipmentInfo.Checker = checker;
+                    equipmentInfo.ExecuteStandard = executeStandard;
+                    equipmentInfo.IdentifierNo = identifierNo;
+                    equipmentInfo.Meterial = meterial;
+                    equipmentInfo.Name = name;
+                    equipmentInfo.OutDateTime = Convert.ToDateTime(outDateTime);
+                    equipmentInfo.Picker = picker;
+                    equipmentInfo.SetupLocation = setupLocation;
+                    equipmentInfo.Specification = specification;
+                    equipmentInfo.Supplier = supplier;
+                    equipmentInfo.Technician = technician;
+                    if (!string.IsNullOrEmpty(categoryName1))
                     {
-                        var cellStartIndex = i + 2;
+                        var category1 = categories.FirstOrDefault(x => x.Name == categoryName1);
+                        equipmentInfo.EquipmentCategory1 = category1;
+                    }
+                    _repository.Create(equipmentInfo);
+                    var fileName = SaveQrCodeImage(equipmentInfo);
+                    equipmentInfo.QrCodeImage = fileName;
+                    _repository.Update(equipmentInfo);
+                    
+                    for (int i = 17; i < category.Columns.Count; i++)
+                    {
+                        var cellStartIndex = i;
                         var type = category.Columns[i].ColumnType;
                         var currentRow = sheet.GetRow(rowNum);
                         var currentCell = currentRow.GetCell(cellStartIndex);

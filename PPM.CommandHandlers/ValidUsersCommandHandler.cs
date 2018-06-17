@@ -61,16 +61,32 @@ namespace PPM.CommandHandlers
             NPOI.SS.UserModel.ISheet sheet1 = book.CreateSheet("Sheet1");
             //给sheet1添加第一行的头部标题  
             NPOI.SS.UserModel.IRow rowHeader = sheet1.CreateRow(0);
-            
+
             rowHeader.CreateCell(0).SetCellValue("ID"); // 表头列名
             rowHeader.CreateCell(1).SetCellValue("设备分类"); // 表头列名
+            rowHeader.CreateCell(2).SetCellValue("生产厂商");
+            rowHeader.CreateCell(3).SetCellValue("批次");
+            rowHeader.CreateCell(4).SetCellValue("产品小类");
+            rowHeader.CreateCell(5).SetCellValue("产品名称");
+            rowHeader.CreateCell(6).SetCellValue("产品编码");
+            rowHeader.CreateCell(7).SetCellValue("规格型号");
+            rowHeader.CreateCell(8).SetCellValue("材质"); 
+            rowHeader.CreateCell(9).SetCellValue("技术人员");
+            rowHeader.CreateCell(10).SetCellValue("物资人员");
+            rowHeader.CreateCell(11).SetCellValue("领料人");
+            rowHeader.CreateCell(12).SetCellValue("出厂日期");
+            rowHeader.CreateCell(13).SetCellValue("检测人员");
+            rowHeader.CreateCell(14).SetCellValue("检测结果"); 
+            rowHeader.CreateCell(15).SetCellValue("产品执行标准");
+            rowHeader.CreateCell(16).SetCellValue("安装位置");
             var dateIndexes = new List<int>();
             for (int i = 0; i < columns.Count; i++)
             {
-                rowHeader.CreateCell(i + 2).SetCellValue(columns[i].ColumnName); // 表头列名
+                var cellStartIndex = i + 17;
+                rowHeader.CreateCell(cellStartIndex).SetCellValue(columns[i].ColumnName); // 表头列名
                 if (columns[i].ColumnType == EquipmentCategoryColumnType.日期.ToString())
                 {
-                    dateIndexes.Add(i+2);
+                    dateIndexes.Add(cellStartIndex);
                 }
             }
             IRow row1 = sheet1.CreateRow(1);
