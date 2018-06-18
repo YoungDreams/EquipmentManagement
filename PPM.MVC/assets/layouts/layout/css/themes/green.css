@@ -504,10 +504,10 @@
     Page Footer 
     ******/
 .page-footer .page-footer-inner {
-  color: #98a6ba; }
+  color: #fff; }
 
 .page-footer-fixed .page-footer {
-  background-color: #28303b; }
+  background-color: #1aa97b; }
 
 @media (min-width: 992px) {
   /* 992px */
@@ -568,7 +568,7 @@
     .page-boxed.page-sidebar-fixed.page-footer-fixed .page-footer {
       background-color: #303a47 !important; }
       .page-boxed.page-sidebar-fixed.page-footer-fixed .page-footer .page-footer-inner {
-        color: #98a6ba; }
+        color: #fff; }
   /* Sidebar Menu Wirh Hoverable Submenu */
   .page-sidebar-menu-hover-submenu li:hover a > .arrow {
     border-right: 8px solid #323c4b; }
@@ -581,7 +581,7 @@
   /* 991px */
   /* Page sidebar */
   .page-sidebar {
-    background-color: #28303b;
+    background-color: #1aa97b;
     /* light sidebar */ }
     .page-sidebar .page-sidebar-menu > li > a {
       border-top: 1px solid #1aa97b; }
@@ -591,9 +591,9 @@
     .page-sidebar .page-sidebar-menu > li:last-child > a {
       border-bottom: 0 !important; }
     .page-sidebar .page-sidebar-menu > li .sub-menu {
-      background-color: #28303b !important; }
+      background-color: #1aa97b !important; }
     .page-sidebar .page-sidebar-menu .sidebar-search input {
-      background-color: #28303b !important; }
+      background-color: #1aa97b !important; }
     .page-sidebar .page-sidebar-menu.page-sidebar-menu-light {
       /* 1st level links */ }
       .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li:hover > a,
@@ -606,7 +606,7 @@
         .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li.active.open > a:hover {
           background: #2e3744; }
       .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu {
-        background: #28303b !important; }
+        background: #1aa97b !important; }
         .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li:hover > a,
         .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li.open > a,
         .page-sidebar .page-sidebar-menu.page-sidebar-menu-light > li .sub-menu > li.active > a {

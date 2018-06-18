@@ -62,11 +62,11 @@ namespace PPM.CommandHandlers
                         command.Files.Remove(firstOrDefault);
                     }
                 }
-                else 
+                else
                 {
                     var type = category.Columns[index].ColumnType;
                     IsValidTypeValue(type, command.Values[index]);
-                    if (type == EquipmentCategoryColumnType.小数.ToString()&&string.IsNullOrEmpty(command.Values[index]))
+                    if (type == EquipmentCategoryColumnType.小数.ToString() && string.IsNullOrEmpty(command.Values[index]))
                     {
                         command.Values[index] = "0";
                     }
@@ -79,7 +79,7 @@ namespace PPM.CommandHandlers
                     index++;
                 }
             }
-            
+
             var fileName = SaveQrCodeImage(equipmentInfo);
             equipmentInfo.QrCodeImage = fileName;
             _repository.Update(equipmentInfo);
@@ -87,7 +87,7 @@ namespace PPM.CommandHandlers
 
         public string SaveFile(byte[] fileBytes, string fileName, bool isRequired = true)
         {
-            if (fileBytes == null && string.IsNullOrEmpty(fileName) && isRequired)
+            if ((fileBytes == null || fileBytes.Length == 0) && string.IsNullOrEmpty(fileName) && isRequired)
             {
                 throw new ApplicationException("请选择附件");
             }
@@ -111,7 +111,7 @@ namespace PPM.CommandHandlers
             return QrCodeVirtualPath.Replace("~", "") + fileName;
         }
 
-        private void IsValidTypeValue(string type,string value)
+        private void IsValidTypeValue(string type, string value)
         {
             var toType = Enum.Parse(typeof(EquipmentCategoryColumnType), type);
             switch (toType)

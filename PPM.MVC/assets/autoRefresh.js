@@ -189,19 +189,21 @@ $.fn.initControls = function (options) {
                             if (modal.length > 0) {
                                 modal.modal("hide");
                             }
-
-                            //刷新列表或页面
-                            var refreshSelector = form.attr("data-refresh");
-                            if (refreshSelector) {
-                                $(refreshSelector).autoRefresh();
-                                button.removeAttr("disabled");
-                            } else {
-                                if (result.redirect) {
-                                    window.location.href = result.redirect;
+                            window.setTimeout(function() {
+                                //刷新列表或页面
+                                var refreshSelector = form.attr("data-refresh");
+                                if (refreshSelector) {
+                                    $(refreshSelector).autoRefresh();
+                                    button.removeAttr("disabled");
                                 } else {
-                                    window.location.reload();
+                                    if (result.redirect) {
+                                        window.location.href = result.redirect;
+                                    } else {
+                                        window.location.reload();
+                                    }
                                 }
-                            }
+                            }, 2000);
+                            
 
                         } else {
                             $.each(result.errors, function (i, val) {

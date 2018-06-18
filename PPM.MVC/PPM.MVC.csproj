@@ -1621,6 +1621,7 @@
     <Content Include="assets\layouts\layout\css\layout.min.css" />
     <Content Include="assets\layouts\layout\css\themes\blue.css" />
     <Content Include="assets\layouts\layout\css\themes\blue.min.css" />
+    <Content Include="assets\layouts\layout\css\themes\green.css" />
     <Content Include="assets\layouts\layout\css\themes\darkblue.css" />
     <Content Include="assets\layouts\layout\css\themes\darkblue.min.css" />
     <Content Include="assets\layouts\layout\css\themes\default.css" />

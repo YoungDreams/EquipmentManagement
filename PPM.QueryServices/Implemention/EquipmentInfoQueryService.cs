@@ -17,14 +17,30 @@ namespace PPM.Query.Implemention
         public PagedData<EquipmentInfo> Query(int page, int pageSize, EquipmentInfoQuery query)
         {
             var equipmentInfos = _fetcher.Query<EquipmentInfo>();
-            if (query.CategoryId.HasValue)
+            if (query.CategoryId.HasValue && query.CategoryId.Value > 0)
             {
                 equipmentInfos = equipmentInfos.Where(x => x.EquipmentCategory.Id == query.CategoryId);
             }
-            //else
-            //{
-            //    return equipmentInfos.Take(0).ToList().ToPagedData(page, pageSize);
-            //}
+            if (!string.IsNullOrEmpty(query.Name))
+            {
+                equipmentInfos = equipmentInfos.Where(x => x.Name.Contains(query.Name));
+            }
+            if (query.BatchNum.HasValue)
+            {
+                equipmentInfos = equipmentInfos.Where(x => x.BatchNum == query.BatchNum.Value);
+            }
+            if (query.CategoryId1.HasValue&& query.CategoryId1.Value > 0)
+            {
+                equipmentInfos = equipmentInfos.Where(x => x.EquipmentCategory1.Id == query.CategoryId1);
+            }
+            if (!string.IsNullOrEmpty(query.IdentifierNo))
+            {
+                equipmentInfos = equipmentInfos.Where(x => x.IdentifierNo.Contains(query.IdentifierNo));
+            }
+            if (query.OutDateTime.HasValue)
+            {
+                equipmentInfos = equipmentInfos.Where(x => x.OutDateTime == query.OutDateTime);
+            }
             return equipmentInfos.ToPagedData(page, pageSize);
         }
         public IEnumerable<EquipmentInfo> Query(EquipmentInfoQuery query)

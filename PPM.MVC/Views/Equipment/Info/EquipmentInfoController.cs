@@ -40,6 +40,9 @@ namespace PPM.MVC.Views.Equipment.Info
                 ProductCategoryTreeView = new EquipmentCategoryTreeView().GetProductCategoryTreeView(categories),
                 CategoryText = query.CategoryId.HasValue
                     ? categories.SingleOrDefault(x => x.Id == query.CategoryId).Name
+                    : string.Empty,
+                CategoryText1 = query.CategoryId1.HasValue
+                    ? categories.SingleOrDefault(x => x.Id == query.CategoryId1).Name
                     : string.Empty
             };
             foreach (var equipmentInfo in viewModel.Items)

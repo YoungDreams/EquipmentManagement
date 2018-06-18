@@ -84,7 +84,7 @@ namespace PPM.CommandHandlers
 
         public string SaveFile(byte[] fileBytes, string fileName, bool isRequired = true)
         {
-            if (fileBytes == null && string.IsNullOrEmpty(fileName) && isRequired)
+            if ((fileBytes == null || fileBytes.Length == 0) && string.IsNullOrEmpty(fileName) && isRequired)
             {
                 throw new ApplicationException("ÇëÑ¡Ôñ¸½¼þ");
             }

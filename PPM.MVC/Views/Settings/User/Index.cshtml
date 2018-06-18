@@ -155,11 +155,10 @@
                                     <td> @(item.IsEnabled ? "有效" : "失效") </td>
                                     <td>
                                         <a href="@Url.Action("Edit", "User", new { id = item.Id })" class="btn default btn-xs yellow-stripe">编辑</a>
-                                        <a href="javascript:;" data-command="@Model.DeleteCommand(item.Id).ToJavascript()" class="btn default btn-xs red-stripe">
+                                        <a href="javascript:;" onclick='sendPost(this)' data-command="@Model.DeleteCommand(item.Id).ToJavascript()" class="btn default btn-xs red-stripe">
                                             删除
                                         </a>
-                                        <a href="javascript:;" data-command="@Model.ResetPasswordCommand(item.Id).ToJavascript()" data-ajax='true' class="btn default btn-xs green-stripe">重置密码</a>
-
+                                        <a href="javascript:;" onclick='sendPost(this)' data-command="@Model.ResetPasswordCommand(item.Id).ToJavascript()" class="btn default btn-xs green-stripe">重置密码</a>
                                     </td>
                                 </tr>
                             }
@@ -234,5 +233,25 @@
                 return false;
             });
         });
+
+        var sendPost = function sendPost(obj) {
+            var $confirm = $(obj);
+            var message = $confirm.attr('data-confirmation-message');
+            App.confirm(function () {
+                postCommand($confirm.data("command").Url, $confirm.data("command").Command, $confirm);
+            }, function () {
+
+            }, message);
+        }
+
+        var resetPwd = function resetPwd(obj) {
+            var $confirm = $(obj);
+            var message = $confirm.attr('data-confirmation-message');
+            App.confirm(function () {
+                postCommand($confirm.data("command").Url, $confirm.data("command").Command, $confirm);
+            }, function () {
+
+            }, message);
+        }
     </script>
 }

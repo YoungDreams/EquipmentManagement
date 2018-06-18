@@ -6,6 +6,15 @@
 @model PPM.MVC.Views.Equipment.Info.IndexViewModel
 <!-- BEGIN PAGE BAR -->
 <!-- END PAGE BAR -->
+@section Styles{
+    <style>
+        .input-group[class*=col-] {
+            float: left !important;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+        }
+    </style>
+}
 <div class="row">
     <div class="col-md-12">
         <div class="portlet">
@@ -16,13 +25,13 @@
             </div>
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
-                <form action="@Url.Action("Index","EquipmentInfo",new {page = Model.Items.Page,pageSize = Model.Items.PageSize})" class="form-horizontal">
+                <form id="query" action="@Url.Action("Index","EquipmentInfo",new {page = Model.Items.Page,pageSize = Model.Items.PageSize})" class="form-horizontal">
                     <div class="form-body">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="control-label col-md-3">分类名称</label>
-                                    <div class="input-group col-md-8" id="getCategories">
+                                    <label class="control-label col-md-3">产品大类</label>
+                                    <div class="input-group col-md-9" id="getCategories">
                                         <input type="text" class="form-control" disabled id="productCategoryText" value="@Model.CategoryText" placeholder="选择分类">
                                         <input id="productCategoryId" type="hidden" name="Query.CategoryId" value="@Model.Query.CategoryId" />
                                         <span class="input-group-addon" style="padding: 3px 12px;">
@@ -31,14 +40,84 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">产品小类</label>
+                                    <div class="input-group col-md-9" id="getCategories1">
+                                        <input type="text" class="form-control" disabled id="productCategoryText1" value="@Model.CategoryText1" placeholder="选择分类">
+                                        <input id="productCategoryId1" type="hidden" name="Query.CategoryId1" value="@Model.Query.CategoryId1" />
+                                        <span class="input-group-addon" style="padding: 3px 12px;">
+                                            <i class="fa fa-chevron-down font-red"></i>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
+                    @*<div class="form-body">
+                            <div class="row">
+
+                            </div>
+                        </div>*@
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">产品名称</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Query.Name" value="@Model.Query.Name" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">产品编号</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Query.IdentifierNo" value="@Model.Query.IdentifierNo" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="form-body">
+                            <div class="row">
+
+                            </div>
+                        </div>*@
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">批次</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control" name="Query.BatchNum" value="@Model.Query.BatchNum" onkeyup="if(! /^[0-9]\d*$/.test(this.value)){this.value = ''}" onafterpaste="if(! /^[0-9]\d*$/.test(this.value)){this.value = '');}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-3">出厂日期</label>
+                                    <div class="col-md-9">
+                                        <input type="text" class="form-control dateTypeField" name="Query.OutDateTime" value="@Model.Query.OutDateTime" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*<div class="form-body">
+                            <div class="row">
+
+                            </div>
+                        </div>*@
                     <div class="form-actions">
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="row">
                                     <div class="col-md-offset-5">
                                         <button type="submit" class="btn green">查询</button>
+                                        @*<input type="button" onclick="{$('#productCategoryId').val(0);$('#productCategoryText').val('');$('#productCategoryId1').val(0);$('#productCategoryText1').val('');document.getElementById('query').reset();}" class="btn yellow" value="重置">*@
+                                        <a role="button" href="@Url.Action("Index", "EquipmentInfo")" class="btn yellow">重置</a>
+                                        @*<a role="button" href="javascript:;" onclick="reset()" class="btn yellow">重置</a>*@
                                     </div>
                                 </div>
                             </div>
@@ -98,15 +177,15 @@
                             <th>产品执行标准</th>
                             <th>安装位置</th>
                             @*@{
-                                var equipmentCategoryColumns = Model.Items.FirstOrDefault()?.EquipmentCategory?.Columns.Where(x => x.ColumnType != EquipmentCategoryColumnType.文件.ToString());
-                            }
-                            @if (equipmentCategoryColumns != null)
-                            {
-                                foreach (var header in equipmentCategoryColumns)
-                                {
-                                    <th>@header.ColumnName</th>
+                                    var equipmentCategoryColumns = Model.Items.FirstOrDefault()?.EquipmentCategory?.Columns.Where(x => x.ColumnType != EquipmentCategoryColumnType.文件.ToString());
                                 }
-                            }*@
+                                @if (equipmentCategoryColumns != null)
+                                {
+                                    foreach (var header in equipmentCategoryColumns)
+                                    {
+                                        <th>@header.ColumnName</th>
+                                    }
+                                }*@
                             <th>产品图片</th>
                             <th>二维码</th>
                             <th>操作</th>
@@ -118,14 +197,14 @@
                             <tr>
                                 <td>@item.Id</td>
                                 @*@{ var index = 0; }
-                                @foreach (var cell in item.EquipmentInfoColumnValues)
-                                {
-                                    if (item.EquipmentCategory.Columns[index].ColumnType != EquipmentCategoryColumnType.文件.ToString())
+                                    @foreach (var cell in item.EquipmentInfoColumnValues)
                                     {
-                                        <td>@cell.Value</td>
-                                    }
-                                    index++;
-                                }*@
+                                        if (item.EquipmentCategory.Columns[index].ColumnType != EquipmentCategoryColumnType.文件.ToString())
+                                        {
+                                            <td>@cell.Value</td>
+                                        }
+                                        index++;
+                                    }*@
                                 <td>@item.Manufacturer</td>
                                 <td>@item.BatchNum</td>
                                 <td>@(item.EquipmentCategory?.Name)</td>
@@ -168,7 +247,7 @@
                 <div class="portlet box green">
                     <div class="portlet-title">
                         <div class="caption">
-                            <i class="fa fa-gift"></i>商品分类
+                            <i class="fa fa-gift"></i>产品大类
                         </div>
                     </div>
                     <div class="portlet-body">
@@ -195,19 +274,68 @@
     </div>
 </div>
 
+<div class="modal small fade" id="productCategories1" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" style="width:600px;">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="portlet box green">
+                    <div class="portlet-title">
+                        <div class="caption">
+                            <i class="fa fa-gift"></i>产品小类
+                        </div>
+                    </div>
+                    <div class="portlet-body">
+                        <!-- BEGIN FORM-->
+                        <div id="tree_11" class="tree-demo">
+                            @Html.Raw(Model.ProductCategoryTreeView.GetSubTreeNodes(Model.ProductCategoryTreeView.Trees))
+                        </div>
+                        <div id="category-noselect-error1" class="alert alert-danger hidden">
+                            <strong>未选择商品分类!</strong>
+                        </div>
+                        <div class="row">
+                            <br />
+                            <p>
+                                <div class="text-center">
+                                    <button id="select-product-category1" class="btn green btn-sm padding-lf-15">确定</button>
+                                    <button id="cancel-select-product-category1" type="button" class="btn yellow btn-sm padding-lf-15" data-dismiss="modal">取消</button>
+                                </div>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts
 {
     <script type="text/javascript">
-        $(document).ready(function () {
+        $(document).ready(function() {
+            $('.dateTypeField').datetimepicker({
+                autoclose: true,
+                todayBtn: true,
+                language: "zh",
+                format: 'yyyy-mm-dd',
+                minView: 2,
+                todayHighlight: true,
+            });
+
             $('#getCategories').on('click',
-                function () {
+                function() {
                     var productCategories = $('#productCategories');
                     productCategories.modal('show');
                 });
 
-            $('#select-product-category').on('click',
-                function () {
-                    var checkedCategory = $('.jstree-clicked');
+            $('#getCategories1').on('click',
+                function() {
+                    var productCategories = $('#productCategories1');
+                    productCategories.modal('show');
+                });
+
+            $('.jstree-clicked').on('click',
+                function() {
+                    var checkedCategory = $('.jstree-clicked').first();
                     var categoryId = checkedCategory.attr('data-id');
                     var categoryText = checkedCategory.attr('data-text');
                     var error = $('#category-noselect-error');
@@ -217,6 +345,23 @@
                         $('#productCategoryText').val(categoryText);
 
                         $('#cancel-select-product-category').click();
+                    } else {
+                        error.removeClass('hidden');
+                    }
+                });
+
+            $('#select-product-category1').on('click',
+                function() {
+                    var checkedCategory = $('.jstree-clicked').last();
+                    var categoryId = checkedCategory.attr('data-id');
+                    var categoryText = checkedCategory.attr('data-text');
+                    var error = $('#category-noselect-error1');
+                    if (categoryId || categoryText) {
+                        error.addClass('hidden');
+                        $('#productCategoryId1').val(categoryId);
+                        $('#productCategoryText1').val(categoryText);
+
+                        $('#cancel-select-product-category1').click();
                     } else {
                         error.removeClass('hidden');
                     }
@@ -234,10 +379,20 @@
             var $confirm = $(obj);
             var message = $confirm.attr('data-confirmation-message');
             App.confirm(function() {
-                postCommand($confirm.data("command").Url, $confirm.data("command").Command, $confirm);
-            }, function() {
+                    postCommand($confirm.data("command").Url, $confirm.data("command").Command, $confirm);
+                },
+                function() {
 
-            }, message);
+                },
+                message);
+        }
+
+        var reset = function reset() {
+            $('#productCategoryId').val(0);
+            $('#productCategoryText').val("");
+            $('#productCategoryId1').val(0);
+            $('#productCategoryText1').val("");
+            document.getElementById("query").reset();
         }
     </script>
 }

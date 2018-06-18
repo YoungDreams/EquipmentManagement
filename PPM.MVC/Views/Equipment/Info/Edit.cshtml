@@ -19,7 +19,7 @@
         <div class="portlet light bordered">
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->
-                <form action="@Url.Action("Edit", "EquipmentInfo")" method="POST" enctype="multipart/form-data">
+                <form data-ajax="true" action="@Url.Action("Edit", "EquipmentInfo")" method="POST" enctype="multipart/form-data">
                     <div class="portlet" style="margin-top: 10px;">
                         <div class="portlet-title">
                             <div class="caption">
@@ -212,7 +212,7 @@
                                                             <div class="input-group input-large">
                                                                 <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
                                                                     <i class="fa fa-file fileinput-exists"></i>&nbsp;
-                                                                    <span class="fileinput-filename" required>@Model.EquipmentInfo.ImageUrl</span>
+                                                                    <span class="fileinput-filename">@Model.EquipmentInfo.ImageUrl</span>
                                                                 </div>
                                                                 <span class="input-group-addon btn default btn-file">
                                                                     <span class="fileinput-new">选择图片</span>
@@ -459,7 +459,7 @@
             $('.dateTypeField').datetimepicker({
                 autoclose: true,
                 todayBtn: true,
-                language: "zh-CN",
+                language: "zh",
                 format: 'yyyy-mm-dd',
                 minView: 2,
                 todayHighlight: true,

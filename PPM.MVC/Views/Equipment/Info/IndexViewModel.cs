@@ -21,6 +21,7 @@ namespace PPM.MVC.Views.Equipment.Info
         public PagedData<PPM.Entities.EquipmentInfo> Items { get; set; }
         public EquipmentCategoryTreeView ProductCategoryTreeView { get; set; }
         public string CategoryText { get; set; }
+        public string CategoryText1 { get; set; }
         public object DeleteCommand(int id)
         {
             return new WebCommand

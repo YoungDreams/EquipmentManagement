@@ -6,6 +6,7 @@
     var category = equipmentInfo.EquipmentCategory;
     var categoryColumns = category.Columns;
     var columnValues = equipmentInfo.EquipmentInfoColumnValues;
+    var empty = "暂无";
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -63,6 +64,9 @@
                 color: #999;
                 text-decoration: none;
             }
+            p {
+                color: #999999;
+            }
     </style>
 </head>
 <body>
@@ -71,36 +75,147 @@
     </header>
 
     <div class="bd">
-        <div class="weui-cells__title">详情</div>
+        <div class="weui-cells__title">设备参数</div>
         @{
             var index = 0;
         }
-        @foreach (var categoryColumn in categoryColumns)
-        {
-            if (categoryColumn.ColumnType != EquipmentCategoryColumnType.文件.ToString())
+        <div class="weui-cells">
+            <div class="weui-cell">
+                @*<div class="weui-cell__bd">
+                <p>安装位置</p>
+            </div>
+            <div class="weui-cell__ft">@(equipmentInfo.SetupLocation)</div>*@
+                <img src="@Url.Content(equipmentInfo.ImageUrl)" style="max-width: 348px; margin-right: 10px;" alt="产品图片" />
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>产品Id</p>
+                </div>
+                <div class="weui-cell__ft">@equipmentInfo.Id</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>产品名称</p>
+                </div>
+                <div class="weui-cell__ft">@equipmentInfo.Name</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>生产厂家</p>
+                </div>
+                <div class="weui-cell__ft">@equipmentInfo.Manufacturer</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>批次</p>
+                </div>
+                <div class="weui-cell__ft">@equipmentInfo.BatchNum</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>产品小类</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.EquipmentCategory1.Name ?? empty)</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>产品编码</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.IdentifierNo)</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>规格型号</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.Specification)</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>材质</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.Meterial)</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>技术人员</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.Technician)</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>物资人员</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.Supplier)</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>领料人</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.Picker)</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>出厂日期</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.OutDateTime?.ToShortDateString())</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>检测人员</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.Checker)</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>检测结果</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.CheckResult)</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>产品执行标准</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.ExecuteStandard)</div>
+            </div>
+            <div class="weui-cell">
+                <div class="weui-cell__bd">
+                    <p>安装位置</p>
+                </div>
+                <div class="weui-cell__ft">@(equipmentInfo.SetupLocation)</div>
+            </div>
+
+            @foreach (var categoryColumn in categoryColumns)
             {
-                <div class="weui-cells">
+                if (categoryColumn.ColumnType != EquipmentCategoryColumnType.文件.ToString())
+                {
                     <div class="weui-cell">
                         <div class="weui-cell__bd">
                             <p>@categoryColumn.ColumnName</p>
                         </div>
                         <div class="weui-cell__ft">@columnValues[index].Value</div>
                     </div>
-                </div>
+                }
+                index++;
             }
-            else
+        </div>
+        <div class="weui-cells">
+            @{
+                var j = 0;
+            }
+            @foreach (var categoryColumn in categoryColumns)
             {
-                <div class="weui-cells weui-cell_access">
-                    <a class="weui-cell" href="@(columnValues[index].Value.IndexOf("Attachments", StringComparison.Ordinal)!=-1 ? columnValues[index].Value:"javascript:;")">
+                if (categoryColumn.ColumnType == EquipmentCategoryColumnType.文件.ToString())
+                {
+                    <a class="weui-cell weui-cell_access" href="@(columnValues[j].Value.IndexOf("Attachments", StringComparison.Ordinal) != -1 ? columnValues[j].Value : "javascript:;")">
                         <div class="weui-cell__bd">
-                            <p>@categoryColumn.ColumnName</p>
+                            <div>@categoryColumn.ColumnName</div>
                         </div>
-                        <div class="weui-cell__ft">@(columnValues[index].Value.IndexOf("Attachments", StringComparison.Ordinal) != -1 ? "查看文件" : "未上传")</div>
+                        <div class="weui-cell__ft">@(columnValues[j].Value.IndexOf("Attachments", StringComparison.Ordinal) != -1 ? "" : "未上传")</div>
                     </a>
-                </div>
+                }
+                j++;
             }
-            index++;
-        }
+        </div>
     </div>
     <br />
     <div class="weui-footer">
