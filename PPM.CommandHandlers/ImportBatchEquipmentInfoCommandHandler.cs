@@ -74,22 +74,9 @@ namespace PPM.CommandHandlers
                 };
                 for (int rowNum = 1; rowNum <= sheet.LastRowNum; rowNum++)
                 {
-                    //rowHeader.CreateCell(3).SetCellValue("批次");
-                    //rowHeader.CreateCell(4).SetCellValue("产品小类");
-                    //rowHeader.CreateCell(5).SetCellValue("产品名称");
-                    //rowHeader.CreateCell(6).SetCellValue("产品编码");
-                    //rowHeader.CreateCell(7).SetCellValue("规格型号");
-                    //rowHeader.CreateCell(8).SetCellValue("材质");
-                    //rowHeader.CreateCell(9).SetCellValue("技术人员");
-                    //rowHeader.CreateCell(10).SetCellValue("物资人员");
-                    //rowHeader.CreateCell(11).SetCellValue("领料人");
-                    //rowHeader.CreateCell(12).SetCellValue("出厂日期");
-                    //rowHeader.CreateCell(13).SetCellValue("检测人员");
-                    //rowHeader.CreateCell(14).SetCellValue("检测结果");
-                    //rowHeader.CreateCell(15).SetCellValue("产品执行标准");
-                    //rowHeader.CreateCell(16).SetCellValue("安装位置");
                     var manufacturer = sheet.GetRow(rowNum).GetCell(2).GetCellValue();
                     var batchNum = sheet.GetRow(rowNum).GetCell(3).GetCellValue();
+                    
                     var categoryName1 = sheet.GetRow(rowNum).GetCell(4).GetCellValue();
                     var name = sheet.GetRow(rowNum).GetCell(5).GetCellValue();
                     var identifierNo = sheet.GetRow(rowNum).GetCell(6).GetCellValue();
@@ -98,19 +85,42 @@ namespace PPM.CommandHandlers
                     var technician = sheet.GetRow(rowNum).GetCell(9).GetCellValue();
                     var supplier = sheet.GetRow(rowNum).GetCell(10).GetCellValue();
                     var picker = sheet.GetRow(rowNum).GetCell(11).GetCellValue();
-                    var outDateTime = sheet.GetRow(rowNum).GetCell(12).GetCellDateTime().ToString();
+                    var outDateTime = sheet.GetRow(rowNum).GetCell(12)?.GetCellDateTime()?.ToString();
+                    
                     var checker = sheet.GetRow(rowNum).GetCell(13).GetCellValue();
                     var checkResult = sheet.GetRow(rowNum).GetCell(14).GetCellValue();
                     var executeStandard = sheet.GetRow(rowNum).GetCell(15).GetCellValue();
                     var setupLocation = sheet.GetRow(rowNum).GetCell(16).GetCellValue();
                     equipmentInfo.Manufacturer = manufacturer;
-                    equipmentInfo.BatchNum = Convert.ToInt32(batchNum);
+                    int batchNumResult = 0;
+                    if (string.IsNullOrEmpty(batchNum))
+                    {
+                        //result.IsSucceed = false;
+                        //result.Errors.Add($"第{rowNum}行的批次未填写！");
+                        //break;
+                        throw new DomainValidationException($"第{rowNum}行的批次未填写！");
+                    }
+                    if (!int.TryParse(batchNum, out batchNumResult))
+                    {
+                        //result.IsSucceed = false;
+                        //result.Errors.Add($"第{rowNum}行的批次填写错误！");
+                        //break;
+                        throw new DomainValidationException($"第{rowNum}行的批次填写错误！");
+                    }
+                    equipmentInfo.BatchNum = Convert.ToInt32(batchNum);    
                     equipmentInfo.CheckResult = checkResult;
                     equipmentInfo.Checker = checker;
                     equipmentInfo.ExecuteStandard = executeStandard;
                     equipmentInfo.IdentifierNo = identifierNo;
                     equipmentInfo.Meterial = meterial;
                     equipmentInfo.Name = name;
+                    if (outDateTime == null)
+                    {
+                        //result.IsSucceed = false;
+                        //result.Errors.Add($"第{rowNum}行的出厂日期未填写！");
+                        //break;
+                        throw new DomainValidationException($"第{rowNum}行的出厂日期未填写！");
+                    }
                     equipmentInfo.OutDateTime = Convert.ToDateTime(outDateTime);
                     equipmentInfo.Picker = picker;
                     equipmentInfo.SetupLocation = setupLocation;
@@ -127,9 +137,9 @@ namespace PPM.CommandHandlers
                     equipmentInfo.QrCodeImage = fileName;
                     _repository.Update(equipmentInfo);
                     
-                    for (int i = 17; i < category.Columns.Count; i++)
+                    for (int i = 0; i < category.Columns.Count; i++)
                     {
-                        var cellStartIndex = i;
+                        var cellStartIndex = i + 17;
                         var type = category.Columns[i].ColumnType;
                         var currentRow = sheet.GetRow(rowNum);
                         var currentCell = currentRow.GetCell(cellStartIndex);
@@ -172,21 +182,21 @@ namespace PPM.CommandHandlers
             {
                 case EquipmentCategoryColumnType.整数:
                     int result = 0;
-                    if (!int.TryParse(value, out result))
+                    if (!int.TryParse(value, out result) && !string.IsNullOrEmpty(value))
                     {
                         throw new ApplicationException($"第{rowNum}行{column+1}列的{type}{value}不是{EquipmentCategoryColumnType.整数}类型。");
                     }
                     break;
                 case EquipmentCategoryColumnType.小数:
                     double result1 = 0.00;
-                    if (!double.TryParse(value, out result1))
+                    if (!double.TryParse(value, out result1) && !string.IsNullOrEmpty(value))
                     {
                         throw new ApplicationException($"第{rowNum}行{column+1}列的{type}{value}不是{EquipmentCategoryColumnType.小数}类型。");
                     }
                     break;
                 case EquipmentCategoryColumnType.日期:
                     DateTime date;
-                    if (!DateTime.TryParse(value, out date))
+                    if (!DateTime.TryParse(value, out date) && !string.IsNullOrEmpty(value))
                     {
                         throw new ApplicationException($"第{rowNum}行{column+1}列的{type}{value}不是{EquipmentCategoryColumnType.日期}类型。");
                     }
@@ -195,6 +205,35 @@ namespace PPM.CommandHandlers
                     if (!string.IsNullOrEmpty(value))
                     {
                         throw new ApplicationException($"第{rowNum}行{column+1}列的{type}{value}不能填写，只能从后台上传。");
+                    }
+                    break;
+            }
+        }
+
+        private void IsValidTypeValue(string type, string value)
+        {
+            var toType = Enum.Parse(typeof(EquipmentCategoryColumnType), type);
+            switch (toType)
+            {
+                case EquipmentCategoryColumnType.整数:
+                    int result = 0;
+                    if (!int.TryParse(value, out result) && !string.IsNullOrEmpty(value))
+                    {
+                        throw new DomainValidationException($"{value}不是整数类型。");
+                    }
+                    break;
+                case EquipmentCategoryColumnType.小数:
+                    double result1 = 0.00;
+                    if (!double.TryParse(value, out result1) && !string.IsNullOrEmpty(value))
+                    {
+                        throw new DomainValidationException($"{value}不是小数类型。");
+                    }
+                    break;
+                case EquipmentCategoryColumnType.日期:
+                    DateTime date;
+                    if (!DateTime.TryParse(value, out date) && !string.IsNullOrEmpty(value))
+                    {
+                        throw new DomainValidationException($"{value}不是浮点数类型。");
                     }
                     break;
             }
