@@ -225,7 +225,7 @@
                                 <td><img src="@Url.Content(item.QrCodeImage)" style="width: 100px; height: 100px;" alt="设备二维码" /></td>
                                 <td>
                                     <a href="@Url.Action("Edit", "EquipmentInfo", new {id = item.Id})" class="btn default btn-xs yellow-stripe">编辑</a>
-                                    <a href="javascript:;" data-command="@Model.DeleteCommand(item.Id).ToJavascript()" class="btn default btn-xs red-stripe">
+                                    <a href="javascript:;" data-command1="@Model.DeleteCommand(item.Id).ToJavascript()" onclick="deleteCategory(this)" class="btn default btn-xs red-stripe">
                                         删除
                                     </a>
                                 </td>
@@ -378,8 +378,18 @@
         var deleteCategory = function deleteCategory(obj) {
             var $confirm = $(obj);
             var message = $confirm.attr('data-confirmation-message');
-            App.confirm(function() {
-                    postCommand($confirm.data("command").Url, $confirm.data("command").Command, $confirm);
+            App.confirm(function () {
+                    $.bootstrapGrowl("操作成功!",
+                        {
+                            type: "success",
+                            offset: {
+                                from: "top",
+                                amount: 150
+                            },
+                            align: "center",
+                            delay: 3000
+                        });
+                    postCommand($confirm.data("command1").Url, $confirm.data("command1").Command, $confirm);
                 },
                 function() {
 

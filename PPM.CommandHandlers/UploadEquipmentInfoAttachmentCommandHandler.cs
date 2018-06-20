@@ -21,7 +21,7 @@ namespace PPM.CommandHandlers
 
         public UploadEquipmentInfoAttachmentCommand.Result Handle(UploadEquipmentInfoAttachmentCommand command)
         {
-            var column = _repository.Get<EquipmentInfoColumnValue>(command.ColumnId);
+            var column = _repository.Get<EquipmentInfo>(command.Id);
             if (command.FileBytes == null || command.FileBytes.Length == 0)
             {
                 throw new ApplicationException("ÇëÑ¡Ôñ¸½¼þ");
@@ -31,7 +31,7 @@ namespace PPM.CommandHandlers
             var filePath = VirtualPath + saveAsFileName;
             var saveAsPath = Path.Combine(StorageRoot, saveAsFileName);
             File.WriteAllBytes(saveAsPath, command.FileBytes);
-            column.Value = filePath;
+            column.ImageUrl = filePath;
             _repository.Update(column);
             return new UploadEquipmentInfoAttachmentCommand.Result { FileName = saveAsFileName, FilePath = filePath };
         }

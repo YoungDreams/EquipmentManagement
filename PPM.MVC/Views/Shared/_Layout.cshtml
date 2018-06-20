@@ -60,13 +60,14 @@
                 <!-- BEGIN THEME PANEL -->
                 <!-- END THEME PANEL -->
                 <!-- BEGIN PAGE BAR -->
-                <div class="page-bar">
+                @*<div class="page-bar">
                     <!-- 此处是相关代码 -->
                     <ul class="nav nav-tabs" role="tablist"></ul>
                     <div class="tab-content" style="width:100%;">
                     </div>
                     <!-- 相关代码结束 -->
-                </div>
+                </div>*@
+                @RenderSection("Breadcrumb", false)
                 <!-- END PAGE BAR -->
                 <!-- BEGIN PAGE TITLE-->
                 <h3 class="page-title">

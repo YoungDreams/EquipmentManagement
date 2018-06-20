@@ -173,6 +173,11 @@ namespace PPM.MVC.Views.Equipment.Info
 
         public ActionResult UploadAttachment(UploadEquipmentInfoAttachmentCommand command)
         {
+            if (Request.Files.Count > 0)
+            {
+                command.FileBytes = Request.Files[0].ReadBytes();
+                command.FileName = Request.Files[0].FileName;
+            }
             var result =_commandService.ExecuteFoResult(command);
             return Json(result);
         }

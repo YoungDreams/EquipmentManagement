@@ -170,7 +170,8 @@ $.fn.initControls = function (options) {
                 $.ajax({
                     url: $(this).attr("action"),
                     type: 'POST',
-                    data: new FormData(this),
+                    dataType: 'json',
+                    data: new FormData(form[0]),
                     processData: false,
                     contentType: false,
                     success: function (result) {
@@ -215,6 +216,9 @@ $.fn.initControls = function (options) {
                             }
                             button.removeAttr("disabled");
                         }
+                    },
+                    error: function(e) {
+                        alert(e);
                     }
                 });
                 

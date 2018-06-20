@@ -66,6 +66,9 @@ namespace PPM.Shared
                     : _container.Resolve<IFetcher>()
                         .Query<User>()
                         .First(x => x.Username == _httpContext.User.Identity.Name);
+                //_user = _container.Resolve<IFetcher>()
+                //        .Query<User>()
+                //        .First(x => x.Username == _httpContext.User.Identity.Name);
 
                 return _user;
             }
