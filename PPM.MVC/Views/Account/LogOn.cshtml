@@ -10,73 +10,146 @@
     <meta content="width=device-width, initial-scale=1" name="viewport" />
     <meta content="" name="description" />
     <meta content="" name="author" />
-    <!-- BEGIN GLOBAL MANDATORY STYLES -->
-    <link href=@Url.Content("~/assets/global/plugins/font-awesome/css/font-awesome.min.css") rel="stylesheet" type="text/css" />
-    <link href=@Url.Content("~/assets/global/plugins/simple-line-icons/simple-line-icons.min.css") rel="stylesheet" type="text/css" />
     <link href=@Url.Content("~/assets/global/plugins/bootstrap/css/bootstrap.min.css") rel="stylesheet" type="text/css" />
-    <link href=@Url.Content("~/assets/global/plugins/bootstrap-switch/css/bootstrap-switch.min.css") rel="stylesheet" type="text/css" />
-    <!-- END GLOBAL MANDATORY STYLES -->
-    <!-- BEGIN THEME GLOBAL STYLES -->
-    <link href=@Url.Content("~/assets/global/css/components.min.css") rel="stylesheet" id="style_components" type="text/css" />
-    <link href=@Url.Content("~/assets/global/css/plugins.min.css") rel="stylesheet" type="text/css" />
-    <!-- END THEME GLOBAL STYLES -->
-    <!-- BEGIN PAGE LEVEL STYLES -->
-    <link href=@Url.Content("~/assets/pages/css/login.css") rel="stylesheet" type="text/css" />
-    <!-- END PAGE LEVEL STYLES -->
-    <!-- BEGIN THEME LAYOUT STYLES -->
-    <!-- END THEME LAYOUT STYLES -->
-    <link rel="shortcut icon" href="favicon.ico" />
+    <link href=@Url.Content("~/assets/weui/weui.css") rel="stylesheet" type="text/css" />
+    @*<link rel="shortcut icon" href="favicon.ico" />*@
+    <style>
+        h1 {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 3rem;
+        }
+
+        .cont_width {
+            margin-top: 5rem;
+        }
+
+        .weui-cell {
+            border: solid 1px #eee;
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 0.5rem;
+            padding: 0;
+            border-radius: 0.2rem;
+        }
+
+        .weui-label {
+            width: 50px;
+            text-align: center;
+            padding: 0.6rem 0;
+        }
+
+        .weui-cell:before {
+            border: 0;
+        }
+
+        .weui-agree {
+            width: 80%;
+            margin: 0 auto;
+            padding: 1rem 0;
+        }
+
+        .weui-agree__checkbox {
+            margin-right: 0.5rem;
+            width: 20px;
+            height: 20px;
+        }
+
+            .weui-agree__checkbox:checked:before {
+                color: #3498db;
+                font-size: 18px;
+            }
+
+        .weui-btn_primary {
+            width: 80%;
+            margin: 0 auto;
+            margin-top: 2rem;
+        }
+
+        .weui-input {
+            border-left: solid 1px #eee;
+            height: 3rem;
+            padding-left: 0.5rem;
+            color: #000;
+        }
+    </style>
 </head>
 <!-- END HEAD -->
-<body class="login">
+<body>
 
-    <div class="note note-warning text-center browser-warning" style="display: none">
-        <h5 class="block">提示! 为了您更好的操作体验，请使用chrome浏览器，<a href="http://211.103.129.210:88/tools/Chrome_Setup.zip">点击下载</a></h5>
-    </div>
-
-    <!-- BEGIN LOGO -->
-    <div class="logo">
-        <a href="javascript:;">
-            @*<img src=@Url.Content("~/assets/pages/img/logo.gif") alt="" />*@
-        </a>
-    </div>
     <!-- END LOGO -->
-    <!-- BEGIN LOGIN -->
-    <div class="content">
-        <!-- BEGIN LOGIN FORM -->
+    @*<!-- BEGIN LOGIN -->
+        <div class="content">
+            <!-- BEGIN LOGIN FORM -->
+            <form class="login-form" data-ajax="true" method="POST">
+                <h3 class="form-title">惠齐电力设备管理系统</h3>
+                <div class="errors alert alert-danger fade in" style="display: none;"></div>
+                <div class="form-group">
+                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                    <label class="control-label visible-ie8 visible-ie9">用户名</label>
+                    <div class="input-icon">
+                        <i class="fa fa-user"></i>
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control placeholder-no-fix", autocomplete = "off", placeholder = "用户名", autofocus = "autofocus" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">密码</label>
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                        @Html.TextBoxFor(m => m.Password, new { @class = "form-control placeholder-no-fix", type = "password", autocomplete = "off", placeholder = "密码" })
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <label class="rememberme mt-checkbox mt-checkbox-outline">
+                        @Html.CheckBoxFor(m => m.RememberMe) 记住我
+                        <span></span>
+                    </label>
+                    <button type="submit" class="btn green pull-right"> 登录 </button>
+                </div>
+            </form>
+            <!-- END LOGIN FORM -->
+        </div>*@
+
+    <h1>
+        <img src="@Url.Content("~/assets/pages/img/logo.jpg")" title="惠齐电力智能云平台" alt="惠齐电力智能云平台" width="85%">
+    </h1>
+    <div class="cont_width">
         <form class="login-form" data-ajax="true" method="POST">
-            <h3 class="form-title">惠齐电力设备管理系统</h3>
-            <div class="errors alert alert-danger fade in" style="display: none;"></div>
-            <div class="form-group">
-                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-                <label class="control-label visible-ie8 visible-ie9">用户名</label>
-                <div class="input-icon">
-                    <i class="fa fa-user"></i>
-                    @Html.TextBoxFor(m => m.UserName, new { @class = "form-control placeholder-no-fix", autocomplete = "off", placeholder = "用户名", autofocus = "autofocus" })
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label"><img src="@Url.Content("~/assets/pages/img/icon1.jpg")" width="60%"></label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="text" autofocus="autofocus" id="UserName" name="UserName" placeholder="用户名">
                 </div>
             </div>
-            <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">密码</label>
-                <div class="input-icon">
-                    <i class="fa fa-lock"></i>
-                    @Html.TextBoxFor(m => m.Password, new { @class = "form-control placeholder-no-fix", type = "password", autocomplete = "off", placeholder = "密码" })
+            <div class="weui-cell">
+                <div class="weui-cell__hd">
+                    <label class="weui-label"><img src="@Url.Content("~/assets/pages/img/icon2.jpg")" width="60%"></label>
+                </div>
+                <div class="weui-cell__bd">
+                    <input class="weui-input" type="password" id="Password" name="Password" placeholder="密码">
                 </div>
             </div>
-            <div class="form-actions">
-                <label class="rememberme mt-checkbox mt-checkbox-outline">
-                    @Html.CheckBoxFor(m => m.RememberMe) 记住我
-                    <span></span>
-                </label>
-                <button type="submit" class="btn green pull-right"> 登录 </button>
-            </div>
+            <label for="RememberMe" class="weui-agree">
+                <input id="RememberMe" type="checkbox" name="RememberMe" class="weui-agree__checkbox" value="true">
+                <span class="weui-agree__text">
+                    记住我
+                </span>
+            </label>
+            <button type="submit" class="weui-btn weui-btn_primary" style="width: 80%;">登录</button>
+            <div class="errors alert alert-danger fade in" style="display: none; margin-right: 20px; margin-left: 20px;"></div>
         </form>
-        <!-- END LOGIN FORM -->
     </div>
     <!-- END LOGIN -->
     <!-- BEGIN COPYRIGHT -->
     @*<div class="copyright">
-        远洋集团 版权所有 Copyright 2016 sinooceanland.com. All Rights Reserved <a href="http://www.sinooceanland.com/"></a>
-    </div>*@
+            远洋集团 版权所有 Copyright 2016 sinooceanland.com. All Rights Reserved <a href="http://www.sinooceanland.com/"></a>
+        </div>*@
     <!-- END COPYRIGHT -->
     <!--[if lt IE 9]>
         <script src=@Url.Content("~/assets/global/plugins/respond.min.js")></script>

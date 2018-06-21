@@ -56,27 +56,85 @@ namespace PPM.CommandHandlers
             var index = 0;
             foreach (var categoryColun in category.Columns)
             {
-                var equipmentInfoColumnValue = equipmentInfo.EquipmentInfoColumnValues[index];
-                if (categoryColun.ColumnType == EquipmentCategoryColumnType.文件.ToString())
+                if (equipmentInfo.EquipmentInfoColumnValues.Count == 0 || index >= equipmentInfo.EquipmentInfoColumnValues.Count)
                 {
-                    var firstOrDefault = command.Files.FirstOrDefault();
-                    if (firstOrDefault != null)
+                    if (categoryColun.ColumnType == EquipmentCategoryColumnType.文件.ToString())
                     {
-                        if (firstOrDefault.FileBytes != null && !string.IsNullOrEmpty(firstOrDefault.FileName))
+                        var firstOrDefault = command.Files.FirstOrDefault();
+                        if (firstOrDefault != null)
                         {
-                            equipmentInfoColumnValue.Value =
-                                SaveFile(firstOrDefault.FileBytes, firstOrDefault.FileName, false);
-                            _repository.Update(equipmentInfoColumnValue);
+                            if (firstOrDefault.FileBytes != null && !string.IsNullOrEmpty(firstOrDefault.FileName))
+                            {
+                                var value = new EquipmentInfoColumnValue
+                                {
+                                    EquipmentInfo = equipmentInfo,
+                                    Value = SaveFile(firstOrDefault.FileBytes, firstOrDefault.FileName, false)
+                                };
+                                _repository.Create(value);
+                            }
+                            command.Files.Remove(firstOrDefault);
                         }
-                        command.Files.Remove(firstOrDefault);
+                    }
+                    else
+                    {
+                        var type = category.Columns[index].ColumnType;
+                        IsValidTypeValue(type, command.Values[index]);
+                        var value = new EquipmentInfoColumnValue
+                        {
+                            EquipmentInfo = equipmentInfo,
+                            Value = command.Values[index]
+                        };
+                        _repository.Create(value);
                     }
                 }
                 else
                 {
-                    var type = category.Columns[index].ColumnType;
-                    IsValidTypeValue(type, command.Values[index]);
-                    equipmentInfoColumnValue.Value = command.Values[index];
-                    _repository.Update(equipmentInfoColumnValue);
+                    var equipmentInfoColumnValue = equipmentInfo.EquipmentInfoColumnValues[index];
+                    if (categoryColun.ColumnType == EquipmentCategoryColumnType.文件.ToString())
+                    {
+                        var firstOrDefault = command.Files.FirstOrDefault();
+                        if (firstOrDefault != null)
+                        {
+                            if (firstOrDefault.FileBytes != null && !string.IsNullOrEmpty(firstOrDefault.FileName))
+                            {
+                                if (equipmentInfoColumnValue != null)
+                                {
+                                    equipmentInfoColumnValue.Value =
+                                        SaveFile(firstOrDefault.FileBytes, firstOrDefault.FileName, false);
+                                    _repository.Update(equipmentInfoColumnValue);
+                                }
+                                else
+                                {
+                                    var value = new EquipmentInfoColumnValue
+                                    {
+                                        EquipmentInfo = equipmentInfo,
+                                        Value = SaveFile(firstOrDefault.FileBytes, firstOrDefault.FileName, false)
+                                    };
+                                    _repository.Create(value);
+                                }
+                            }
+                            command.Files.Remove(firstOrDefault);
+                        }
+                    }
+                    else
+                    {
+                        var type = category.Columns[index].ColumnType;
+                        IsValidTypeValue(type, command.Values[index]);
+                        if (equipmentInfoColumnValue != null)
+                        {
+                            equipmentInfoColumnValue.Value = command.Values[index];
+                            _repository.Update(equipmentInfoColumnValue);
+                        }
+                        else
+                        {
+                            var value = new EquipmentInfoColumnValue
+                            {
+                                EquipmentInfo = equipmentInfo,
+                                Value = command.Values[index]
+                            };
+                            _repository.Create(value);
+                        }
+                    }
                 }
                 index++;
             }

@@ -7,8 +7,8 @@ namespace DataImporter.Migrations
     {
         public override void Up()
         {
-            Execute.Sql("Update [PPMDB].[dbo].[User] Set RoleType = 0 Where RoleType = '超级管理员'");
-            Execute.Sql("Update [PPMDB].[dbo].[User] Set RoleType = 1 Where RoleType = '内部员工'");
+            //Execute.Sql("Update [PPMDB].[dbo].[User] Set RoleType = 0 Where RoleType = '超级管理员'");
+            //Execute.Sql("Update [PPMDB].[dbo].[User] Set RoleType = 1 Where RoleType = '内部员工'");
         }
 
         public override void Down()

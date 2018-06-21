@@ -379,16 +379,6 @@
             var $confirm = $(obj);
             var message = $confirm.attr('data-confirmation-message');
             App.confirm(function () {
-                    $.bootstrapGrowl("操作成功!",
-                        {
-                            type: "success",
-                            offset: {
-                                from: "top",
-                                amount: 150
-                            },
-                            align: "center",
-                            delay: 3000
-                        });
                     postCommand($confirm.data("command1").Url, $confirm.data("command1").Command, $confirm);
                 },
                 function() {

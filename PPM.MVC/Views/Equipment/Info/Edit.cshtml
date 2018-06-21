@@ -124,9 +124,9 @@
                                                     <div class="col-md-9">
                                                         @*<input type="button" id="uploadShow" class="form-control" name="IdentifierNo" value="@Model.EquipmentInfo.ImageUrl" />*@
                                                         @*@if (!string.IsNullOrWhiteSpace(Model.EquipmentInfo.ImageUrl))
-                                                            {
-                                                                <a target="_blank" class="input-group-addon btn default btn-file" href="@(Url.Content(Model.EquipmentInfo.ImageUrl))">查看文件</a>
-                                                            }*@
+                                {
+                                    <a target="_blank" class="input-group-addon btn default btn-file" href="@(Url.Content(Model.EquipmentInfo.ImageUrl))">查看文件</a>
+                                }*@
                                                         <div class="fileinput fileinput-new" data-provides="fileinput">
                                                             <div class="input-group input-large">
                                                                 <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
@@ -260,91 +260,271 @@
                                         var index = 0;
                                         foreach (var equipmentCategoryColumn in Model.EquipmentInfo.EquipmentCategory.Columns)
                                         {
-                                            if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.文件.ToString())
+                                            if (Model.EquipmentInfo.EquipmentInfoColumnValues.Count == 0)
                                             {
-                                                <div class="row margin-top-10">
-                                                    <div class="col-md-8 col-md-offset-2">
-                                                        <div class="form-group">
-                                                            <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
-                                                            <div class="col-md-9">
+                                                if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.文件.ToString())
+                                                {
+                                                    <div class="row margin-top-10">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
 
-                                                                <div class="fileinput fileinput-new" data-provides="fileinput">
-                                                                    <div class="input-group input-large">
-                                                                        <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
-                                                                            <i class="fa fa-file fileinput-exists"></i>&nbsp;
-                                                                            <span class="fileinput-filename">@Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value</span>
-                                                                        </div>
-                                                                        <span class="input-group-addon btn default btn-file">
-                                                                            <span class="fileinput-new">选择文件</span>
-                                                                            <span class="fileinput-exists">替换</span>
-                                                                            <input type="file" name="file">
-                                                                        </span>&nbsp;
-                                                                        @if (!string.IsNullOrWhiteSpace(Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value))
-                                                                        {
+                                                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                        <div class="input-group input-large">
+                                                                            <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                                                <span class="fileinput-filename"></span>
+                                                                            </div>
                                                                             <span class="input-group-addon btn default btn-file">
-                                                                                <a target="_blank" href="@(ConfigurationManager.AppSettings["Host"] + Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value)">查看文件</a>
-                                                                            </span>
-                                                                        }
-                                                                        <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                                                                <span class="fileinput-new">选择文件</span>
+                                                                                <span class="fileinput-exists">替换</span>
+                                                                                <input type="file" name="file">
+                                                                            </span>&nbsp;
+                                                                            @if (!string.IsNullOrWhiteSpace(Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value))
+                                                                            {
+                                                                                <span class="input-group-addon btn default btn-file">
+                                                                                    <a target="_blank" href="@(ConfigurationManager.AppSettings["Host"] + Model.EquipmentInfo.EquipmentInfoColumnValues[index]?.Value)">查看文件</a>
+                                                                                </span>
+                                                                            }
+                                                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            }
-                                            else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.日期.ToString())
-                                            {
-                                                <div class="row">
-                                                    <div class="col-md-8 col-md-offset-2">
-                                                        <div class="form-group">
-                                                            <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control dateTypeField" name="Values[@index]" value="@Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value" />
+                                                }
+                                                else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.日期.ToString())
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control dateTypeField" name="Values[@index]" />
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            }
-                                            else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.整数.ToString())
-                                            {
-                                                <div class="row">
-                                                    <div class="col-md-8 col-md-offset-2">
-                                                        <div class="form-group">
-                                                            <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control" name="Values[@index]" value="@Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value" onkeyup="this.value = this.value.replace(/[^\d]/g, '')" onafterpaste="this.value = this.value.replace(/[^\d]/g, '')" />
+                                                }
+                                                else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.整数.ToString())
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control" name="Values[@index]" onkeyup="this.value = this.value.replace(/[^\d]/g, '')" onafterpaste="this.value = this.value.replace(/[^\d]/g, '')" />
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            }
-                                            else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.小数.ToString())
-                                            {
-                                                <div class="row">
-                                                    <div class="col-md-8 col-md-offset-2">
-                                                        <div class="form-group">
-                                                            <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control" name="Values[@index]" value="@Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value" onkeyup="this.value = this.value.replace(/[^\d.{4}]/g, '')" onafterpaste="this.value = this.value.replace(/[^\d.{4}]/g, '')" />
+                                                }
+                                                else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.小数.ToString())
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control" name="Values[@index]" onkeyup="this.value = this.value.replace(/[^\d.{4}]/g, '')" onafterpaste="this.value = this.value.replace(/[^\d.{4}]/g, '')" />
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName  (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control" name="Values[@index]" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                            }
+                                            else if (index >= Model.EquipmentInfo.EquipmentInfoColumnValues.Count)
+                                            {
+                                                if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.文件.ToString())
+                                                {
+                                                    <div class="row margin-top-10">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+
+                                                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                        <div class="input-group input-large">
+                                                                            <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                                                <span class="fileinput-filename"></span>
+                                                                            </div>
+                                                                            <span class="input-group-addon btn default btn-file">
+                                                                                <span class="fileinput-new">选择文件</span>
+                                                                                <span class="fileinput-exists">替换</span>
+                                                                                <input type="file" name="file">
+                                                                            </span>&nbsp;
+                                                                            @if (!string.IsNullOrWhiteSpace(Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value))
+                                                                            {
+                                                                                <span class="input-group-addon btn default btn-file">
+                                                                                    <a target="_blank" href="@(ConfigurationManager.AppSettings["Host"] + Model.EquipmentInfo.EquipmentInfoColumnValues[index]?.Value)">查看文件</a>
+                                                                                </span>
+                                                                            }
+                                                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.日期.ToString())
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control dateTypeField" name="Values[@index]" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.整数.ToString())
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control" name="Values[@index]" onkeyup="this.value = this.value.replace(/[^\d]/g, '')" onafterpaste="this.value = this.value.replace(/[^\d]/g, '')" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.小数.ToString())
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control" name="Values[@index]" onkeyup="this.value = this.value.replace(/[^\d.{4}]/g, '')" onafterpaste="this.value = this.value.replace(/[^\d.{4}]/g, '')" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName  (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control" name="Values[@index]" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
                                             }
                                             else
                                             {
-                                                <div class="row">
-                                                    <div class="col-md-8 col-md-offset-2">
-                                                        <div class="form-group">
-                                                            <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName  (@equipmentCategoryColumn.ColumnType)</label>
-                                                            <div class="col-md-9">
-                                                                <input type="text" class="form-control" name="Values[@index]" value="@Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value" />
+                                                if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.文件.ToString())
+                                                {
+                                                    <div class="row margin-top-10">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+
+                                                                    <div class="fileinput fileinput-new" data-provides="fileinput">
+                                                                        <div class="input-group input-large">
+                                                                            <div class="form-control uneditable-input input-fixed input-small" data-trigger="fileinput">
+                                                                                <i class="fa fa-file fileinput-exists"></i>&nbsp;
+                                                                                <span class="fileinput-filename">@(Model.EquipmentInfo.EquipmentInfoColumnValues[index]?.Value)</span>
+                                                                            </div>
+                                                                            <span class="input-group-addon btn default btn-file">
+                                                                                <span class="fileinput-new">选择文件</span>
+                                                                                <span class="fileinput-exists">替换</span>
+                                                                                <input type="file" name="file">
+                                                                            </span>&nbsp;
+                                                                            @if (!string.IsNullOrWhiteSpace(Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value))
+                                                                            {
+                                                                                <span class="input-group-addon btn default btn-file">
+                                                                                    <a target="_blank" href="@(ConfigurationManager.AppSettings["Host"] + Model.EquipmentInfo.EquipmentInfoColumnValues[index]?.Value)">查看文件</a>
+                                                                                </span>
+                                                                            }
+                                                                            <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                }
+                                                else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.日期.ToString())
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control dateTypeField" name="Values[@index]" value="@(Model.EquipmentInfo.EquipmentInfoColumnValues[index]?.Value)" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.整数.ToString())
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control" name="Values[@index]" value="@(Model.EquipmentInfo.EquipmentInfoColumnValues[index]?.Value)" onkeyup="this.value = this.value.replace(/[^\d]/g, '')" onafterpaste="this.value = this.value.replace(/[^\d]/g, '')" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else if (equipmentCategoryColumn.ColumnType == EquipmentCategoryColumnType.小数.ToString())
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control" name="Values[@index]" value="@(Model.EquipmentInfo.EquipmentInfoColumnValues[index]?.Value)" onkeyup="this.value = this.value.replace(/[^\d.{4}]/g, '')" onafterpaste="this.value = this.value.replace(/[^\d.{4}]/g, '')" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div class="row">
+                                                        <div class="col-md-8 col-md-offset-2">
+                                                            <div class="form-group">
+                                                                <label class="text-right col-md-3">@equipmentCategoryColumn.ColumnName  (@equipmentCategoryColumn.ColumnType)</label>
+                                                                <div class="col-md-9">
+                                                                    <input type="text" class="form-control" name="Values[@index]" value="@(Model.EquipmentInfo.EquipmentInfoColumnValues[index]?.Value)" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                }
                                             }
+                                            
                                             index++;
                                         }
                                     }

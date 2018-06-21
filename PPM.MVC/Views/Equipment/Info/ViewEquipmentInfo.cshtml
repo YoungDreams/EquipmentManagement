@@ -115,7 +115,7 @@
                 <div class="weui-cell__bd">
                     <p>产品小类</p>
                 </div>
-                <div class="weui-cell__ft">@(equipmentInfo.EquipmentCategory1.Name ?? empty)</div>
+                <div class="weui-cell__ft">@(equipmentInfo.EquipmentCategory1?.Name ?? empty)</div>
             </div>
             <div class="weui-cell">
                 <div class="weui-cell__bd">
@@ -219,7 +219,7 @@
     </div>
     <br />
     <div class="weui-footer">
-        <p class="weui-footer__text">Copyright © @DateTime.Now.Year</p>
+        <p class="weui-footer__text">Copyright © @DateTime.Now.Year 惠齐电力</p>
     </div>
     <!-- body 最后 -->
     <script src="https://cdn.bootcss.com/jquery/1.11.0/jquery.min.js"></script>
