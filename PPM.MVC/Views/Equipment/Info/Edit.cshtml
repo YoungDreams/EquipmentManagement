@@ -280,13 +280,7 @@
                                                                                 <span class="fileinput-new">选择文件</span>
                                                                                 <span class="fileinput-exists">替换</span>
                                                                                 <input type="file" name="file">
-                                                                            </span>&nbsp;
-                                                                            @if (!string.IsNullOrWhiteSpace(Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value))
-                                                                            {
-                                                                                <span class="input-group-addon btn default btn-file">
-                                                                                    <a target="_blank" href="@(ConfigurationManager.AppSettings["Host"] + Model.EquipmentInfo.EquipmentInfoColumnValues[index]?.Value)">查看文件</a>
-                                                                                </span>
-                                                                            }
+                                                                            </span>
                                                                             <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
                                                                         </div>
                                                                     </div>
@@ -368,13 +362,7 @@
                                                                                 <span class="fileinput-new">选择文件</span>
                                                                                 <span class="fileinput-exists">替换</span>
                                                                                 <input type="file" name="file">
-                                                                            </span>&nbsp;
-                                                                            @if (!string.IsNullOrWhiteSpace(Model.EquipmentInfo.EquipmentInfoColumnValues[index].Value))
-                                                                            {
-                                                                                <span class="input-group-addon btn default btn-file">
-                                                                                    <a target="_blank" href="@(ConfigurationManager.AppSettings["Host"] + Model.EquipmentInfo.EquipmentInfoColumnValues[index]?.Value)">查看文件</a>
-                                                                                </span>
-                                                                            }
+                                                                            </span>
                                                                             <a href="javascript:;" class="input-group-addon btn red fileinput-exists" data-dismiss="fileinput">删除</a>
                                                                         </div>
                                                                     </div>
